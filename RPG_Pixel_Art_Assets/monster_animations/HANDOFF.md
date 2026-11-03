@@ -28,11 +28,11 @@ Family documentation:
 
 ## 2. Actual completion status (verified)
 
-**No family currently has a complete, production-ready animation set committed to this repository.** The repository currently contains planning/index documentation and family README files; it does not yet contain the requested new per-frame transparent animation PNGs or normalized animation atlases.
+**Slime is integrated on the isolated `feature/slime-family-animations` branch as four transparent SVG character variants with five CSS keyframe clips each. Static checks passed; browser/mobile visual QA remains pending. No other family is complete.** The repository currently contains planning/index documentation and family README files; it does not yet contain the requested new per-frame transparent animation PNGs or normalized animation atlases.
 
 | Family | Characters | Actual state | Remaining work |
 |---|---|---|---|
-| Slime | Slime, Greater, Elite, King Slime | A small experimental GIF preview was produced in the original ChatGPT conversation; it is not a production sprite set and is not committed here. | Redraw/export independent frames, true alpha PNGs, normalize pivots and timings, test all clips. |
+| Slime | Slime, Greater, Elite, King Slime | Four transparent SVG source assets and five CSS keyframe clips per character are committed under the slime folder and integrated into the isolated feature branch. Static syntax/mapping checks passed; browser QA pending. | Run browser/mobile visual QA; if raster sprite sheets are required, export PNG frames from these SVG animations. |
 | Goblin | Goblin, Goblin Warrior, Goblin Archer, Goblin Chief | Concept animation boards were generated in the conversation; not committed as production frames. Family README documents the limitations. | Create clean per-character frames and atlas; verify alpha and loops. |
 | Golem | Rock Golem, Stone Golem, Crystal Golem, Ancient Golem | Family folder and README only. | Generate all frames and export/test. |
 | Undead | Skeleton, Skeleton Archer, Bone Knight, Lich | Family folder and README only. | Generate all frames and export/test. |
@@ -41,7 +41,7 @@ Family documentation:
 | Demon | Imp, Demon, Hellknight, Demon Lord | Family folder and README only. | Generate all frames and export/test. |
 | Boss Monsters | Slime King, Goblin Warlord, Crystal Dragon, Lava Colossus | Family folder and README only. | Generate all frames and export/test. |
 
-There are generated family overview/poster images in the original conversation, but these are **visual concept references only**. They are not separate animation frames, and a checkerboard or dark painted background is not proof of transparency. The images generated in that conversation were not uploaded as binary image files to this repository. Do not claim they are present in GitHub.
+The family overview/poster images in the original conversation are **visual concept references only**. They are not separate animation frames, and a checkerboard or dark painted background is not proof of transparency. The images generated in that conversation were not uploaded as binary image files to this repository. Do not claim they are present in GitHub.
 
 The pre-existing asset-pack README says the pack contains monster art and source sheets. Treat those as pre-existing static art assets until their actual files and alpha channels are inspected; do not assume they provide the new five-clip animation set.
 
@@ -118,7 +118,7 @@ For another GitHub account to continue:
 5. If using ChatGPT from the other account, that account must independently connect/authorize its own GitHub integration and grant it access to this private repository. Sharing a conversation link does not transfer the current account's GitHub, Runway, files-library, or other connected-app credentials.
 6. Never put passwords, personal access tokens, API keys, or private credentials in this file or in chat. Use GitHub's own authorization/invitation flow.
 
-The current connected GitHub integration in the originating account had push permission when this handoff was written. That permission is account-specific and does not automatically apply to another ChatGPT account.
+The current connected GitHub integration in the originating account had push permission when this handoff was written. The slime implementation is isolated on `feature/slime-family-animations`; `main` remains the stable base for the gameplay file. That permission is account-specific and does not automatically apply to another ChatGPT account.
 
 ## 7. Safe continuation procedure
 
@@ -138,3 +138,14 @@ The current connected GitHub integration in the originating account had push per
 3. Continue Golem, Undead, Spider, Elemental, Demon, and Boss Monsters.
 4. Upload every approved source image and every final frame/atlas to its correct GitHub folder.
 5. Keep this document truthful: update status only after files have been committed and checked.
+
+
+## 9. Slime family implementation update (2026-11-03)
+
+- Feature branch: `feature/slime-family-animations`.
+- Integrated game: [RPG_Game7_MOBILE_STABLE.html](https://github.com/yusssfeee/RGP-GAME/blob/feature/slime-family-animations/RPG_Game7_MOBILE_STABLE.html).
+- Animation source files: `slime.svg`, `greater-slime.svg`, `elite-slime.svg`, `king-slime.svg`, plus `slime-family-runtime.js`.
+- The runtime replaces only the SVG art for Slime, Blue Slime, Acid Slime, Slime King, and Ooze Titan; combat data is preserved.
+- Five clips: idle, walk, attack, hurt, death. This implementation uses animated SVG/CSS keyframes, not hand-exported PNG sprite frames.
+- Static validation: inline JavaScript parses; HTML markers and five clip definitions exist; runtime maps the five slime/ooze entries and leaves Goblin unchanged.
+- Browser and mobile play-through remains to be performed before merging into `main`.
