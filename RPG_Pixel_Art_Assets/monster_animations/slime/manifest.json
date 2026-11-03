@@ -1,0 +1,75 @@
+{
+  "family": "slime",
+  "artStyle": "detailed fantasy pixel-cluster vector, crisp edges, transparent background",
+  "characters": [
+    {
+      "id": "slime",
+      "name": "Slime",
+      "file": "slime.svg",
+      "clips": [
+        "idle",
+        "walk",
+        "attack",
+        "hurt",
+        "death"
+      ],
+      "frameCanvas": [
+        100,
+        100
+      ],
+      "background": "transparent"
+    },
+    {
+      "id": "greater",
+      "name": "Greater Slime",
+      "file": "greater-slime.svg",
+      "clips": [
+        "idle",
+        "walk",
+        "attack",
+        "hurt",
+        "death"
+      ],
+      "frameCanvas": [
+        100,
+        100
+      ],
+      "background": "transparent"
+    },
+    {
+      "id": "elite",
+      "name": "Elite Slime",
+      "file": "elite-slime.svg",
+      "clips": [
+        "idle",
+        "walk",
+        "attack",
+        "hurt",
+        "death"
+      ],
+      "frameCanvas": [
+        100,
+        100
+      ],
+      "background": "transparent"
+    },
+    {
+      "id": "king",
+      "name": "King Slime",
+      "file": "king-slime.svg",
+      "clips": [
+        "idle",
+        "walk",
+        "attack",
+        "hurt",
+        "death"
+      ],
+      "frameCanvas": [
+        100,
+        100
+      ],
+      "background": "transparent"
+    }
+  ],
+  "notes": "Five independent CSS keyframe clip sequences are embedded in each SVG source; the game embeds matching markup for offline operation."
+}
