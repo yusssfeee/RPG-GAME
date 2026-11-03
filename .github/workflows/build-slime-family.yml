@@ -1,0 +1,45 @@
+name: Build slime family game variant
+
+on:
+  push:
+    branches:
+      - main
+      - feature/slime-family-animations
+    paths:
+      - 'RPG_Pixel_Art_Assets/monster_animations/slime/**'
+      - 'tools/integrate_slime_family.py'
+      - '.github/workflows/build-slime-family.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/slime-family-animations
+      - name: Integrate offline slime animation runtime
+        run: python3 tools/integrate_slime_family.py
+      - name: Validate HTML and JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path('RPG_Game7_MOBILE_STABLE.html').read_text(encoding='utf-8')
+          assert html.count('SLIME_FAMILY_ANIMATION_V1') >= 2
+          assert all(k in html for k in ['slime-idle','slime-walk','slime-attack','slime-hurt','slime-death'])
+          assert html.lower().count('<html') == 1 and '</body>' in html.lower()
+          print('HTML integration markers and all five animation clips verified.')
+          PY
+      - name: Commit integrated game file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add RPG_Game7_MOBILE_STABLE.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Integrate slime family animations into game"
+            git push origin HEAD:feature/slime-family-animations
+          else
+            echo "No game changes to commit."
+          fi
