@@ -21,7 +21,8 @@ This directory stores original frame-by-frame monster animation sheets generated
 8. Boss monsters
 
 ## Current status
-- Goblin: concept sheets generated; needs clean transparent export and consistent per-frame extraction before game integration.
-- Other families: pending.
+- Slime: four transparent SVG variants with idle/walk/attack/hurt/death clips committed and integrated into the isolated feature branch; static checks passed, browser QA pending.
+- Goblin: concept sheets only; not production-ready.
+- Golem, Undead, Spider, Elemental, Demon, Boss Monsters: documentation only; animation assets pending.
 
 No game code is changed by this asset-only directory.
