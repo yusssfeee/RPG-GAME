@@ -1,6 +1,6 @@
-# Tiny Acre — Pixel-art asset pack
+# RPG — Pixel-art asset pack
 
-This pack contains AI-generated, individually cropped PNG sprites:
+This pack contains AI-generated, individually cropped PNG sprites for the RPG game:
 - 9 farm animals
 - 40 fantasy monsters, variants and story bosses
 - Original transparent sprite sheets in `source_sheets/`
