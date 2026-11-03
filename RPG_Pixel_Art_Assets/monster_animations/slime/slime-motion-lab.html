@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RPG — Slime Motion Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#111b19;--panel:#1b2925;--line:#40574a;--text:#e8f0df;--muted:#a8b8a2;--lime:#8ce879}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 25%,#294638,#111b19 68%);color:var(--text);font:15px system-ui,sans-serif;display:grid;place-items:center;padding:18px}
+main{width:min(720px,100%);display:grid;gap:14px}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.eyebrow{color:#b5d69c;font-size:11px;letter-spacing:.18em;text-transform:uppercase}.head h1{margin:3px 0;font-size:clamp(22px,5vw,32px)}.head p{margin:0;color:var(--muted);font-size:13px}
+.scene{height:360px;position:relative;overflow:hidden;border:1px solid #506b52;border-radius:18px;background:linear-gradient(#1e3435 0 55%,#263e30 55% 100%);box-shadow:0 18px 50px #0007;display:grid;place-items:center}
+.scene:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 75%,#a0d86b18,transparent 48%),linear-gradient(90deg,transparent 49.8%,#ffffff08 50%,transparent 50.2%)}
+.moon{position:absolute;top:30px;right:45px;width:52px;height:52px;border-radius:50%;background:#d8e6b8;box-shadow:0 0 35px #d8e6b855}
+.ruin{position:absolute;bottom:44%;width:110px;height:100px;border:8px solid #41534b;border-bottom:0;opacity:.35}.ruin:before,.ruin:after{content:"";position:absolute;bottom:0;width:12px;height:65px;background:#41534b}.ruin:before{left:0}.ruin:after{right:0}.ruin.left{left:8%}.ruin.right{right:8%;transform:scale(.7)}
+.ground{position:absolute;bottom:43px;width:70%;height:24px;border-radius:50%;background:#07100c;filter:blur(5px);opacity:.7}
+#slime{position:relative;z-index:2;width:min(230px,48vw);height:auto;overflow:visible;transform-origin:50% 88%}
+#slime .body{fill:url(#gel);stroke:#b4ff9d;stroke-width:2.5;stroke-linejoin:round}
+#slime .shine{fill:#eaffd9;opacity:.65}.eye{fill:#f6ffe9}.pupil{fill:#183326}.mouth{fill:none;stroke:#183326;stroke-width:3;stroke-linecap:round}
+#slime .bubble{fill:#d9ffb6;opacity:.65}.status{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}
+.panel{background:#14221e;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:12px}
+.controls{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.controls button{border:1px solid #49644f;background:#20352a;color:var(--text);border-radius:10px;padding:10px 4px;font-weight:700;cursor:pointer}.controls button[aria-pressed=true]{background:#a3dc7d;color:#172519;border-color:#c9f3a8}
+.hint{color:var(--muted);font-size:12px;line-height:1.5}
+#slime.idle{animation:idle 1.5s ease-in-out infinite}
+#slime.walk{animation:walk .52s ease-in-out infinite}
+#slime.attack{animation:attack .48s cubic-bezier(.2,.8,.2,1) both}
+#slime.hurt{animation:hurt .34s ease-out both}
+#slime.death{animation:death .9s ease-in forwards}
+@keyframes idle{0%,100%{transform:translateY(0) scale(1,1)}45%{transform:translateY(-8px) scale(1.04,.96)}72%{transform:translateY(1px) scale(.97,1.04)}}
+@keyframes walk{0%,100%{transform:translateY(2px) scale(1.06,.91)}50%{transform:translateY(-7px) scale(.94,1.08)}}
+@keyframes attack{0%{transform:translateX(0) scale(1,1)}25%{transform:translateX(-16px) scale(1.18,.78)}60%{transform:translateX(35px) scale(.86,1.16)}82%{transform:translateX(12px) scale(1.05,.95)}100%{transform:translateX(0) scale(1,1)}}
+@keyframes hurt{0%,100%{filter:none;transform:translateX(0)}22%{filter:brightness(2.3) saturate(.45);transform:translateX(12px) scale(.9,1.1)}55%{transform:translateX(-9px) scale(1.07,.93)}}
+@keyframes death{0%{transform:scale(1,1);opacity:1}35%{transform:scale(1.15,.72);opacity:1}100%{transform:translateY(24px) scale(1.35,.08);opacity:0}}
+@media(max-width:480px){.scene{height:300px}.controls{grid-template-columns:repeat(3,1fr)}.controls button{min-height:44px}}
+@media(prefers-reduced-motion:reduce){#slime{animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+ <header class="head"><div><div class="eyebrow">RPG · Monster animation prototype</div><h1>Slime — Motion Lab</h1><p>First playable motion study · isolated from the main campaign</p></div><div class="eyebrow">01 / 08 families</div></header>
+ <section class="scene" aria-label="Animated slime preview">
+  <div class="moon"></div><div class="ruin left"></div><div class="ruin right"></div><div class="ground"></div>
+  <svg id="slime" class="idle" viewBox="0 0 220 190" role="img" aria-label="Green fantasy slime monster">
+   <defs><linearGradient id="gel" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#c5ff91"/><stop offset=".35" stop-color="#70d94f"/><stop offset=".72" stop-color="#36a94d"/><stop offset="1" stop-color="#17633e"/></linearGradient><radialGradient id="glow"><stop stop-color="#d8ff9d" stop-opacity=".65"/><stop offset="1" stop-color="#d8ff9d" stop-opacity="0"/></radialGradient></defs>
+   <ellipse cx="110" cy="166" rx="80" ry="12" fill="url(#glow)"/>
+   <path class="body" d="M29 157C20 133 35 112 48 91C63 66 79 40 109 39C139 38 159 64 174 94C190 125 198 147 183 158C164 173 54 174 29 157Z"/>
+   <path class="shine" d="M57 111C66 81 83 57 105 54C91 70 84 92 79 111C74 124 62 125 57 111Z"/>
+   <ellipse class="bubble" cx="147" cy="91" rx="8" ry="5"/><circle class="bubble" cx="160" cy="115" r="4"/><circle class="bubble" cx="62" cy="143" r="3"/>
+   <ellipse class="eye" cx="83" cy="119" rx="12" ry="16"/><ellipse class="eye" cx="139" cy="119" rx="12" ry="16"/>
+   <ellipse class="pupil" cx="86" cy="122" rx="6" ry="9"/><ellipse class="pupil" cx="136" cy="122" rx="6" ry="9"/>
+   <circle cx="83" cy="116" r="3" fill="#fff"/><circle cx="133" cy="116" r="3" fill="#fff"/>
+   <path class="mouth" d="M99 145Q111 153 123 144"/>
+  </svg>
+ </section>
+ <div class="status"><span id="state">State: Idle</span><span>Tap a motion to preview</span></div>
+ <section class="panel"><div class="controls" role="group" aria-label="Slime animation states">
+  <button data-state="idle" aria-pressed="true">Idle</button><button data-state="walk" aria-pressed="false">Walk</button><button data-state="attack" aria-pressed="false">Attack</button><button data-state="hurt" aria-pressed="false">Hurt</button><button data-state="death" aria-pressed="false">Death</button>
+ </div><div class="hint">This is a lightweight CSS motion prototype using the existing Slime design language. It is not yet a frame-by-frame transparent sprite atlas and is not wired into the live RPG file.</div></section>
+</main>
+<script>
+const slime=document.getElementById('slime'),label=document.getElementById('state'),buttons=[...document.querySelectorAll('[data-state]')];
+function setState(state){slime.classList.remove('idle','walk','attack','hurt','death');void slime.getBoundingClientRect();slime.classList.add(state);label.textContent='State: '+state[0].toUpperCase()+state.slice(1);buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.state===state)));if(state==='attack'||state==='hurt'||state==='death'){slime.addEventListener('animationend',()=>{if(slime.classList.contains(state)&&state!=='death')setState('idle')},{once:true})}}
+buttons.forEach(b=>b.addEventListener('click',()=>setState(b.dataset.state)));
+</script>
+</body>
+</html>
