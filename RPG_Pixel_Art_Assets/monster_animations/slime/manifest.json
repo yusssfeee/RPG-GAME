@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "family_id": "slime",
+  "visual_style": "semi_realistic_glossy_translucent_gel",
+  "approved_reference": "2026-11-04 approved glossy blue water slime",
+  "animation_clips": [
+    "idle",
+    "attack",
+    "hurt",
+    "death"
+  ],
+  "prohibited_clips": [
+    "walk",
+    "run",
+    "travel"
+  ],
+  "characters": [
+    {
+      "id": "slime_basic",
+      "name": "Basic Slime",
+      "rank": "common",
+      "element": "water",
+      "status": "pending_art"
+    },
+    {
+      "id": "slime_acid",
+      "name": "Acid Slime",
+      "rank": "uncommon",
+      "element": "acid",
+      "status": "pending_art"
+    },
+    {
+      "id": "slime_frost",
+      "name": "Frost Slime",
+      "rank": "uncommon",
+      "element": "ice",
+      "status": "pending_art"
+    },
+    {
+      "id": "slime_greater",
+      "name": "Greater Slime",
+      "rank": "rare",
+      "element": "water",
+      "status": "pending_art"
+    },
+    {
+      "id": "slime_elite",
+      "name": "Elite Slime",
+      "rank": "elite",
+      "element": "arcane",
+      "status": "pending_art"
+    },
+    {
+      "id": "slime_king",
+      "name": "King Slime",
+      "rank": "boss",
+      "element": "royal_water",
+      "status": "pending_art"
+    }
+  ],
+  "export_rules": {
+    "frame_format": "PNG",
+    "background": "transparent_alpha",
+    "naming": "<character_id>_<clip>_<frame_3digits>.png",
+    "stationary_idle": true,
+    "consistent_canvas": true,
+    "consistent_pivot": true
+  }
+}
