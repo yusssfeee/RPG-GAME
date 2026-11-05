@@ -1,3 +1,26 @@
+# Current continuation update — 2026-11-05
+
+**Verified current main head:** `d496fec161fe136ea2368d33509e4d219c0b8148`.
+
+## Canonical game source
+- The user confirmed that `RPG Game .html` is the latest game source.
+- It has been copied byte-for-byte to the canonical path `RPG_Game.html` on `main`; the original `RPG Game .html` remains preserved.
+- `RPG_Game7_MOBILE_STABLE.html` is an older version and must not be used for new game edits.
+- The GitHub connector can verify the canonical blob SHA and file metadata, but currently returns an empty body for this ~10 MB HTML file. Do not attempt code edits against a partial or reconstructed copy. Obtain the exact file bytes (for example, as a chat attachment) before changing game logic.
+
+## Basic Slime QA pack — local only, not yet committed
+- A QA-normalized test pack exists in the originating ChatGPT file library; it is **not yet in GitHub** and is not wired into the game.
+- Verified: 24 individual PNG frames, all 256×256 RGBA with an alpha channel and transparent pixels.
+- Clips: idle 6, attack_prepare 6, attack 6, hurt 1, death 5. There are no walk/travel frames, per the user's explicit direction.
+- Shared pivot: (128, 224). Original source sheet is preserved in the pack.
+- The pack includes a local HTML preview only; it is not a combat integration test. Production approval still requires in-game scale/timing/death-state review and final edge/halo inspection.
+- Do not mark Basic Slime as integrated or production-ready until the individual frame files and metadata are committed and the game is tested.
+
+## Slime family art direction
+Use the user's approved glossy semi-realistic translucent gel style (not the older flat pixel-vector SVG prototype). Preserve the same visual language across types; vary material/element details. Keep idle stationary and use attack preparation, attack, hurt, and death states only. No walking or spatial travel.
+
+---
+
 # Monster Animation Project — Handoff
 
 Last verified: 2026-11-03  
