@@ -5,8 +5,8 @@ This repository contains the user's browser-based RPG game. These instructions a
 ## Canonical working source
 - The user supplied a newer game source file named `RPG Game .html` on 2026-11-05.
 - This uploaded file is intended to replace the older `RPG_Game7_MOBILE_STABLE.html`.
-- The uploaded replacement is not yet committed to this repository. Do not claim it has been uploaded and do not silently use the older file as the latest source.
-- The supplied file must be synced into the repository as `RPG_Game.html`. Once it exists, `RPG_Game.html` is the single canonical game entry point.
+- The user confirmed `RPG Game .html` is the latest source. It is preserved under its original filename and copied byte-for-byte to `RPG_Game.html` on `main`.
+- `RPG_Game.html` is now the single canonical game entry point. Keep `RPG Game .html` as the preserved original upload and do not silently use the older `RPG_Game7_MOBILE_STABLE.html`.
 - All future game edits must target `RPG_Game.html` and its required companion assets, not `RPG_Game7_MOBILE_STABLE.html`, unless the user explicitly instructs otherwise.
 - Before editing, inspect the repository state and confirm the canonical file exists. Never reconstruct an older game from memory or stale attachments.
 
