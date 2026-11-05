@@ -1,10 +1,16 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "family_id": "slime",
   "visual_style": "semi_realistic_glossy_translucent_gel",
-  "approved_reference": "2026-11-04 approved glossy blue water slime",
+  "approved_reference": {
+    "character": "Slime",
+    "description": "User-approved glossy blue translucent water slime; visual baseline only, not a new asset target",
+    "reference_directory": "RPG_Pixel_Art_Assets/monster_animations/slime/references/"
+  },
+  "source_of_truth": "RPG_Game.html",
   "animation_clips": [
     "idle",
+    "attack_prepare",
     "attack",
     "hurt",
     "death"
@@ -14,48 +20,104 @@
     "run",
     "travel"
   ],
+  "default_clip_frame_count": 8,
   "characters": [
-    {
-      "id": "slime_basic",
-      "name": "Basic Slime",
-      "rank": "common",
-      "element": "water",
-      "status": "pending_art"
-    },
     {
       "id": "slime_acid",
       "name": "Acid Slime",
       "rank": "uncommon",
+      "role": "elemental_enemy",
       "element": "acid",
+      "game_data_name": "Acid Slime",
       "status": "pending_art"
     },
     {
       "id": "slime_frost",
       "name": "Frost Slime",
       "rank": "uncommon",
+      "role": "elemental_enemy",
       "element": "ice",
+      "game_data_name": "Frost Slime",
       "status": "pending_art"
     },
     {
-      "id": "slime_greater",
-      "name": "Greater Slime",
-      "rank": "rare",
-      "element": "water",
-      "status": "pending_art"
-    },
-    {
-      "id": "slime_elite",
-      "name": "Elite Slime",
-      "rank": "elite",
-      "element": "arcane",
+      "id": "slime_magma",
+      "name": "Magma Slime",
+      "rank": "uncommon",
+      "role": "elemental_enemy",
+      "element": "magma",
+      "game_data_name": "Magma Slime",
       "status": "pending_art"
     },
     {
       "id": "slime_king",
-      "name": "King Slime",
+      "name": "Slime King",
       "rank": "boss",
+      "role": "boss",
       "element": "royal_water",
+      "game_data_name": "Slime King",
       "status": "pending_art"
+    },
+    {
+      "id": "ooze_titan",
+      "name": "Ooze Titan",
+      "rank": "final_boss",
+      "role": "dungeon_final_boss",
+      "element": "arcane_ooze",
+      "game_data_name": "Ooze Titan",
+      "status": "pending_art"
+    },
+    {
+      "id": "frost_titan",
+      "name": "Frost Titan",
+      "rank": "final_boss",
+      "role": "dungeon_final_boss",
+      "element": "ice",
+      "game_data_name": "Frost Titan",
+      "status": "pending_art"
+    },
+    {
+      "id": "magma_colossus",
+      "name": "Magma Colossus",
+      "rank": "final_boss",
+      "role": "dungeon_final_boss",
+      "element": "magma",
+      "game_data_name": "Magma Colossus",
+      "status": "pending_art"
+    }
+  ],
+  "excluded_or_deferred": [
+    {
+      "name": "Slime",
+      "reason": "Approved blue water reference only; do not recreate"
+    },
+    {
+      "name": "Blue Slime",
+      "reason": "Existing game variant/alias of the basic slime visual; exclude to prevent duplication"
+    },
+    {
+      "name": "Greater Acid Slime",
+      "reason": "Not present in current game data; defer until a matching game entity is added"
+    },
+    {
+      "name": "Elite Acid Slime",
+      "reason": "Not present in current game data; defer until a matching game entity is added"
+    },
+    {
+      "name": "Greater Frost Slime",
+      "reason": "Not present in current game data; defer until a matching game entity is added"
+    },
+    {
+      "name": "Elite Frost Slime",
+      "reason": "Not present in current game data; defer until a matching game entity is added"
+    },
+    {
+      "name": "Greater Magma Slime",
+      "reason": "Not present in current game data; defer until a matching game entity is added"
+    },
+    {
+      "name": "Elite Magma Slime",
+      "reason": "Not present in current game data; defer until a matching game entity is added"
     }
   ],
   "export_rules": {
@@ -64,6 +126,40 @@
     "naming": "<character_id>_<clip>_<frame_3digits>.png",
     "stationary_idle": true,
     "consistent_canvas": true,
-    "consistent_pivot": true
+    "consistent_pivot": true,
+    "frame_size": {
+      "width": 256,
+      "height": 256
+    },
+    "grid": {
+      "columns": 8,
+      "rows": 5
+    },
+    "pivot": {
+      "x": 128,
+      "y": 224
+    },
+    "verify_alpha": true,
+    "verify_no_halo": true,
+    "verify_no_frame_overlap": true
+  },
+  "folder_contract": {
+    "per_character": [
+      "source/",
+      "preview/",
+      "frames/idle/",
+      "frames/attack_prepare/",
+      "frames/attack/",
+      "frames/hurt/",
+      "frames/death/",
+      "atlas/",
+      "manifest.json"
+    ],
+    "qa_status_values": [
+      "pending_art",
+      "pending_qa",
+      "approved",
+      "rejected"
+    ]
   }
 }
