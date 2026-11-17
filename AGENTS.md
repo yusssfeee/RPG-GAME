@@ -1,34 +1,31 @@
 # RPG Game — Mandatory Project Instructions
 
-This repository contains the user's browser-based RPG game. These instructions are authoritative for every AI coding agent working in this repository.
+These instructions are authoritative for every AI coding agent and contributor working in this repository.
 
-## Canonical working source
-- The user supplied a newer game source file named `RPG Game .html` on 2026-11-05.
-- This uploaded file is intended to replace the older `RPG_Game7_MOBILE_STABLE.html`.
-- The user confirmed `RPG Game .html` is the latest source. It is preserved under its original filename and copied byte-for-byte to `RPG_Game.html` on `main`.
-- `RPG_Game.html` is now the single canonical game entry point. Keep `RPG Game .html` as the preserved original upload and do not silently use the older `RPG_Game7_MOBILE_STABLE.html`.
-- All future game edits must target `RPG_Game.html` and its required companion assets, not `RPG_Game7_MOBILE_STABLE.html`, unless the user explicitly instructs otherwise.
-- Before editing, inspect the repository state and confirm the canonical file exists. Never reconstruct an older game from memory or stale attachments.
+## Canonical source of truth (highest priority)
+- The user's newest authoritative game source is the uploaded file **`17l10.html`**, supplied on 2026-11-17 (22,689,281 bytes; 8,043 lines).
+- Treat this exact upload as the sole source of truth for all future game work. Do not use, merge from, copy from, or revert to older copies such as `RPG_Game.html`, `RPG Game .html`, `RPG_Game7_MOBILE_STABLE.html`, or any other historical duplicate unless the user explicitly asks.
+- The repository's historical files are not authoritative simply because their names look canonical. Verify the latest canonical file and this instruction before editing.
+- The intended repository path for the canonical upload is `17l10.html` at the repository root. Once committed, all edits must start from that file and preserve it as the main working source. Do not silently substitute another file.
+- If `17l10.html` is not present in the current checkout, stop and ask for/access the exact uploaded source. Never reconstruct it from memory or an older version.
+- When another AI tool/session starts work, its first steps must be: read this `AGENTS.md`, open root `17l10.html`, and confirm its content/commit before making changes.
 
 ## Required workflow
-1. Read this file before doing any work; inspect the latest commit and current branch.
-2. Edit the canonical `RPG_Game.html` only after it is present.
-3. Preserve existing gameplay systems, save/local storage compatibility, farming and crop growth, economy, inventory, quests, combat, navigation, responsive layouts, and established visual style unless explicitly asked to change them.
-4. Preserve prior versions in Git history and avoid overwriting unrelated work.
-5. Keep art/animation assets organized under `assets/monsters/` (or the existing project convention). Document frame order, dimensions, frame timing, and animation state.
-6. Test the game after changes: syntax/boot, intro, navigation, and affected gameplay flow. Report only tests actually performed.
-7. Keep source and assets in GitHub; temporary ChatGPT sandbox paths are not permanent project storage.
-8. Update handoff documentation when canonical source or asset paths change.
+1. Read this file and inspect the latest commit/branch before any edit.
+2. Use root `17l10.html` as the starting point for every game change.
+3. Preserve gameplay systems, save/local-storage compatibility, farming, economy, inventory, quests, combat, navigation, responsive layouts, and existing visual direction unless the user explicitly requests a change.
+4. Do not overwrite unrelated work. Preserve prior versions in Git history.
+5. Keep art/animation assets organized under the existing project conventions; document frame order, dimensions, timing, and state.
+6. Test syntax/boot, intro, navigation, and the affected gameplay flow after edits. Report only tests actually performed.
+7. Keep source and assets in GitHub; temporary chat attachments or sandbox files are not permanent project storage.
+8. Update this file if the canonical source path changes, only with explicit user direction.
 
-## Slime animation requirements
-- The blue common slime is a glossy translucent cobalt/azure slime with large dark oval eyes, cyan/white highlights, small surrounding bubbles, and a puddle base, matching the user's supplied reference.
-- Preserve identity, proportions, palette, eye placement, lighting, and rendering style across frames.
-- Idle: subtle breathing and battle-ready anticipation before an attack; remain planted.
-- Include occasional natural blink frames (partially closed/closed eyes) with a pause between blinks; do not blink continuously on every breathing cycle.
+## Existing art and animation requirements
+- For slime monsters, use the user's chosen semi-realistic glossy translucent gelatin style: strong reflections, bubbles, droplets, and consistent design language across elements/types.
+- Slimes remain planted; do not create walking/travel frames. Use idle/breathing, hurt, attack, and death states.
 - Keep edges crisp, backgrounds truly transparent, frame bounds aligned; avoid blur, halos, cropping, inconsistent anatomy, or unintended movement.
-- Keep idle, move, hurt, attack, and death as separate states.
 
 ## Communication
-- If the canonical file or an asset is missing, say exactly what is missing; never pretend it was integrated.
+- If the canonical source or an asset is missing, state exactly what is missing; never claim it was integrated.
 - Make the smallest safe change. Summarize paths, branch/commit, and tests.
-- These requirements must be followed even when an AI session has no access to earlier chat history.
+- These requirements apply even when an AI session has no access to earlier chat history.
