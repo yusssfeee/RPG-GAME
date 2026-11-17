@@ -1,0 +1,29 @@
+name: Temporary export of canonical Project X
+on:
+  push:
+    branches:
+      - export-project-x-20261117
+    paths:
+      - .github/workflows/export-project-x.yml
+permissions:
+  contents: read
+jobs:
+  export-html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout canonical branch snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: export-project-x-20261117
+      - name: Package Project X
+        run: |
+          test -s "Project X.html"
+          mkdir -p export
+          cp "Project X.html" "export/Project X.html"
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-x-html
+          path: export/Project X.html
+          if-no-files-found: error
+          retention-days: 1
