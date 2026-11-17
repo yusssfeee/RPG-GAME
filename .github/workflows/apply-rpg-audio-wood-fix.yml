@@ -1,0 +1,28 @@
+name: Apply one-time RPG combat audio and woodcutting update
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-rpg-audio-wood-fix.yml'
+permissions:
+  contents: write
+jobs:
+  patch-game:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply and validate game updates
+        run: python .github/scripts/apply-rpg-audio-wood-fix.py
+      - name: Commit the updated game and clean up the one-time patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "Project X.html"
+          git rm -f .github/workflows/apply-rpg-audio-wood-fix.yml .github/scripts/apply-rpg-audio-wood-fix.py
+          git commit -m "Refine goblin combat audio and woodcutting feedback"
+          git push
