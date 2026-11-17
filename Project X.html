@@ -4541,19 +4541,19 @@ function wSwing(e,viaBtn){
   ani(ax,[{transform:'scaleX(-1) rotate(-12deg)'},{transform:'scaleX(-1) translate(-20px,-30px) rotate(-70deg)',offset:.35},{transform:'scaleX(-1) translate(60px,10px) rotate(28deg)',offset:.6},{transform:'scaleX(-1) rotate(-12deg)'}],{duration:300,easing:'cubic-bezier(.4,0,.2,1)'});
   setTimeout(()=>{
     const s2=$s(),t2=document.getElementById('w5tree');if(!s2||!t2||W5.tree!==T)return;
-    T.hp-=dmg;sfx('chop');if(perfect)sfx('ding');
+    T.hp-=dmg;sfx('chop');if(perfect)sfx('woodPerfect');else if(good)sfx('woodGood');else sfx('woodWeak');
     ani(t2,[{transform:'rotate(0)'},{transform:'rotate(-3.5deg)',offset:.3},{transform:'rotate(2.5deg)',offset:.7},{transform:'rotate(0)'}],{duration:220,easing:'ease-out'});
     const sx=t2.offsetLeft+rx,sy=t2.offsetTop+ry;
     for(let i=0;i<(perfect?12:6);i++)wFly(s2,'w5-chip',{left:sx+'px',top:sy+'px',background:T.t.trunk},[{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+(Math.random()*140-70)+'px,'+(Math.random()*-90-10)+'px) rotate(280deg)',opacity:0}],600);
     for(let i=0;i<(perfect?7:3);i++)wFly(s2,'w5-leaf',{left:(t2.offsetLeft+50+Math.random()*110)+'px',top:(t2.offsetTop+20+Math.random()*60)+'px',background:T.t.leaf},[{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+(Math.random()*80-40)+'px,150px) rotate(300deg)',opacity:0}],1400,'ease-in');
     const nb=document.getElementById('w5notch');if(nb){const n=document.createElement('i');n.className='w5-notch';n.style.left=(rx-19)+'px';n.style.top=(ry-4)+'px';n.style.width=(26+Math.min(30,dmg*4))+'px';n.style.transform='rotate('+(Math.random()*24-12)+'deg)';nb.appendChild(n)}
-    wText(s2,sx-30,sy-40,(perfect?'PERFECT ':good?'':'weak ')+(aimed?'+aim ':'')+'-'+dmg,perfect);
+    wText(s2,sx-30,sy-40,(perfect?'PERFECT':good?'GOOD':'WEAK')+(aimed?' · WEAK SPOT':'')+' -'+dmg,perfect);
     if(perfect)ani(s2,[{transform:'translate(0,0)'},{transform:'translate(-3px,2px)'},{transform:'translate(3px,-2px)'},{transform:'translate(0,0)'}],{duration:180});
     if(perfect&&W5.streak%5===0){W5.frenzy=performance.now()+7000;wBanner(s2,'FRENZY!','18%');sfx('win')}
     const hp=document.getElementById('w5hp');if(hp)hp.style.width=Math.max(0,T.hp/T.max*100)+'%';
     wStreakUI();wStatsUI();
     if(T.hp<=0){wFell(s2,t2,T)}
-    else{wmsg(T.hp<=T.max*.3?'The trunk is creaking...':'');if(T.hp<=T.max*.3)sfx('creak');w5NewRing(300)}
+    else{wmsg(T.hp<=T.max*.3?'The trunk is creaking...':(perfect?'Perfect strike! Combo ×'+W5.streak:good?'Good hit! Keep your timing tight.':'Weak strike — wait for the ring to close.'));if(T.hp<=T.max*.3)sfx('creak');w5NewRing(300)}
   },170);
 }
 function wFell(s,tr,T){
@@ -4577,7 +4577,7 @@ function wFell(s,tr,T){
     if(Math.random()<.06)S.inv.feather=inv('feather')+1;
     if(f.rare&&Math.random()<.05)S.inv.crystal=inv('crystal')+1;if(f.drop&&Math.random()<f.drop[1])S.inv[f.drop[0]]=inv(f.drop[0])+1;w8Add(f.id);
     W5.fells++;W5.logs+=q;wStatsUI();
-    wmsg('Clean cut '+'★'.repeat(stars)+'☆'.repeat(3-stars)+' · +'+q+' '+t.n+' log'+(q>1?'s':''));
+    wmsg('Clean cut '+'★'.repeat(stars)+'☆'.repeat(3-stars)+' · +'+q+' '+t.n+' log'+(q>1?'s':''));sfx('woodReward');
     const sk=document.getElementById('w5skill');if(sk)sk.innerHTML=skillBar('wood');
     save();
   },620);
@@ -4623,9 +4623,9 @@ function wDoEv(act){
   if(ev.type==='nest'&&act==='nest'){
     const pool=[['feather',55],['egg',30],['honey',15]];let r=Math.random()*100,id='feather';for(const[i,w]of pool){r-=w;if(r<=0){id=i;break}}
     const n=1+(Math.random()<.25+.06*nl('forester')?1:0);S.inv[id]=inv(id)+n;
-    wText(s,s.clientWidth/2-40,90,'+'+n+' '+nm(id),true);wmsg('Nest looted: '+n+' '+nm(id)+'.');sfx('coin');wEndEv();save();
+    wText(s,s.clientWidth/2-40,90,'+'+n+' '+nm(id),true);wmsg('Nest looted: '+n+' '+nm(id)+'.');sfx('woodNest');wEndEv();save();
   }else if(ev.type==='branch'&&act==='dodge'){
-    wBranchFall(s,ev.x,false);wText(s,12,s.clientHeight-100,'Dodged!',true);wmsg('Dodged the branch!');addXp('wood',3);sfx('coin');wEndEv();
+    wBranchFall(s,ev.x,false);wText(s,12,s.clientHeight-100,'Dodged!',true);wmsg('Dodged the branch!');addXp('wood',3);sfx('woodDodge');wEndEv();
   }
 }
 /* ---------- main loop ---------- */
@@ -4640,7 +4640,7 @@ function w5Loop(){
     if(!r||r.used||W5.busy||now<r.t0)tg.style.display='none';
     else{
       const e=(now-r.t0)/r.dur;
-      if(e>1.12){W5.streak=0;wStreakUI();wmsg('Too slow! Swing as the ring closes.');w5NewRing(220);tg.style.display='none'}
+      if(e>1.12){W5.streak=0;wStreakUI();sfx('woodMiss');wmsg('Too slow! Swing as the ring closes.');w5NewRing(220);tg.style.display='none'}
       else{
         if(r.flick&&!r.flicked&&e>.55){r.flicked=true;r.x=78+Math.random()*60;r.y=70+Math.random()*130;
           wFly(s,'w5-chip',{left:(tr.offsetLeft+r.x)+'px',top:(tr.offsetTop+r.y)+'px',background:'#d4a8ff',width:'14px',height:'14px',borderRadius:'50%'},[{transform:'scale(1)',opacity:1},{transform:'scale(3)',opacity:0}],400)}
@@ -7384,6 +7384,7 @@ window.__RPG_GOBLIN_ATTACK_FRAMES={"goblin":{"frames":["data:image/webp;base64,U
     atkIndex=-1;setMode('attack');showAtk(heavy?Math.min(cfg.hit,atkDecoded.length-1):0);
     hitTimer=setTimeout(fireHit,Math.max(0,hitAt-skip));
     if(activeKind==='goblin')try{window.__rpgGobSfx.dagger(hitAt,skip)}catch(e){}
+    if(activeKind==='archer')try{window.__rpgGobSfx.archer(hitAt,skip)}catch(e){}
     return true;
   }
   const previousEnemyAttack=enemyAttack;
@@ -8045,25 +8046,57 @@ window.__RPG_GOBLIN_SHAMAN_WEBP = Object.freeze({
  const A=()=>window.RPGAudio;
  function run(fn){try{const a=A();if(a&&a.run)a.run(fn)}catch(_){}}
  function osc(c,t,f0,f1,d,type='sine',v=.04){const a=A(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f0,t);if(f1)o.frequency.exponentialRampToValueAtTime(Math.max(35,f1),t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.out());o.onended=()=>{try{g.disconnect()}catch(_){}};o.start(t);o.stop(t+d+.03)}
- function nz(c,t,d,f0,f1,v=.07){const a=A(),b=a.noiseBuf('white',c);if(!b)return;const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type='bandpass';f.Q.value=1.2;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(Math.max(40,f1),t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+d*.25);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(a.out());s.onended=()=>{try{g.disconnect()}catch(_){}};s.start(t,Math.random());s.stop(t+d+.03)}
- function schedule(hit,ahead,fn){run(c=>{const t=c.currentTime+Math.max(0,(hit-(ahead||0))/1000);fn(c,t)})}
+ function nz(c,t,d,f0,f1,v=.07){const a=A(),b=a.noiseBuf('white',c);if(!b)return;const src=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();src.buffer=b;f.type='bandpass';f.Q.value=1.2;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(Math.max(40,f1),t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+d*.25);g.gain.exponentialRampToValueAtTime(.0001,t+d);src.connect(f);f.connect(g);g.connect(a.out());src.onended=()=>{try{g.disconnect()}catch(_){}};src.start(t,Math.random());src.stop(t+d+.03)}
+ function schedule(hit,ahead,fn){run(c=>{const delta=hit-(ahead||0);if(delta< -35)return;fn(c,c.currentTime+Math.max(0,delta/1000))})}
  const old=window.__rpgGobSfx||{};
- old.dagger=(hit,ahead)=>{schedule(hit-370,ahead,(c,t)=>nz(c,t,.2,900,3600,.12));schedule(hit-170,ahead,(c,t)=>{nz(c,t,.15,1800,6200,.15);osc(c,t,500,160,.16,'sawtooth',.04)});schedule(hit-4,ahead,(c,t)=>{nz(c,t,.07,3000,7000,.07);osc(c,t,1900,750,.12,'triangle',.055)})};
- old.archer=(hit,ahead)=>{schedule(hit-480,ahead,(c,t)=>{osc(c,t,170,420,.28,'triangle',.04);nz(c,t,.15,450,1400,.05)});schedule(hit-230,ahead,(c,t)=>{osc(c,t,650,1250,.12,'sine',.04);nz(c,t,.1,1000,2800,.06)});schedule(hit-140,ahead,(c,t)=>{nz(c,t,.24,4500,850,.12);osc(c,t,1300,430,.22,'sawtooth',.025)});schedule(hit-5,ahead,(c,t)=>{nz(c,t,.08,2400,6500,.08);osc(c,t,2100,700,.1,'triangle',.045)})};
- old.magic=()=>run(c=>{const t=c.currentTime;osc(c,t,135,520,.34,'sine',.055);osc(c,t,500,1900,.38,'triangle',.028);osc(c,t,1300,2500,.28,'sine',.02);nz(c,t+.12,.28,2800,850,.07);const z=t+.32;nz(c,z,.27,4800,600,.12);osc(c,z,1180,145,.3,'sawtooth',.05);osc(c,z,2200,720,.36,'sine',.045);osc(c,z,360,70,.32,'triangle',.03)});
- old.impact=k=>run(c=>{const t=c.currentTime;nz(c,t,.1,k==='archer'?1900:700,180,.08);osc(c,t,k==='archer'?1400:180,k==='archer'?480:65,.18,'triangle',.05)});
+ // Goblin: battle grunt, fast blade swishes, and a metallic strike.
+ old.dagger=(hit,ahead)=>{
+  schedule(hit-365,ahead,(c,t)=>{nz(c,t,.16,620,1700,.075);osc(c,t,145,92,.16,'sawtooth',.025)});
+  schedule(hit-225,ahead,(c,t)=>{nz(c,t,.14,1350,4300,.12);osc(c,t,520,270,.12,'triangle',.025)});
+  schedule(hit-105,ahead,(c,t)=>{nz(c,t,.12,2100,6500,.13);osc(c,t,760,390,.1,'sawtooth',.022)});
+  schedule(hit-6,ahead,(c,t)=>{nz(c,t,.07,3200,7200,.08);osc(c,t,2050,760,.12,'triangle',.05);osc(c,t,1180,640,.1,'sine',.026)});
+ };
+ // Archer: bow tension, string snap, arrow flight, then impact at the attack hit frame.
+ old.archer=(hit,ahead)=>{
+  schedule(hit-350,ahead,(c,t)=>{osc(c,t,175,360,.2,'triangle',.035);nz(c,t,.12,420,1350,.045)});
+  schedule(hit-205,ahead,(c,t)=>{osc(c,t,840,1480,.085,'sine',.04);osc(c,t,390,210,.1,'triangle',.025)});
+  schedule(hit-112,ahead,(c,t)=>{nz(c,t,.2,5200,900,.11);osc(c,t,1750,520,.19,'sawtooth',.022)});
+  schedule(hit-6,ahead,(c,t)=>{nz(c,t,.075,2550,6800,.075);osc(c,t,2250,680,.105,'triangle',.045)});
+ };
+ // Shaman attack: arcane charge, airy release and layered magic bolt.
+ // old.vanish() is deliberately untouched: preserve the Shaman's magical death sound.
+ old.magic=()=>run(c=>{
+  const t=c.currentTime;
+  osc(c,t,118,420,.34,'sine',.052);
+  osc(c,t,430,1620,.38,'triangle',.03);
+  osc(c,t,980,2260,.3,'sine',.022);
+  nz(c,t+.1,.3,3000,900,.075);
+  const z=t+.32;
+  nz(c,z,.25,5200,520,.12);
+  osc(c,z,1260,135,.29,'sawtooth',.048);
+  osc(c,z,2260,760,.32,'sine',.046);
+  osc(c,z,330,68,.35,'triangle',.032);
+ });
  old.hurt=k=>run(c=>{const t=c.currentTime;nz(c,t,.17,k==='archer'?1100:620,150,.075);osc(c,t,k==='archer'?300:145,65,.2,'sawtooth',.04)});
  old.death=k=>run(c=>{const t=c.currentTime;nz(c,t,.4,k==='archer'?850:500,80,.07);osc(c,t,k==='archer'?240:120,45,.42,'sine',.05)});
- window.__rpgGobSfx=old; // Keep old.vanish() unchanged: Shaman death sound remains exactly as before.
- const prevAttack=enemyAttack;
- enemyAttack=function(){if(typeof fight!=='undefined'&&fight&&fight.n==='Goblin Archer'){try{old.archer(470,0)}catch(_){}}return prevAttack.apply(this,arguments)};
+ window.__rpgGobSfx=old; // Keep the original old.vanish() completely unchanged.
+ const baseDeath=SFX.death;
+ SFX.death=function(foe){const n=String(foe&&foe.n||'').toLowerCase();if(n==='goblin'||n==='goblin archer'){try{old.death(n==='goblin archer'?'archer':'goblin')}catch(_){}return}return baseDeath.apply(this,arguments)};
+ Object.assign(SFX,{
+  chop:()=>{tone(128,.105,'square',.075,-76);tone(470,.07,'sawtooth',.043,-300,.012);tone(1680,.035,'triangle',.018,-720,.025)},
+  woodPerfect:()=>{tone(215,.11,'sawtooth',.065,-130);tone(1040,.13,'triangle',.052,220,.015);tone(1710,.09,'sine',.032,260,.045)},
+  woodGood:()=>{tone(185,.09,'square',.05,-82);tone(640,.075,'triangle',.03,130,.02)},
+  woodWeak:()=>{tone(96,.12,'square',.05,-42);tone(250,.07,'sawtooth',.027,-140,.02)},
+  woodMiss:()=>{tone(340,.09,'sine',.026,-230);tone(125,.12,'triangle',.02,-70,.025)},
+  creak:()=>{tone(160,.42,'sawtooth',.048,-68);tone(86,.5,'square',.038,-30,.12)},
+  timber:()=>{tone(96,.76,'sawtooth',.085,-58);tone(54,.82,'square',.065,-20,.09);tone(185,.34,'sine',.035,-105,.16)},
+  ding:()=>{tone(1360,.12,'triangle',.045,0);tone(1780,.16,'sine',.027,0,.05)},
+  woodReward:()=>{tone(660,.13,'triangle',.036,70);tone(880,.14,'triangle',.034,90,.085);tone(1320,.19,'sine',.03,0,.17)},
+  woodNest:()=>{tone(960,.12,'sine',.032,150,.0);tone(1210,.13,'sine',.03,170,.065);tone(1560,.16,'triangle',.027,180,.13)},
+  woodDodge:()=>{tone(430,.1,'sawtooth',.04,-260);tone(720,.07,'triangle',.026,240,.03)}
+ });
  const prevStrike=strike;
  strike=function(){const foe=fight,before=foe&&foe.hp,result=prevStrike.apply(this,arguments);if(foe&&['Goblin','Goblin Archer'].includes(foe.n)&&foe.hp<before&&foe.hp>0)try{old.hurt(foe.n==='Goblin Archer'?'archer':'goblin')}catch(_){}return result};
- const prevDown=foeDown;
- foeDown=function(){const foe=fight;if(foe&&['Goblin','Goblin Archer'].includes(foe.n))try{old.death(foe.n==='Goblin Archer'?'archer':'goblin')}catch(_){}return prevDown.apply(this,arguments)};
- if(typeof wSwing==='function'){const prev=wSwing;wSwing=function(){try{run(c=>{const t=c.currentTime;nz(c,t,.18,650,180,.07);osc(c,t,170,520,.13,'sawtooth',.04)})}catch(_){}return prev.apply(this,arguments)}}
- if(typeof wFell==='function'){const prev=wFell;wFell=function(s,tr,T){try{run(c=>{const t=c.currentTime;nz(c,t,.8,350,45,.14);osc(c,t,90,35,.7,'sawtooth',.08);osc(c,t+.14,58,38,.55,'triangle',.06)})}catch(_){}const out=prev.apply(this,arguments);setTimeout(()=>{try{document.querySelectorAll('.w5-logs').forEach(el=>{const h=logsRow();el.innerHTML=h.substring(h.indexOf('>')+1,h.lastIndexOf('</div>'))});run(c=>{const t=c.currentTime;[660,880,1320].forEach((f,i)=>osc(c,t+i*.075,f,f*1.02,.2,'triangle',.035))})}catch(_){}},720);return out}}
- if(typeof wDoEv==='function'){const prev=wDoEv;wDoEv=function(act){const out=prev.apply(this,arguments);if(act==='nest')try{run(c=>{const t=c.currentTime;[880,1175,1568].forEach((f,i)=>osc(c,t+i*.06,f,f*1.08,.16,'sine',.035))})}catch(_){}return out}}
 })();
 </script>
 
