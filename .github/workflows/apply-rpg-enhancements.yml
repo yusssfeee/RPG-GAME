@@ -1,0 +1,25 @@
+name: Apply one-time RPG audio and woodcutting enhancements
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-rpg-enhancements.yml'
+permissions:
+  contents: write
+jobs:
+  patch-game:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Apply the requested game enhancements
+        run: python .github/scripts/apply-rpg-enhancements.py
+      - name: Commit the updated game file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "Project X.html" .github/workflows/apply-rpg-enhancements.yml .github/scripts/apply-rpg-enhancements.py
+          git commit -m "Improve goblin combat audio and woodcutting interactions"
+          git push
