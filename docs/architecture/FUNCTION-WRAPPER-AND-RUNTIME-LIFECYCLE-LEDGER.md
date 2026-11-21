@@ -141,13 +141,7 @@ The file contains many one-shot UI timers in addition to recurring work. The tab
 | 8124–8199 | `frameTimer`, `actionTimer` | Spear idle/attack/death animation | Clear helpers, play token and death timeout exist; verify cleanup for all state transitions. |
 | 8476–8477, 8974–8977, 9161–9164 | hold timers | Touch long-press tooltips | Clear on pointerup/cancel/leave in their respective controllers. |
 
-## 4. One-shot timers and delayed DOM work
-
-The source also uses many short timeouts for toasts, particles, floating numbers, hit effects, delayed renders, transitions, scroll adjustments, audio source stops, and boot overlays. Examples include lines 573, 1069, 1399, 1729, 2278–2279, 2739, 3057, 3114, 3279–3288, 3415–3417, 3724–3791, 3880–3911, 4074, 4154, 4525, 4908–4909, 4969, 5226, 6746–6781, 6810, 7138–7146, 7419, 7458, 7597–7608, 8342–8343, 8919, 9040–9069.
-
-Most are intentionally short-lived visual effects. They still matter if they close over a stale DOM node, old campaign state, or an old fight object after tab/slot changes. They should not all be moved into one generic timer module; ownership should remain with the domain that creates the effect.
-
-## 3A. Refined recurring timer findings
+## 4A. Refined recurring timer findings
 
 The AST call-site count is 15 `setInterval` calls and zero `clearInterval` calls. None of the interval IDs was directly assigned to a named handle at its call site. The recurring owners and source lines are:
 
@@ -172,6 +166,12 @@ The AST call-site count is 15 `setInterval` calls and zero `clearInterval` calls
 The absence of `clearInterval` does not automatically prove a bug: several intervals may intentionally live for the page lifetime. It does mean that a tab change, campaign slot change, modal close, or subsystem disposal cannot currently be assumed to stop them. Browser tests should check duplicate intervals and stale callbacks after repeated navigation and slot changes.
 
 The 34 `requestAnimationFrame` call sites include 13 syntactically assigned to named handles (for example `pondLoopRaf`, `ck.raf`, `WS.raf`, local `raf`, and `W5.raf`) and 21 not directly assigned to a named handle at their call site. Four `cancelAnimationFrame` calls were found. Main core loop (around 1689), fish motion (2262–2264), goblin idle/action animation (7028 onwards), and combat visual attachment/update (7512 onwards) include self-scheduling behavior; their actual stop/dispose behavior must be verified in a browser. Cooking, timed minigames and some wood loops have explicit cancellation/exit paths.
+
+## 4. One-shot timers and delayed DOM work
+
+The source also uses many short timeouts for toasts, particles, floating numbers, hit effects, delayed renders, transitions, scroll adjustments, audio source stops, and boot overlays. Examples include lines 573, 1069, 1399, 1729, 2278–2279, 2739, 3057, 3114, 3279–3288, 3415–3417, 3724–3791, 3880–3911, 4074, 4154, 4525, 4908–4909, 4969, 5226, 6746–6781, 6810, 7138–7146, 7419, 7458, 7597–7608, 8342–8343, 8919, 9040–9069.
+
+Most are intentionally short-lived visual effects. They still matter if they close over a stale DOM node, old campaign state, or an old fight object after tab/slot changes. They should not all be moved into one generic timer module; ownership should remain with the domain that creates the effect.
 
 ## 5. Lifecycle requirements before modularization
 
