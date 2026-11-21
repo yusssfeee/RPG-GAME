@@ -31,6 +31,27 @@ Each script block was extracted separately and passed through Node.js `v22.16.0`
 
 This establishes that each extracted block is syntactically parseable as JavaScript in isolation. It does **not** prove that the combined page runs correctly in a browser, that globals resolve, or that runtime behavior is correct.
 
+## 2A. AST-backed static analysis
+
+The same pinned source was parsed with the TypeScript compiler API `5.8.3` using JavaScript ScriptKind in Node.js `v22.16.0`.
+
+| Check | Result |
+|---|---:|
+| Non-empty inline script blocks parsed | 52 |
+| Parser diagnostics | 0 |
+| Direct `S.property` AST references | 963 |
+| Unique static state property names | 51 |
+| Simple alias/destructuring binding sites rooted at `S` | 16 |
+| Direct `S.property` references passed as call arguments | 31 |
+| Callable identifier-function assignments | 100 across 44 targets |
+| Same-script capture/use pairings | 86 |
+| `setTimeout` call sites | 111 |
+| `setInterval` call sites | 15 |
+| `requestAnimationFrame` call sites | 34 |
+| `clearInterval` call sites | 0 |
+
+These are syntax-level counts, not proof of semantic ownership, full alias propagation, correct runtime predecessor resolution, or timer disposal. Detailed classifications, per-field counts and limitations are in `../architecture/AST-BACKED-STATIC-ANALYSIS.md`.
+
 ## 3. Browser startup attempt
 
 A headless Chromium startup test was attempted against the exact source copy. Navigation was blocked by the execution environment with:
@@ -39,7 +60,7 @@ A headless Chromium startup test was attempted against the exact source copy. Na
 net::ERR_BLOCKED_BY_ADMINISTRATOR
 ```
 
-The restriction occurred for both a local `file://` navigation and a temporary loopback HTTP URL. As a result:
+The restriction occurred for both a local `file://` navigation and a temporary loopback HTTP URL. A later attempt to read the connected local browser tab context also failed because the originating browser context was unavailable. As a result:
 
 - No browser startup result is claimed.
 - No console-error baseline was collected.
@@ -64,6 +85,7 @@ The following still require a browser environment in which the game can actually
 
 - [x] Confirmed the audited local source matches the GitHub `main` blob.
 - [x] Parsed all 52 inline JavaScript blocks with Node.js syntax checking.
+- [x] AST-backed syntax scan completed with zero diagnostics for all 52 non-empty inline script blocks.
 - [ ] Browser startup and console baseline.
 - [ ] Gameplay regression run.
 - [ ] Save-slot and persistence fixtures.
