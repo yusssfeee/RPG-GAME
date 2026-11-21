@@ -86,6 +86,22 @@ The existing `fmt` helper at line 3516 (script block 8, lines 2685–4772) was e
 
 **Result:** 7/7 helper-only cases passed. The six uses of this formatter binding are at lines 3534, 3539, 3932, 4091, 4137 and 4174. A raw whole-file `fmt(` search returns ten textual matches because it also sees unrelated formatter scopes and a locally shadowing parameter; see `../architecture/FIRST-EXTRACTION-CANDIDATE.md`.
 
+## 2D. Corrected same-script alias/write trace
+
+A follow-up AST pass corrected the immediate write classification and extended tracking to simple same-script variable aliases rooted at `S`. This is the current report for state field counts; the earlier 2A table records only the original direct-property syntax pass and its preliminary alias matcher.
+
+| Check | Result |
+|---|---:|
+| Direct `S.property` references | 963 |
+| Alias/destructuring binding sites | 49 |
+| Alias-rooted property references | 246 |
+| Combined direct + tracked-alias references | 1,209 |
+| Reads | 822 |
+| Write/update operations | 387 |
+| Writes through tracked aliases (subset of 387) | 69 |
+
+The corrected write classifier only treats `++`/`--` as increment/decrement writes; boolean negation such as `!p.open` is a read. This prevents false write counts. The alias tracker follows only simple same-script declarations/assignments. It is not full points-to/data-flow analysis. Full per-field results, mutation paths and state replacement boundaries are in [SEMANTIC-STATE-ALIAS-WRITE-TRACE.md](../architecture/SEMANTIC-STATE-ALIAS-WRITE-TRACE.md).
+
 ## 3. Browser startup attempt
 
 Several launch paths were tested against the exact pinned local copy. The final attempt used a regular Chromium window running in a temporary Xvfb virtual display and a disposable user-data directory. This avoided the unavailable physical X display and did not use the user's normal browser profile or save data.
