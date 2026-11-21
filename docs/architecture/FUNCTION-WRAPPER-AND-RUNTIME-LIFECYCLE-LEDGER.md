@@ -71,6 +71,40 @@ See [AST-backed static analysis](AST-BACKED-STATIC-ANALYSIS.md) for the field-re
 
 These are AST syntax observations scoped to the pinned inline script blocks. Alias propagation, helper effects, exact runtime lexical resolution, and the complete lifecycle still require manual tracing and browser execution.
 
+## 2B. Manual classification of unpaired identifier-function assignments
+
+The AST matcher reported 14 assignments without a same-script captured predecessor/use pair. A manual review of the pinned source classifies them below. These classifications are source-level findings; they do not prove that all runtime callers remain reachable or that behavior is correct.
+
+| Target | Assignment line | Previous definition | Classification / consequence |
+|---|---:|---|---|
+| `fx` | 1727 | 1399 | Direct replacement with stage-positioned crit/damage feedback. Wrapped at 3737, then later replaced as `window.fx` at 8900 and 9022. |
+| `tapStall` | 1769 | 1234 | Direct replacement implementing barn purchase/collection/feed/pet. A later wrapper at 4156 captures `_ts` and adds baby/illness/fox branches. |
+| `newGrid` | 2176 | 1796 | Direct replacement for mining-grid generation. |
+| `spawnFish` | 2247 | 1260 | Direct replacement for fishing-pool and scene-aware fish spawning. |
+| `oIcon` | 2338 | 1060 | Direct ore icon helper replacement using sprite mappings. |
+| `fIcon` | 2345 | 1061 | Direct fish icon helper replacement using fish catalog metadata. |
+| `tradeTick` | 2660 | 1380 | Direct replacement; advances `S.cv.runs`, does not delegate to legacy `S.trade` travel logic. High-priority compatibility scenario; see below. |
+| `toast` | 2777 | 1729 | Direct replacement routed through V4 `note()` and guarded audio. |
+| `treeSvg` | 3465 | 3232 | Direct tree SVG/rendering replacement using sprite art. |
+| `anvilAct` | 3542 | 1311 | Direct Smithing implementation replacement. |
+| `woodLoop` | 3863 | 3265 | Direct V4 timed wood-ring loop replacement. |
+| `chopSwing` | 3872 | 3271 | Direct V4 chop mechanic replacement. |
+| `woodLoop` | 4520 | 3863 | Later stub/no-op setting `WS.raf=0` when the V5 wood scene takes over. Source order is behaviorally significant. |
+| `equip` | 8421 | 1324 | Direct replacement adding the class-restriction check to the actual equip action. |
+
+Additional non-identifier property assignments discovered by manual review:
+
+- `window.fx` is replaced at lines 8900 and 9022. Both blocks capture the previous `window.fx` (`floatOld` and `oldFx`) but do not invoke it; treat them as replacements, not delegating wrappers.
+- `window.drop` is replaced at line 9044 to render loot in a dedicated side rail.
+- `window.toast` is temporarily replaced at 8795 and restored at 8807 in a `finally` block around `addXp`. This is a scoped suppression hook, not a lasting wrapper.
+- The `VIEWS.fish`, `VIEWS.mine`, `VIEWS.fight` and other object-property chains remain covered by the companion object-wrapper inventory.
+
+### High-priority compatibility risk: `tradeTick`
+
+The original `tradeTick` at lines 1380–1384 advances `S.trade`, calls `arrive()` when the travel completes, awards Trade XP, and updates the original trade UI. The core RAF loop calls `tradeTick()` at line 1678. The later assignment at line 2660 replaces it with a function that only iterates `S.cv.runs`; it never calls the previous implementation. The separate interval at line 2673 also invokes the replacement.
+
+Result: after the replacement runs, the old `S.trade` travel/arrival logic is no longer advanced by the core loop. This is a potential compatibility regression, not a proven bug until browser testing confirms whether the legacy travel UI remains an intended/reachable feature or has been fully superseded by the caravan system. Test start-trip, arrival, reward, reload and slot-switch behavior for both old and V4 caravan paths before changing this code.
+
 ## 3. Timer and animation-frame lifecycle inventory
 
 The file contains many one-shot UI timers in addition to recurring work. The table below emphasizes recurring loops and stateful animation controllers. Source line numbers are approximate and refer to the pinned baseline.
@@ -113,6 +147,32 @@ The source also uses many short timeouts for toasts, particles, floating numbers
 
 Most are intentionally short-lived visual effects. They still matter if they close over a stale DOM node, old campaign state, or an old fight object after tab/slot changes. They should not all be moved into one generic timer module; ownership should remain with the domain that creates the effect.
 
+## 3A. Refined recurring timer findings
+
+The AST call-site count is 15 `setInterval` calls and zero `clearInterval` calls. None of the interval IDs was directly assigned to a named handle at its call site. The recurring owners and source lines are:
+
+| Line | Interval responsibility | Observed behavior / lifecycle risk |
+|---:|---|---|
+| 1138 | Audio API synchronization (`api.sync`), 300 ms | Page-lifetime watcher; no explicit interval disposal found. |
+| 1693 | Core game tick, 250 ms | Main simulation/render tick; self-running core loop. |
+| 1755 | Player HP regeneration, 1 s | Mutates `S.hp` while fighting with regeneration upgrade active; interval itself remains installed. |
+| 1774 | Barn hunger/mood simulation, 1 s | Mutates each live `S.barn` object; captures global state by lookup each tick. |
+| 2673 | V4 caravan completion check, 1 s | Checks `S.cv.runs` and calls the later `tradeTick` replacement. |
+| 3536 | Smith/carpenter job completion/progress, 400 ms | Reads job state and updates UI; no interval owner handle. |
+| 3596 | V4 ready-state notification polling, 1 s | Scans job/crop/animal readiness; maintains a local seen set. Check behavior after replacing `S`. |
+| 3972 | Contract/market UI polling, 1 s | Updates countdown/progress display; persistent poll. |
+| 4182 | Weather, pests, barn and farm synchronization, 1 s | Work is gated by intro/class-picker state, but interval continues. |
+| 5239 | Mine ambience watcher, 300 ms | Starts/stops ambient audio based on state; visibility handlers also stop audio. |
+| 6103 | Fishing ambience watcher, 450 ms | Persistent audio watcher; visibility handler stops ambience. |
+| 6436 | Farm-water visual watcher, 150 ms | DOM visual polling; no central interval disposal. |
+| 6974 | SVG icon auto-fit watcher, 1 s | Repeated document-level scan. |
+| 7161 | Gain-feed cleanup/check watcher, 150 ms | Persistent UI watcher. |
+| 8087 | Shaman death visual cleanup poll, 90 ms | Repeated DOM cleanup with no visible central stop handle. |
+
+The absence of `clearInterval` does not automatically prove a bug: several intervals may intentionally live for the page lifetime. It does mean that a tab change, campaign slot change, modal close, or subsystem disposal cannot currently be assumed to stop them. Browser tests should check duplicate intervals and stale callbacks after repeated navigation and slot changes.
+
+The 34 `requestAnimationFrame` call sites include 13 syntactically assigned to named handles (for example `pondLoopRaf`, `ck.raf`, `WS.raf`, local `raf`, and `W5.raf`) and 21 not directly assigned to a named handle at their call site. Four `cancelAnimationFrame` calls were found. Main core loop (around 1689), fish motion (2262–2264), goblin idle/action animation (7028 onwards), and combat visual attachment/update (7512 onwards) include self-scheduling behavior; their actual stop/dispose behavior must be verified in a browser. Cooking, timed minigames and some wood loops have explicit cancellation/exit paths.
+
 ## 5. Lifecycle requirements before modularization
 
 For every persistent interval or RAF controller, record these fields in a follow-up runtime ledger:
@@ -138,10 +198,10 @@ The most important risks are the main RAF loop, global 250 ms tick, regeneration
 - [x] Major global function reassignment sites catalogued.
 - [x] Major persistent interval / RAF sites catalogued.
 - [ ] Complete semantic field read/write ownership and alias/data-flow tracing; current AST inventory is syntactic, not a complete semantic analysis.
-- [ ] Exact wrapper predecessor/delegation graph.
-- [ ] Runtime timer handle and disposal verification.
+- [ ] Full wrapper predecessor/delegation graph for all 86 paired assignments and object-property wrapper chains, including runtime return-value/caller expectations. The 14 unpaired identifier assignments have been manually classified.
+- [ ] Runtime timer handle and disposal verification, including repeated tab changes, slot changes, page visibility and teardown.
 - [ ] Browser execution, console baseline and gameplay regression.
 - [ ] Save fixtures for five slots plus legacy import.
 - [ ] Approve a first pure-helper extraction candidate.
 
-**Phase 0 remains open. No runtime code has been modified.**
+**Phase 0 remains open. No runtime code has been modified.** Semantic alias tracing and manual classification of the 14 unpaired identifier assignments are documented; browser execution, full runtime wrapper verification and timer disposal tests remain open.
