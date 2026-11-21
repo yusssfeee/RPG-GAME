@@ -10,7 +10,7 @@ Working branch: `phase-0/baseline-audit`.
 - [x] Isolated audit branch exists; `main` remains unchanged.
 - [x] High-level source/script inventory exists.
 - [x] Feature extension blocks and approximate line ranges are mapped.
-- [x] Main state object `S and five-slot localStorage save contract are identified.
+- [x] Main state object `S` and five-slot localStorage save contract are identified.
 - [x] Legacy slot-1 compatibility key `tinyacre-save` is identified.
 - [x] Save/load/hydration and mining save synchronization touchpoints are documented.
 - [x] Cross-feature shared-state and function-wrapper risks are documented.
@@ -20,13 +20,15 @@ Working branch: `phase-0/baseline-audit`.
 - [x] Static JavaScript syntax validation passed for all 52 non-empty inline script blocks.
 - [x] Local audit source was verified against the GitHub blob SHA for `Project X.html` on `main`.
 - [x] Proposed modularization roadmap and regression checklist exist.
+- [x] First low-risk pure-helper extraction candidate identified and characterized with isolated tests.
 - [x] Documentation-only diff has been confirmed against `main`.
 
-## New detailed audit documents
+## Detailed audit documents
 
 - [Detailed shared-state ledger](DETAILED-SHARED-STATE-LEDGER.md) — 51 direct property tokens; heuristic read/write counts and high-coupling risk notes.
 - [Function wrapper and runtime lifecycle ledger](FUNCTION-WRAPPER-AND-RUNTIME-LIFECYCLE-LEDGER.md) — major wrapper reassignment order, recurring timers/RAF, and cleanup observations.
 - [State access, wrapper and lifecycle audit](STATE-ACCESS-WRAPPER-AND-LIFECYCLE-AUDIT.md) — combined high-level findings.
+- [First extraction candidate](FIRST-EXTRACTION-CANDIDATE.md) — pure duration formatter, proposed as the first isolated utility to extract after browser baseline gates.
 - [Static validation results](../testing/STATIC-VALIDATION-RESULTS.md) — source identity, syntax check and browser-environment limitation.
 
 ## Not yet verified — do not mark complete
@@ -39,17 +41,17 @@ Working branch: `phase-0/baseline-audit`.
 - [ ] Representative save fixtures for all five slots and legacy slot-1 import.
 - [ ] Save -> reload -> compare state checks using disposable test data.
 - [ ] Screenshots or recordings of key screens and gameplay flows.
-- [ ] Approval of the first extraction candidate.
+- [ ] Approval to implement the first extraction in a runtime-code commit.
 
 ## Important measurement notes
 
 Static counts are dependent on the scan method. The 51-property ledger counts direct `S.<identifier>` tokens and classifies only simple textual patterns. It is not a full JavaScript data-flow analysis: aliasing, dynamic property access, nested mutation and helper side effects need AST/manual tracing. Similarly, counting `addEventListener` text matches is not the same as counting runtime listener registrations, and counting `<img>` tags is not the same as counting embedded image data URIs.
 
-The syntax check proves that each extracted inline script block parses as JavaScript in isolation. It does not prove that all blocks execute together successfully or that browser/gameplay behavior is correct.
+The syntax check proves that each extracted inline script block parses as JavaScript in isolation. It does not prove that all blocks execute together successfully or that browser/gameplay behavior is correct. The isolated formatter tests characterize the existing helper's outputs but do not replace browser regression.
 
 ## Safe next step
 
-Finish semantic state ownership and exact wrapper/timer lifecycle verification, then run the browser regression checklist against the frozen baseline using disposable save data. Until browser and persistence checks are complete, Phase 0 remains in progress and no gameplay source should be extracted or modified.
+Complete semantic state ownership and exact wrapper/timer lifecycle verification, then run the browser regression checklist against the frozen baseline using disposable save data. Only after those gates pass should the pure duration formatter be extracted in a separate reviewable code commit. Until then, Phase 0 remains in progress and no gameplay source should be extracted or modified.
 
 ## Change-control guarantee
 
