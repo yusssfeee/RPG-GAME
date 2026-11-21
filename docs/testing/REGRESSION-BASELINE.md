@@ -39,6 +39,30 @@ Do not use a valuable player save as the only test fixture. Preserve a separate 
 - [ ] Purchases and sales update both inventory and currency consistently.
 - [ ] Invalid transactions do not create or destroy resources.
 
+### Legacy trade and V4 caravan compatibility
+
+A static source review found that `tradeTick` at line 2660 replaces the earlier implementation at line 1380. The earlier function advances the legacy `S.trade` route and calls `arrive()`; the replacement processes `S.cv.runs` and does not delegate to the previous implementation. This is a potential compatibility risk and must be resolved by observing intended/reachable UI behavior, not by assuming it is a confirmed bug.
+
+**Legacy trade route — run independently:**
+- [ ] From a clean disposable campaign, open the legacy trade UI and start a route with a known departure/destination.
+- [ ] Confirm the route countdown advances and arrival occurs after the expected duration.
+- [ ] Confirm arrival rewards, Trade XP, inventory/currency changes and UI state are applied exactly once.
+- [ ] Save/reload during travel and confirm the trip resumes or resolves according to the existing contract.
+- [ ] Repeat after switching campaign slots; confirm the old campaign's route does not leak into the new slot.
+
+**V4 caravan (`S.cv.runs`) — run independently:**
+- [ ] Start a caravan run and confirm it appears in the V4 run list.
+- [ ] Confirm the completion timer advances and the ready state appears once.
+- [ ] Collect the caravan and confirm goods/rewards, log entries, coins and UI update exactly once.
+- [ ] Save/reload before and after completion and confirm run state is restored without duplicate collection.
+- [ ] Switch campaign slots and confirm caravan timers/results remain isolated to their originating campaign.
+
+**Comparison:**
+- [ ] Confirm which legacy trade and V4 caravan entry points are reachable in the current UI.
+- [ ] Record actual calls/results for the legacy route tick and V4 caravan tick separately.
+- [ ] Do not change `tradeTick` until the intended compatibility behavior and caller expectations are confirmed.
+- [ ] Mark each scenario PASS / FAIL / BLOCKED with console output and screenshots; currently these scenarios are not executed because the browser policy blocks the game file before load.
+
 ### Farming and animals
 - [ ] Planting, growth progression, and harvesting work.
 - [ ] Resource and time costs are applied once.
@@ -79,7 +103,7 @@ For each scenario, record:
 
 ## Important limitations
 
-This is a manual regression plan, not an automated test suite. Do not mark a scenario PASS until it has actually been executed. Automated tests may be added later, after the game's state and persistence boundaries have been mapped.
+This is a manual regression plan, not an automated test suite. Do not mark a scenario PASS until it has actually been executed. In particular, the new legacy trade and V4 caravan scenarios are intentionally unchecked pending an approved browser environment. Automated tests may be added later, after the game's state and persistence boundaries have been mapped.
 
 ## Change policy
 
