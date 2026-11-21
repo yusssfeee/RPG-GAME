@@ -41,7 +41,7 @@ The source scan found the declaration and these uses in the same enhancement blo
 | 4137 | Barn production/baby growth countdown. |
 | 4174 | Breeding cooldown message. |
 
-No call sites outside this block were found by the literal `fmt(` scan. This must be rechecked immediately before implementation.
+A fresh scope-aware source review confirmed six uses of this declaration inside its script block. A raw whole-file `fmt(` grep returns ten text matches because two earlier matches belong to a different formatter and one is a `fmt` parameter local to the helper at line 2744; they are not calls to this binding. Recheck the six binding-specific uses immediately before implementation.
 
 ## Proposed extraction shape
 
@@ -78,3 +78,8 @@ Do not extract this helper until:
 ## Scope boundary
 
 This is a candidate decision only. No source code, script tags, or gameplay behavior has been changed. The first extraction should be a separate, reviewable commit and must retain a one-step rollback path.
+
+
+## Fresh isolated characterization run (2026-11-21)
+
+The exact current helper expression was extracted from the pinned file and evaluated in a Node.js `vm` context, without executing the surrounding game script. All seven representative cases passed: `0`, `1.4`, `59.6`, `60`, `61`, `125.2`, and `-4`. This is helper-only characterization, not browser or game integration testing. The test output is also recorded in `../testing/STATIC-VALIDATION-RESULTS.md`.
