@@ -16,7 +16,9 @@ Working branch: `phase-0/baseline-audit`.
 - [x] Cross-feature shared-state and function-wrapper risks are documented.
 - [x] Direct textual inventory of 51 `S.property` names and heuristic access classifications is documented.
 - [x] Major global wrapper assignment sites are catalogued in source order.
+- [x] Selected identifier-function predecessor captures are cross-checked with AST syntax: 100 callable assignments across 44 targets; 86 same-script capture/use pairings.
 - [x] Major recurring interval and RAF sites are catalogued with observed cleanup notes.
+- [x] AST timer callsite counts documented: 15 `setInterval`, 34 `requestAnimationFrame`, 111 `setTimeout`; zero `clearInterval` call sites found.
 - [x] Static JavaScript syntax validation passed for all 52 non-empty inline script blocks.
 - [x] Local audit source was verified against the GitHub blob SHA for `Project X.html` on `main`.
 - [x] Proposed modularization roadmap and regression checklist exist.
@@ -25,7 +27,8 @@ Working branch: `phase-0/baseline-audit`.
 
 ## Detailed audit documents
 
-- [Detailed shared-state ledger](DETAILED-SHARED-STATE-LEDGER.md) — 51 direct property tokens; heuristic read/write counts and high-coupling risk notes.
+- [Detailed shared-state ledger](DETAILED-SHARED-STATE-LEDGER.md) — historical heuristic read/write counts and high-coupling risk notes.
+- [AST-backed static analysis](AST-BACKED-STATIC-ANALYSIS.md) — syntax-level field references, selected wrapper predecessor captures, timer API call counts and limitations.
 - [Function wrapper and runtime lifecycle ledger](FUNCTION-WRAPPER-AND-RUNTIME-LIFECYCLE-LEDGER.md) — major wrapper reassignment order, recurring timers/RAF, and cleanup observations.
 - [State access, wrapper and lifecycle audit](STATE-ACCESS-WRAPPER-AND-LIFECYCLE-AUDIT.md) — combined high-level findings.
 - [First extraction candidate](FIRST-EXTRACTION-CANDIDATE.md) — pure duration formatter, proposed as the first isolated utility to extract after browser baseline gates.
@@ -33,7 +36,7 @@ Working branch: `phase-0/baseline-audit`.
 
 ## Not yet verified — do not mark complete
 
-- [ ] Semantic, AST-backed read/write ownership for every field in `S`, including aliases, nested mutations, dynamic keys and helper side effects.
+- [ ] Complete semantic read/write ownership for every field in `S`, including alias propagation, dynamic keys, object references passed to helpers and helper side effects. The current AST report is syntax-level evidence only.
 - [ ] Complete wrapper predecessor/delegation graph, including direct replacements and skipped delegation.
 - [ ] Exact runtime timer/RAF owner and disposal guarantees for every exit path.
 - [ ] Browser execution of the legacy baseline. The available headless browser attempt was blocked by the execution environment (`ERR_BLOCKED_BY_ADMINISTRATOR`).
@@ -45,13 +48,13 @@ Working branch: `phase-0/baseline-audit`.
 
 ## Important measurement notes
 
-Static counts are dependent on the scan method. The 51-property ledger counts direct `S.<identifier>` tokens and classifies only simple textual patterns. It is not a full JavaScript data-flow analysis: aliasing, dynamic property access, nested mutation and helper side effects need AST/manual tracing. Similarly, counting `addEventListener` text matches is not the same as counting runtime listener registrations, and counting `<img>` tags is not the same as counting embedded image data URIs.
+Static counts are dependent on the scan method. The 51-property ledger began as a raw-text heuristic and may count comments/strings. The new AST report records code-syntax references (963 nodes across 51 fields) and classifications for immediate syntax contexts, but it is not a full JavaScript data-flow analysis: alias propagation, dynamic property access, nested mutation through arbitrary aliases and helper side effects still need manual tracing. Similarly, counting `addEventListener` text matches is not the same as counting runtime listener registrations, and counting `<img>` tags is not the same as counting embedded image data URIs.
 
 The syntax check proves that each extracted inline script block parses as JavaScript in isolation. It does not prove that all blocks execute together successfully or that browser/gameplay behavior is correct. The isolated formatter tests characterize the existing helper's outputs but do not replace browser regression.
 
 ## Safe next step
 
-Complete semantic state ownership and exact wrapper/timer lifecycle verification, then run the browser regression checklist against the frozen baseline using disposable save data. Only after those gates pass should the pure duration formatter be extracted in a separate reviewable code commit. Until then, Phase 0 remains in progress and no gameplay source should be extracted or modified.
+Complete semantic state ownership and the exact wrapper/timer lifecycle trace, then run the browser regression checklist against the frozen baseline using disposable save data. The new AST inventory narrows the static-analysis gaps but does not close these semantic/runtime gates. Only after those gates pass should the pure duration formatter be extracted in a separate reviewable code commit. Until then, Phase 0 remains in progress and no gameplay source should be extracted or modified.
 
 ## Change-control guarantee
 
