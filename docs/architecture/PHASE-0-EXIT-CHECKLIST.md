@@ -4,6 +4,8 @@ Reference source: `Project X.html`, `main`, commit `2252c12b57e81a3fe773e3c8b5a3
 
 Working branch: `phase-0/baseline-audit`.
 
+**AI continuation:** read [docs/AI-HANDOFF.md](../AI-HANDOFF.md) first when resuming this project in another assistant/session.
+
 ## What is verified so far
 
 - [x] Baseline source is identified and pinned to a commit.
@@ -32,14 +34,15 @@ Working branch: `phase-0/baseline-audit`.
 - [Function wrapper and runtime lifecycle ledger](FUNCTION-WRAPPER-AND-RUNTIME-LIFECYCLE-LEDGER.md) — major wrapper reassignment order, recurring timers/RAF, and cleanup observations.
 - [State access, wrapper and lifecycle audit](STATE-ACCESS-WRAPPER-AND-LIFECYCLE-AUDIT.md) — combined high-level findings.
 - [First extraction candidate](FIRST-EXTRACTION-CANDIDATE.md) — pure duration formatter, proposed as the first isolated utility to extract after browser baseline gates.
-- [Static validation results](../testing/STATIC-VALIDATION-RESULTS.md) — source identity, syntax check and browser-environment limitation.
+- [Static validation results](../testing/STATIC-VALIDATION-RESULTS.md) — source identity, syntax checks, isolated helper characterization and browser-environment limitation.
+- [AI handoff](../AI-HANDOFF.md) — complete continuation instructions, completed work, blockers and next steps for another assistant.
 
 ## Not yet verified — do not mark complete
 
 - [ ] Complete semantic read/write ownership for every field in `S`, including alias propagation, dynamic keys, object references passed to helpers and helper side effects. The current AST report is syntax-level evidence only.
 - [ ] Complete wrapper predecessor/delegation graph, including direct replacements and skipped delegation.
 - [ ] Exact runtime timer/RAF owner and disposal guarantees for every exit path.
-- [ ] Browser execution of the legacy baseline. The available headless browser attempt was blocked by the execution environment (`ERR_BLOCKED_BY_ADMINISTRATOR`).
+- [ ] Browser execution of the legacy baseline. Prior headless Chromium attempts were blocked with `ERR_BLOCKED_BY_ADMINISTRATOR`; the latest connected Browser read was explicitly denied by the browser host security gate on the current ChatGPT tab. No game URL was opened and no workaround was attempted.
 - [ ] Console-error baseline from a real browser session.
 - [ ] Representative save fixtures for all five slots and legacy slot-1 import.
 - [ ] Save -> reload -> compare state checks using disposable test data.
