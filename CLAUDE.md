@@ -1,5 +1,5 @@
 # Claude project instructions
 
-Read the repository-root `AGENTS.md` before working. It is the authoritative project brief.
+Read the repository-root `AGENTS.md` before working. It is authoritative.
 
-The user's newer uploaded game source from 2026-11-05 is intended to replace legacy `RPG_Game7_MOBILE_STABLE.html`, but it is not yet committed. Do not treat the legacy file as current. Sync the uploaded source as `RPG_Game.html`; once present, edit that file for all game changes. Preserve systems and save compatibility. Follow all asset, animation, and testing requirements in `AGENTS.md`.
+The sole canonical game source is `Project X.html` at the repository root. Do not use or restore older HTML copies. Start every task by checking the current branch and reading `AGENTS.md`, then inspect the canonical file. Preserve existing behavior and save compatibility. Follow the gradual Full + Modular development approach; do not rewrite the game from scratch. Preserve existing art assets and follow the testing and communication requirements in `AGENTS.md`.
