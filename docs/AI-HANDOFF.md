@@ -156,9 +156,9 @@ The checklist is maintained in [PHASE-0-EXIT-CHECKLIST.md](architecture/PHASE-0-
 
 1. Read this handoff, then the modularization roadmap, Phase 0 exit checklist, static validation report, AST report, shared-state ledger, wrapper/lifecycle ledger, persistence maps, and regression baseline.
 2. Re-fetch current branch files and compare `phase-0/baseline-audit` with `main`; verify that no runtime source file has entered the audit branch.
-3. Continue static analysis by manually reviewing the unpaired function assignments and the highest-risk state fields. Amend reports with exact evidence and keep heuristic vs AST vs runtime observations distinct.
+3. The 14 unpaired identifier assignments have already been manually classified. Continue with the remaining whole-program data-flow gaps: callback parameters, helper side effects, aliases crossing script blocks, dynamic keys, and caller/return-value expectations for paired wrappers. Keep heuristic vs AST vs runtime observations distinct.
 4. Arrange an approved browser testing context. Chromium was already launched in Xvfb, but the organization blocked `file://` before load. If an approved route becomes available, run the frozen baseline with disposable saves and capture console/screenshots and scenario results. If still blocked, stop; do not bypass it.
-5. Test the legacy `S.trade` trip flow and V4 caravan flow separately because the later `tradeTick` assignment replaces the earlier implementation without delegation.
+5. Test the legacy `S.trade` trip flow and V4 caravan flow separately using the new explicit scenarios in `testing/REGRESSION-BASELINE.md`. The later `tradeTick` assignment replaces the earlier implementation without delegation; do not change it until the intended compatibility behavior is observed.
 6. Complete persistence fixtures and lifecycle checks before authorizing any source extraction.
 7. Only after the Phase 0 gates pass and the user agrees to proceed, create a separate implementation branch based on the documented baseline/audit branch and extract one pure helper. Start with `fmt`; preserve the classic-script loading model initially.
 8. Run before/after browser regressions and characterization tests, review the diff, document rollback, and only then propose integration. Never merge on behalf of the user without explicit approval.
@@ -175,7 +175,8 @@ The checklist is maintained in [PHASE-0-EXIT-CHECKLIST.md](architecture/PHASE-0-
 | [Wrapper/lifecycle ledger](architecture/FUNCTION-WRAPPER-AND-RUNTIME-LIFECYCLE-LEDGER.md) | Wrapper order and persistent timer inventory |
 | [First extraction candidate](architecture/FIRST-EXTRACTION-CANDIDATE.md) | `fmt` candidate and isolated characterization |
 | [Static validation](testing/STATIC-VALIDATION-RESULTS.md) | Source identity, parser checks and browser blocker |
-| [Gameplay regression baseline](testing/REGRESSION-BASELINE.md) | Manual test scenarios and evidence format |
+| [Gameplay regression baseline](testing/REGRESSION-BASELINE.md) | Manual test scenarios and evidence format, including legacy trade vs V4 caravan checks |
+| [Browser attempt record](testing/BROWSER-BASELINE-ATTEMPT.md) | Chromium/Xvfb launch result and organization file-link block |
 | [Browser attempt record](testing/BROWSER-BASELINE-ATTEMPT.md) | Chromium/Xvfb launch result and organization file-link block |
 
 ---
