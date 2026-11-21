@@ -2,13 +2,13 @@
 
 ## Purpose and limits
 
-This is a static property-reference scan of `S.<property>` in the baseline source. It is intended to identify cross-feature coupling before modules are extracted. It does not prove exclusive ownership: dynamic property access, aliases, object destructuring, and indirect mutations may not appear in this scan.
+This document is the original direct-property inventory and should be treated as a historical triage view, not the current full reference count. Its counts were based on direct `S.<property>` syntax and cannot establish exclusive ownership. The newer [Semantic State and Alias Write Trace](SEMANTIC-STATE-ALIAS-WRITE-TRACE.md) includes a limited same-script alias trace and is the authoritative current static write inventory; it still does not prove whole-program ownership.
 
 Baseline: `Project X.html`, `main`, commit `2252c12b57e81a3fe773e3c8b5a335f63a8c6097`.
 
 ## Main shared state
 
-The campaign object `S` is initialized in the core runtime around line 1004. It is the de facto shared database for the whole game. The scan found 51 distinct statically referenced top-level properties.
+The campaign object `S` is initialized in the core runtime around line 1004. It is the de facto shared database for the whole game. The scans identified 51 distinct statically referenced top-level properties. The corrected direct-plus-tracked-alias pass records 1,209 references/operations: 822 reads and 387 write/update operations, of which 69 are through simple local aliases. Refer to the semantic trace for the per-field breakdown.
 
 ### High-coupling properties
 
@@ -119,7 +119,8 @@ Then introduce typed state accessors or domain services behind compatibility ada
 - [x] Static top-level `S.<property>` reference inventory.
 - [x] Initial cross-feature coupling counts.
 - [x] Initial function-wrapper reassignment scan.
-- [ ] Validate each field's meaning at all read/write call sites.
+- [x] Corrected AST direct-plus-alias write trace and manual review of 14 previously unpaired function assignments; see `SEMANTIC-STATE-ALIAS-WRITE-TRACE.md`.
+- [ ] Finish whole-program validation of each field's meaning and all writers, including aliases crossing script blocks, callback parameters, helper side effects and computed keys.
 - [ ] Build complete save schema and migration table.
 - [ ] Confirm runtime behavior in a browser with disposable saves.
 - [ ] Approve first extraction candidate.
