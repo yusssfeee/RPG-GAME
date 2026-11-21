@@ -68,9 +68,9 @@ The original source was pinned, its script blocks and feature sections inventori
 
 ### 5.2 Shared-state and dependency audit
 
-A first raw-text inventory found 51 direct `S.property` names. That earlier report is explicitly heuristic. An additional AST pass now records code-syntax references and selected alias/call-argument patterns.
+A first raw-text inventory found 51 direct `S.property` names. That earlier report is explicitly heuristic. An additional AST pass now records direct code-syntax references plus a limited same-script local alias trace; the new detailed report is `architecture/SEMANTIC-STATE-ALIAS-WRITE-TRACE.md`.
 
-Key observed high-coupling areas include `inv`, `items`, `eq`, `coins`, `tab`, `hp`, `up`, `barn`, `plots`, `wx`, `wz`, `mf`, `fz`, `dg`, `mineExp`, `story`, `classXP`, and `combatTraining`.
+Key observed high-coupling areas include `inv`, `items`, `eq`, `coins`, `tab`, `hp`, `up`, `barn`, `plots`, `wx`, `wz`, `mf`, `fz`, `dg`, `mineExp`, `story`, `classXP`, and `combatTraining`. The corrected syntax inventory now has 1,209 direct-plus-tracked-alias references across the 51 fields (822 reads and 387 write/update operations). It found 49 simple same-script alias/destructuring binding sites, 246 alias-rooted references and 69 writes via those tracked aliases. This is not full whole-program data flow.
 
 Do not assign exclusive module ownership based on access frequency. The fields remain shared until full write/alias/helper/event/timer tracing has been completed.
 
@@ -78,7 +78,7 @@ Do not assign exclusive module ownership based on access frequency. The fields r
 
 Many functions are extended by later script blocks that capture the current function and then replace it. The order matters. The audit records major chains for `render`, `foeDown`, `playerDown`, `flee`, `startFight`, `enemyAttack`, `catchFish`, `upd`, `save`, `addXp`, `fx`, `combatTick`, `strike`, and several `VIEWS.*` entries.
 
-A new AST scan found 100 callable assignments to identifier-named functions across 44 target names. In 86 assignments, the simple matcher found a preceding same-script binding and a matching invocation. Fourteen assignments were unpaired by that matcher and are listed for manual review in the AST report. An unpaired assignment is **not automatically a direct replacement**; it may be a new definition or a pattern the matcher cannot recognize.
+A new AST scan found 100 callable assignments to identifier-named functions across 44 target names. In 86 assignments, the simple matcher found a preceding same-script binding and a matching invocation. Fourteen assignments were unpaired by that matcher and are listed for manual review in the AST report. An unpaired assignment is **not automatically a direct replacement**; it may be a new definition or a pattern the matcher cannot recognize. For the pinned source, a manual review has now classified all 14 listed identifier assignments; see the semantic alias/wrapper trace. A high-priority potential behavior gap was found: `tradeTick` at line 2660 replaces the old `S.trade` route tick from line 1380 with a tick for `S.cv.runs`, without delegation. Treat as a regression scenario to confirm in the browser, not as a proven bug.
 
 Timer API scan counts: 111 `setTimeout`, 15 `setInterval`, 34 `requestAnimationFrame`, one `requestIdleCallback`, 26 `clearTimeout`, zero `clearInterval`, four `cancelAnimationFrame`, and zero `cancelIdleCallback` calls. These are syntax call-site counts, not proof of the runtime owner or cleanup behavior.
 
@@ -128,8 +128,8 @@ To continue browser verification, use a supported browser-testing session/mode w
 Do not close Phase 0 until each relevant item has evidence.
 
 ### Static/semantic work
-- Complete semantic read/write ownership for every `S` field, including nested writes, aliases, destructuring, dynamic keys, references passed into helper functions, and helper side effects.
-- Manually classify the 14 unpaired function assignments listed in `AST-BACKED-STATIC-ANALYSIS.md`.
+- Finish whole-program semantic read/write ownership for every `S` field, including callback parameters, helper side effects, aliases crossing script-block boundaries, dynamic/computed keys and arbitrary object references passed into helpers. Simple same-script alias paths have been traced, but they are not complete points-to analysis.
+- The 14 previously unpaired identifier assignments have now been manually classified; verify their assumptions against browser behavior, and complete return-value/caller review for paired and object-property wrappers.
 - Complete the function predecessor/delegation graph, distinguishing wrappers, new definitions and direct replacements. Record whether predecessor calls are conditional, whether return values are preserved, and what runs before/after delegation.
 - For all persistent intervals and RAF controllers, record exact owner, handle, start/stop conditions, cleanup, stale-callback protection, state mutations, and save interactions.
 
@@ -151,9 +151,10 @@ The checklist is maintained in [PHASE-0-EXIT-CHECKLIST.md](architecture/PHASE-0-
 2. Re-fetch current branch files and compare `phase-0/baseline-audit` with `main`; verify that no runtime source file has entered the audit branch.
 3. Continue static analysis by manually reviewing the unpaired function assignments and the highest-risk state fields. Amend reports with exact evidence and keep heuristic vs AST vs runtime observations distinct.
 4. Arrange an approved browser testing context. If available, run the frozen baseline with disposable saves and capture console/screenshots and scenario results. If blocked by a host policy, stop; do not bypass it.
-5. Complete persistence fixtures and lifecycle checks before authorizing any source extraction.
-6. Only after the Phase 0 gates pass and the user agrees to proceed, create a separate implementation branch based on the documented baseline/audit branch and extract one pure helper. Start with `fmt`; preserve the classic-script loading model initially.
-7. Run before/after browser regressions and characterization tests, review the diff, document rollback, and only then propose integration. Never merge on behalf of the user without explicit approval.
+5. Test the legacy `S.trade` trip flow and V4 caravan flow separately because the later `tradeTick` assignment replaces the earlier implementation without delegation.
+6. Complete persistence fixtures and lifecycle checks before authorizing any source extraction.
+7. Only after the Phase 0 gates pass and the user agrees to proceed, create a separate implementation branch based on the documented baseline/audit branch and extract one pure helper. Start with `fmt`; preserve the classic-script loading model initially.
+8. Run before/after browser regressions and characterization tests, review the diff, document rollback, and only then propose integration. Never merge on behalf of the user without explicit approval.
 
 ## 10. Key documents
 
@@ -163,6 +164,7 @@ The checklist is maintained in [PHASE-0-EXIT-CHECKLIST.md](architecture/PHASE-0-
 | [Phase 0 exit checklist](architecture/PHASE-0-EXIT-CHECKLIST.md) | What is done and what still blocks extraction |
 | [AST-backed analysis](architecture/AST-BACKED-STATIC-ANALYSIS.md) | Syntax-level state references, wrapper and timer call-site audit |
 | [Detailed shared-state ledger](architecture/DETAILED-SHARED-STATE-LEDGER.md) | Prior heuristic field inventory and coupling notes |
+| [Semantic alias/write trace](architecture/SEMANTIC-STATE-ALIAS-WRITE-TRACE.md) | Corrected AST direct+alias totals, per-field writes, S replacement boundaries, and manual replacement findings |
 | [Wrapper/lifecycle ledger](architecture/FUNCTION-WRAPPER-AND-RUNTIME-LIFECYCLE-LEDGER.md) | Wrapper order and persistent timer inventory |
 | [First extraction candidate](architecture/FIRST-EXTRACTION-CANDIDATE.md) | `fmt` candidate and isolated characterization |
 | [Static validation](testing/STATIC-VALIDATION-RESULTS.md) | Source identity, parser checks and browser blocker |
