@@ -30,6 +30,7 @@ Working branch: `phase-0/baseline-audit`.
 ## Detailed audit documents
 
 - [Detailed shared-state ledger](DETAILED-SHARED-STATE-LEDGER.md) — historical heuristic read/write counts and high-coupling risk notes.
+- [Semantic state/alias write trace](SEMANTIC-STATE-ALIAS-WRITE-TRACE.md) — corrected AST totals, alias-backed writes, state replacement/save lifecycle, and manual function replacement findings.
 - [AST-backed static analysis](AST-BACKED-STATIC-ANALYSIS.md) — syntax-level field references, selected wrapper predecessor captures, timer API call counts and limitations.
 - [Function wrapper and runtime lifecycle ledger](FUNCTION-WRAPPER-AND-RUNTIME-LIFECYCLE-LEDGER.md) — major wrapper reassignment order, recurring timers/RAF, and cleanup observations.
 - [State access, wrapper and lifecycle audit](STATE-ACCESS-WRAPPER-AND-LIFECYCLE-AUDIT.md) — combined high-level findings.
@@ -39,9 +40,9 @@ Working branch: `phase-0/baseline-audit`.
 
 ## Not yet verified — do not mark complete
 
-- [ ] Complete semantic read/write ownership for every field in `S`, including alias propagation, dynamic keys, object references passed to helpers and helper side effects. The current AST report is syntax-level evidence only.
-- [ ] Complete wrapper predecessor/delegation graph, including direct replacements and skipped delegation.
-- [ ] Exact runtime timer/RAF owner and disposal guarantees for every exit path.
+- [ ] Finish whole-program semantic ownership and data-flow tracing for every `S` field, including callback parameters, helper side effects, aliases crossing script-block boundaries, dynamic/computed keys and all references passed to helpers. The current tracker follows simple same-script aliases only.
+- [ ] Complete runtime wrapper predecessor/delegation graph for all paired wrappers, object-property assignments and caller return-value expectations. The 14 previously unpaired identifier assignments have been manually classified.
+- [ ] Exact runtime timer/RAF owner and disposal guarantees for every exit path, including repeated tab/slot navigation and page visibility changes.
 - [ ] Browser execution of the legacy baseline. Prior headless Chromium attempts were blocked with `ERR_BLOCKED_BY_ADMINISTRATOR`; the latest connected Browser read was explicitly denied by the browser host security gate on the current ChatGPT tab. No game URL was opened and no workaround was attempted.
 - [ ] Console-error baseline from a real browser session.
 - [ ] Representative save fixtures for all five slots and legacy slot-1 import.
@@ -57,7 +58,7 @@ The syntax check proves that each extracted inline script block parses as JavaSc
 
 ## Safe next step
 
-Complete semantic state ownership and the exact wrapper/timer lifecycle trace, then run the browser regression checklist against the frozen baseline using disposable save data. The new AST inventory narrows the static-analysis gaps but does not close these semantic/runtime gates. Only after those gates pass should the pure duration formatter be extracted in a separate reviewable code commit. Until then, Phase 0 remains in progress and no gameplay source should be extracted or modified.
+Continue from the completed simple-alias and manual-unpaired-assignment trace: finish callback/helper data-flow review, then run the browser regression checklist against the frozen baseline using a dedicated disposable browser profile and save data. Verify the high-risk legacy-trade `tradeTick` replacement as a specific scenario. The new AST inventory narrows the static-analysis gaps but does not close these semantic/runtime gates. Only after those gates pass should the pure duration formatter be extracted in a separate reviewable code commit. Until then, Phase 0 remains in progress and no gameplay source should be extracted or modified.
 
 ## Change-control guarantee
 
