@@ -56,14 +56,7 @@ The local copy used for the latest checks was `/mnt/data/files/Project X.html`. 
 
 ## 4. Current repository state
 
-The working branch is `phase-0/baseline-audit`. It is an audit/documentation branch. The latest verified compare after adding the handoff and updating the Phase 0 checklist showed:
-
-- `ahead_by: 28` and `behind_by: 0` relative to `main`;
-- 19 changed files;
-- every changed path begins with `docs/`;
-- no runtime/game source files changed.
-
-Re-run GitHub compare before the next implementation step because documentation commits will change these counts. Do not merge this branch into `main` automatically.
+The working branch is `phase-0/baseline-audit`. It is an audit/documentation branch. A verified compare during this handoff showed the branch ahead of `main`, not behind, with every changed path under `docs/` and no runtime/game source files changed. The exact ahead count changes as this handoff and checklist are updated, so obtain a fresh comparison before the next implementation step. Do not merge this branch into `main` automatically.
 
 Useful branch link: https://github.com/yusssfeee/RGP-GAME/tree/phase-0/baseline-audit
 
