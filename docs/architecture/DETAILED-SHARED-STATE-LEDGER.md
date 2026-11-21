@@ -3,11 +3,11 @@
 **Baseline:** `Project X.html` on `main`  
 **Git blob:** `5ade1cb528871ad410228697e21d317f80782160`  
 **Branch:** `phase-0/baseline-audit`  
-**Method:** static line scan of direct `S.property` tokens; no runtime instrumentation.
+**Method:** historical static line scan of direct `S.property` tokens; no runtime instrumentation. See [AST-backed static analysis](AST-BACKED-STATIC-ANALYSIS.md) for the code-syntax reference inventory.
 
 ## Important interpretation
 
-The counts below are a reproducible *textual heuristic*, not a complete JavaScript data-flow analysis. The scanner classifies a direct token as a read, a simple write/update, an indexed write, or a recognized mutating method call. It cannot reliably classify conditional expressions, aliasing (for example `const x=S.inv`), object destructuring, dynamic keys (`S[k]`), helper functions that mutate an object passed to them, getters/setters, or mutations hidden in callbacks. Nested object writes such as `S.up.x = ...` are not necessarily counted as writes to the top-level `up` field. Therefore these figures must not be used as proof that a property has no writers.
+The counts below are a reproducible *textual heuristic*, not a complete JavaScript data-flow analysis. The companion AST-backed report counts 963 direct code-syntax references across these 51 names and refines the immediate syntax classifications; it does not establish semantic ownership. The scanner classifies a direct token as a read, a simple write/update, an indexed write, or a recognized mutating method call. It cannot reliably classify conditional expressions, aliasing (for example `const x=S.inv`), object destructuring, dynamic keys (`S[k]`), helper functions that mutate an object passed to them, getters/setters, or mutations hidden in callbacks. Nested object writes such as `S.up.x = ...` are not necessarily counted as writes to the top-level `up` field. Therefore these figures must not be used as proof that a property has no writers.
 
 ## 1. Direct property reference inventory
 
