@@ -78,9 +78,9 @@ Do not assign exclusive module ownership based on access frequency. The fields r
 
 Many functions are extended by later script blocks that capture the current function and then replace it. The order matters. The audit records major chains for `render`, `foeDown`, `playerDown`, `flee`, `startFight`, `enemyAttack`, `catchFish`, `upd`, `save`, `addXp`, `fx`, `combatTick`, `strike`, and several `VIEWS.*` entries.
 
-A new AST scan found 100 callable assignments to identifier-named functions across 44 target names. In 86 assignments, the simple matcher found a preceding same-script binding and a matching invocation. Fourteen assignments were unpaired by that matcher and are listed for manual review in the AST report. An unpaired assignment is **not automatically a direct replacement**; it may be a new definition or a pattern the matcher cannot recognize. For the pinned source, a manual review has now classified all 14 listed identifier assignments; see the semantic alias/wrapper trace. A high-priority potential behavior gap was found: `tradeTick` at line 2660 replaces the old `S.trade` route tick from line 1380 with a tick for `S.cv.runs`, without delegation. Treat as a regression scenario to confirm in the browser, not as a proven bug.
+A new AST scan found 100 callable assignments to identifier-named functions across 44 target names. In 86 assignments, the simple matcher found a preceding same-script binding and a matching invocation. The remaining 14 were manually classified in the semantic state/alias trace; additionally, `window.fx`, `window.drop` and the temporary `window.toast` replacement are recorded there. A high-priority potential behavior gap was found: `tradeTick` at line 2660 replaces the old `S.trade` route tick from line 1380 with a tick for `S.cv.runs`, without delegation. Treat it as a regression scenario to confirm in the browser, not as a proven bug.
 
-Timer API scan counts: 111 `setTimeout`, 15 `setInterval`, 34 `requestAnimationFrame`, one `requestIdleCallback`, 26 `clearTimeout`, zero `clearInterval`, four `cancelAnimationFrame`, and zero `cancelIdleCallback` calls. These are syntax call-site counts, not proof of the runtime owner or cleanup behavior.
+Timer API scan counts: 111 `setTimeout`, 15 `setInterval`, 34 `requestAnimationFrame`, one `requestIdleCallback`, 26 `clearTimeout`, zero `clearInterval`, four `cancelAnimationFrame`, and zero `cancelIdleCallback` calls. No interval ID was directly assigned to an obvious handle by the AST call-site scan. These are syntax call-site counts, not proof of the runtime owner or cleanup behavior.
 
 ### 5.4 First extraction candidate
 
@@ -108,20 +108,27 @@ Limitations:
 - The isolated `fmt` test does not execute its UI call sites.
 - No gameplay, audio, animation, persistence, save/reload, or browser-console result is available.
 
-Detailed output and method: [STATIC-VALIDATION-RESULTS.md](testing/STATIC-VALIDATION-RESULTS.md).
+Detailed output and method: [STATIC-VALIDATION-RESULTS.md](testing/STATIC-VALIDATION-RESULTS.md). The full corrected alias trace is in [SEMANTIC-STATE-ALIAS-WRITE-TRACE.md](architecture/SEMANTIC-STATE-ALIAS-WRITE-TRACE.md).
 
 ## 7. Browser test attempt and blocker
 
-The user asked for the game to be launched and tested. This was attempted, but no game-page browser execution was achieved in this session.
+The user explicitly asked to open and test the game in a browser. Chromium 144.0.7559.96 was installed and launched as a regular window in an Xvfb virtual display (`:98`, 1365 × 900), using a new disposable profile. The browser window reached the target local file URL:
 
-1. A previous headless Chromium attempt against both a local `file://` URL and a temporary loopback HTTP URL was blocked by the execution environment with `net::ERR_BLOCKED_BY_ADMINISTRATOR`. This result is recorded in the static validation report.
-2. In the current session, the Browser tab list showed only the current ChatGPT tab.
-3. Reading that tab was explicitly rejected by the browser host security gate because its URL was `https://chatgpt.com`. The rejection stated that the agent must not try to reach the same content through another browser surface, raw CDP, indirect execution, or a workaround.
-4. No workaround was attempted. No game URL was opened, no browser console was read, and no gameplay actions were carried out.
+`file:///mnt/data/files/Project%20X.html`
 
-This is an **environment/tool access blocker**, not evidence that `Project X.html` is broken. Do not change the game to “fix” this blocker.
+The browser then displayed the organization policy page: **“file links are blocked — Your organization doesn’t allow you to view this site.”** The game page did not load. This is an environment/access restriction, not evidence that the game is broken.
 
-To continue browser verification, use a supported browser-testing session/mode when available and obey any host restrictions. If browser interaction is still denied, stop and document the blocker; ask the user to provide an approved testing surface or run the test manually and share the console output. Do not claim the game works or fails based on the blocked attempt.
+Additional attempts:
+- Chromium could not use the container's advertised `:0` display because no X server was available there.
+- Headless Chromium attempts with separate temporary profiles did not return a DOM dump before timeout; browser logs contained D-Bus, EGL/graphics and Mojo/zygote environment diagnostics but no game DOM.
+- Previous attempts against `file://` and loopback HTTP returned `net::ERR_BLOCKED_BY_ADMINISTRATOR`.
+- The connected Browser tab was only the current ChatGPT tab; the browser host denied reading that ChatGPT URL. That refusal was respected. It was not used as a route to inspect the game.
+
+No route was used to bypass the file-link policy. No proxy, re-hosting, raw CDP, injected script, or alternate browser surface was attempted after the policy page appeared. The temporary profile was separate from the user's normal browser data and no save data was opened or changed.
+
+Detailed attempt record: [BROWSER-BASELINE-ATTEMPT.md](testing/BROWSER-BASELINE-ATTEMPT.md).
+
+**No game runtime, application console or gameplay test is claimed as executed.** Do not infer that the game passes or fails from this browser block.
 
 ## 8. Phase 0 work still required
 
@@ -134,7 +141,7 @@ Do not close Phase 0 until each relevant item has evidence.
 - For all persistent intervals and RAF controllers, record exact owner, handle, start/stop conditions, cleanup, stale-callback protection, state mutations, and save interactions.
 
 ### Runtime/persistence work
-- Open the baseline in an approved browser context.
+- Obtain an organization-approved browser context that permits this local game file or an explicitly approved local development origin; do not bypass the observed file-link restriction.
 - Capture startup console output and baseline screenshots for key screens.
 - Test navigation, dialogs, pointer/keyboard inputs, resize and visibility changes.
 - Use disposable test data, not the user's only valuable save.
@@ -150,7 +157,7 @@ The checklist is maintained in [PHASE-0-EXIT-CHECKLIST.md](architecture/PHASE-0-
 1. Read this handoff, then the modularization roadmap, Phase 0 exit checklist, static validation report, AST report, shared-state ledger, wrapper/lifecycle ledger, persistence maps, and regression baseline.
 2. Re-fetch current branch files and compare `phase-0/baseline-audit` with `main`; verify that no runtime source file has entered the audit branch.
 3. Continue static analysis by manually reviewing the unpaired function assignments and the highest-risk state fields. Amend reports with exact evidence and keep heuristic vs AST vs runtime observations distinct.
-4. Arrange an approved browser testing context. If available, run the frozen baseline with disposable saves and capture console/screenshots and scenario results. If blocked by a host policy, stop; do not bypass it.
+4. Arrange an approved browser testing context. Chromium was already launched in Xvfb, but the organization blocked `file://` before load. If an approved route becomes available, run the frozen baseline with disposable saves and capture console/screenshots and scenario results. If still blocked, stop; do not bypass it.
 5. Test the legacy `S.trade` trip flow and V4 caravan flow separately because the later `tradeTick` assignment replaces the earlier implementation without delegation.
 6. Complete persistence fixtures and lifecycle checks before authorizing any source extraction.
 7. Only after the Phase 0 gates pass and the user agrees to proceed, create a separate implementation branch based on the documented baseline/audit branch and extract one pure helper. Start with `fmt`; preserve the classic-script loading model initially.
@@ -169,7 +176,8 @@ The checklist is maintained in [PHASE-0-EXIT-CHECKLIST.md](architecture/PHASE-0-
 | [First extraction candidate](architecture/FIRST-EXTRACTION-CANDIDATE.md) | `fmt` candidate and isolated characterization |
 | [Static validation](testing/STATIC-VALIDATION-RESULTS.md) | Source identity, parser checks and browser blocker |
 | [Gameplay regression baseline](testing/REGRESSION-BASELINE.md) | Manual test scenarios and evidence format |
+| [Browser attempt record](testing/BROWSER-BASELINE-ATTEMPT.md) | Chromium/Xvfb launch result and organization file-link block |
 
 ---
 
-**Current status: Phase 0 is still in progress.** Static analysis and isolated helper checks have advanced. The game has not been successfully launched in a browser in this work session. No runtime/game source has been changed, and no code extraction or merge has been performed.
+**Current status: Phase 0 is still in progress.** Step 1 static source tracing has advanced: simple same-script alias writes are inventoried and the 14 unpaired identifier assignments have been manually classified. Whole-program callback/helper data flow and runtime lifecycle checks remain open. Chromium launched in a virtual display, but the organization's file-link policy blocked the game before load, so no runtime/gameplay test is available. No runtime/game source has been changed, and no code extraction or merge has been performed.
