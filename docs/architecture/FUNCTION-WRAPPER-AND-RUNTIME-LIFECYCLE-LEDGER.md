@@ -3,7 +3,7 @@
 **Baseline source:** `Project X.html` on `main`  
 **Git blob:** `5ade1cb528871ad410228697e21d317f80782160`  
 **Branch:** `phase-0/baseline-audit`  
-**Method:** source-order scan of assignments and timer APIs, followed by manual grouping. Static evidence only.
+**Method:** source-order inventory reconciled with AST-backed static analysis using TypeScript compiler API 5.8.3; runtime behavior remains unverified.
 
 ## 1. Wrapper-chain rule
 
@@ -27,8 +27,8 @@ The table records observed reassignment sites in ascending source order. It list
 | 3795 | Captures current render; toggles fight-pane state and may call `upd()`. |
 | 4183 | Captures current render; runs farm and barn synchronization. |
 | 4686 | Captures current render; adds woodcutting scroll/scene behavior. |
-| 6799 | Direct replacement site; inspect block 23 before moving it. |
-| 7053 | Direct replacement site in goblin animation integration. |
+| 6799 | Captures `baseRender`; delegates and returns the stored result. This is a wrapper, not a direct replacement. |
+| 7053 | Captures `_rn`; delegates to the captured render and returns that call. This is a wrapper. |
 | 7510 | Captures current render for combat visual attachment. |
 | 8054 | Captures previous render; handles shaman death state and schedules attachment. |
 | 8202 | Captures previous render; handles spear death state and schedules attachment. |
@@ -39,8 +39,8 @@ The table records observed reassignment sites in ascending source order. It list
 | Function | Assignment lines | Observed layering |
 |---|---|---|
 | `foeDown` | 1930, 2206, 3782, 4808, 4909, 4972, 7072, 7463, 8064, 8210, 8577 | Story/boss progress; mining cleanup; V4 effects; mining reward and redraw; combat visuals; shaman/spear death animation; class reward integration. |
-| `playerDown` | 2206, 4977, 7463 | Mining encounter cleanup, mining expedition result handling, combat death integration. |
-| `flee` | 2219, 4975 | Mining encounter cleanup and expedition return handling. |
+| `playerDown` | 2213, 4974 | Mining encounter cleanup and mining expedition result handling. The nearby `foeDown` assignments are separate. |
+| `flee` | 2219, 4973 | Mining encounter cleanup and expedition return handling. |
 | `startFight` | 4841, 4908, 7066, 7515, 8056, 8204 | Enemy setup, mining redraw, animation reset, death visual detach/attach for multiple enemy animation controllers. |
 | `enemyAttack` | 3781, 4860, 7069, 7476, 8060, 8206 | V4 effects, mining combat logic, attack timing, shaman/spear animation state. |
 | `catchFish` | 2299, 5716, 6089 | Fishing presentation, discovery/journal integration, audio integration. |
@@ -58,6 +58,18 @@ The table records observed reassignment sites in ascending source order. It list
 - `strike`: 4855, 7471, 8058, 8641.
 
 **Required before extraction:** turn this source-order list into a verified delegation graph by recording the exact captured variable, whether delegation is unconditional, whether return values are preserved, and what cleanup/side effects occur before and after delegation. A direct replacement (without calling the predecessor) must be distinguished from a wrapper.
+
+## 2A. AST-backed predecessor and timer scan
+
+See [AST-backed static analysis](AST-BACKED-STATIC-ANALYSIS.md) for the field-reference inventory, selected predecessor captures, and timer API counts.
+
+- 100 callable assignments to identifier-named functions were found across 44 target names; 86 had a preceding same-script captured binding and a matching use. The remaining 14 need wider lexical/manual tracing; this does not imply all are direct replacements.
+- The AST scan confirms the `render` captures at lines 6799 (`baseRender`) and 7053 (`_rn`), correcting the earlier preliminary classification.
+- Corrected assignment lines: `playerDown` at 2213 and 4974; `flee` at 2219 and 4973.
+- Timer API call counts: `setTimeout` 111, `setInterval` 15, `requestAnimationFrame` 34, `requestIdleCallback` 1, `clearTimeout` 26, `clearInterval` 0, `cancelAnimationFrame` 4, `cancelIdleCallback` 0.
+- No `setInterval` return value was directly assigned to an obvious handle by this scan, and no `clearInterval` call was found. This signals page-lifetime recurring work but is not proof of a defect or a full runtime lifecycle result.
+
+These are AST syntax observations scoped to the pinned inline script blocks. Alias propagation, helper effects, exact runtime lexical resolution, and the complete lifecycle still require manual tracing and browser execution.
 
 ## 3. Timer and animation-frame lifecycle inventory
 
@@ -122,9 +134,10 @@ The most important risks are the main RAF loop, global 250 ms tick, regeneration
 ## 7. Verification status
 
 - [x] Direct `S.property` textual inventory (51 properties).
+- [x] AST syntax inventory and selected function/timer call-site analysis; see `AST-BACKED-STATIC-ANALYSIS.md`.
 - [x] Major global function reassignment sites catalogued.
 - [x] Major persistent interval / RAF sites catalogued.
-- [ ] AST-backed field read/write analysis and alias tracing.
+- [ ] Complete semantic field read/write ownership and alias/data-flow tracing; current AST inventory is syntactic, not a complete semantic analysis.
 - [ ] Exact wrapper predecessor/delegation graph.
 - [ ] Runtime timer handle and disposal verification.
 - [ ] Browser execution, console baseline and gameplay regression.
