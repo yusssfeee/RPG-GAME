@@ -152,6 +152,29 @@ Notes:
 - The matching is syntactic and local to an inline script block. It does not prove that the captured function is the full runtime predecessor when later script blocks, globals, or lexical bindings alter resolution.
 - “Calls without explicit return” describes syntax only. Do not alter this behavior until all callers and observable effects are tested.
 
+### Unpaired identifier-function assignments requiring inspection
+
+The AST scan found these 14 assignments without a same-script captured predecessor and matching use. This only means the simple local capture matcher did not pair them; it does not prove that each assignment overwrites an existing runtime function.
+
+| Target | Assignment line |
+|---|---:|
+| fx | 1727 |
+| tapStall | 1769 |
+| newGrid | 2176 |
+| spawnFish | 2247 |
+| oIcon | 2338 |
+| fIcon | 2345 |
+| tradeTick | 2660 |
+| toast | 2777 |
+| treeSvg | 3465 |
+| anvilAct | 3542 |
+| woodLoop | 3863 |
+| chopSwing | 3872 |
+| woodLoop | 4520 |
+| equip | 8421 |
+
+Classify each as a new definition, export/assignment, direct replacement, or indirect wrapper only after inspecting the containing block and its surrounding lexical scope. Do not presume they all need predecessor delegation.
+
 ## Timer and animation call-site inventory
 
 | API | AST call sites |
