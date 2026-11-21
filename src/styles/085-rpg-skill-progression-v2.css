@@ -1,0 +1,8 @@
+
+.rpg-prog-intro{padding:11px 12px;border:1px solid #806c4b;border-radius:12px;background:linear-gradient(135deg,#1b2a3c,#111b29);color:#dce8f1;font-size:12px;line-height:1.5;margin-bottom:12px}
+.rpg-prog-item{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px;margin:8px 0}
+.rpg-prog-item .top{display:flex;align-items:center;gap:8px}
+.rpg-prog-item .top b{flex:1}
+.rpg-prog-item .benefit{font-size:11px;color:var(--mute);line-height:1.45;margin:6px 0 0 31px}
+.rpg-prog-item .milestone{font-size:10px;color:#e6c783;margin:4px 0 0 31px}
+.rpg-prog-item .bar2{margin-top:7px}

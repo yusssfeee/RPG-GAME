@@ -1,0 +1,14 @@
+
+.rpg-mine-scene{position:relative;overflow:hidden;min-height:290px;border:1px solid #ffffff20;border-radius:16px;transition:filter .2s,transform .2s;background-size:cover!important;background-position:center!important}
+.rpg-mine-resource{transition:transform .14s cubic-bezier(.2,.8,.2,1),filter .2s;transform-origin:50% 75%;cursor:pointer;position:relative;z-index:2}
+.mine-hit .rpg-mine-resource{animation:mineJolt .22s ease-out}.mine-hit{animation:mineSceneShake .2s ease-out}.mine-break .rpg-mine-resource{animation:mineShatter .42s ease-in forwards;filter:brightness(1.6) saturate(.5)}
+.mine-walk-out{position:relative}.mine-walk-out:after{content:' ';position:absolute;inset:0;z-index:999;pointer-events:none;background:linear-gradient(90deg,transparent,#d5c9a455,transparent);animation:mineWalkWipe .7s ease-in-out forwards}.mine-walk-out:before{content:'🚶';position:absolute;z-index:1000;left:8%;top:42%;font-size:34px;pointer-events:none;animation:mineTraveler .7s ease-in-out forwards;filter:drop-shadow(0 3px 4px #000)}
+.mine-walk-out{animation:mineSceneMove .7s ease-in-out forwards}
+.mine-spark{position:fixed;z-index:9999;width:5px;height:5px;border-radius:50%;background:hsl(var(--h),95%,68%);box-shadow:0 0 8px 3px #ffc86b99;pointer-events:none;animation:mineSparkFly .58s ease-out forwards}
+@keyframes mineJolt{0%{transform:translate(0) rotate(0)}25%{transform:translate(-5px,2px) rotate(-3deg)}55%{transform:translate(5px,-2px) rotate(3deg)}100%{transform:translate(0) rotate(0)}}
+@keyframes mineSceneShake{0%,100%{transform:translateX(0)}30%{transform:translateX(-3px)}65%{transform:translateX(3px)}}
+@keyframes mineShatter{to{transform:scale(.72) rotate(9deg);opacity:0;filter:blur(5px)}}
+@keyframes mineSparkFly{to{transform:translate(var(--sx),var(--sy)) scale(0);opacity:0}}
+@keyframes mineTraveler{0%{left:8%;opacity:0;transform:translateY(12px) scale(.8)}15%{opacity:1}55%{transform:translate(38vw,-8px) scale(1.08)}100%{left:86%;opacity:0;transform:translateY(5px) scale(.9)}}
+@keyframes mineWalkWipe{0%{transform:translateX(-110%);opacity:0}35%{opacity:1}100%{transform:translateX(110%);opacity:0}}
+@keyframes mineSceneMove{0%{filter:brightness(1);transform:scale(1)}45%{filter:brightness(.55);transform:scale(1.025)}100%{filter:brightness(1);transform:scale(1)}}

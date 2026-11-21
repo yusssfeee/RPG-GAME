@@ -1,0 +1,18 @@
+
+.eqs{padding:12px 10px 16px}
+.eqs-banner{margin:0 auto 12px;letter-spacing:2px}
+.eqs-stage{grid-template-columns:1fr auto 1fr;align-items:center;gap:4px}
+.eqs-col{gap:10px}
+.eqs-slot{width:64px;position:relative}
+.eqs-slot .ic,.eqs-slot img{width:36px;height:36px}
+.eqs-glyph{width:30px;height:30px;color:#7d8a72;opacity:.9}
+.eqs-slot.empty i{opacity:1;font-size:0}
+.eqs-name{max-width:66px;font-size:9px}
+.eqs-hero .pic{width:150px;height:150px}
+.eqs-quick{gap:12px;margin:14px 0 2px}
+.eqs-stats{margin-top:12px;gap:5px}
+.eqs-st{padding:7px 2px}
+.eqs-st b{font-size:15px}
+html[data-device="mobile"] .eqs-slot{width:56px}
+html[data-device="mobile"] .eqs-hero .pic{width:120px;height:120px}
+html[data-device="mobile"] .eqs-slot .ic,html[data-device="mobile"] .eqs-slot img{width:32px;height:32px}

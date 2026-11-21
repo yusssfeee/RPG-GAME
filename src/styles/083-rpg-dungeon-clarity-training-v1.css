@@ -1,0 +1,42 @@
+
+/* Sharper dungeon scenes while keeping the enemy/player layer crisp and readable. */
+.stage .bgs.ai-bgs{
+  background-size:cover!important;
+  background-position:center 48%!important;
+  filter:saturate(1.12) contrast(1.09) brightness(1.045)!important;
+  transform:scale(1.015);
+  transform-origin:center;
+}
+.stage .bgs.ai-bgs:after{
+  background:
+    linear-gradient(180deg,rgba(4,10,20,.04) 0%,rgba(4,10,20,.08) 48%,rgba(4,10,20,.48) 100%),
+    radial-gradient(ellipse at 50% 42%,rgba(255,255,255,.035),rgba(0,0,0,.16) 100%)!important;
+}
+.stage.s-fight .obj{z-index:4!important;filter:drop-shadow(0 9px 9px rgba(0,0,0,.48))}
+.stage.s-fight .me{z-index:4!important;filter:drop-shadow(0 5px 6px rgba(0,0,0,.55))}
+.stage.s-fight .tip,.stage.s-fight .mbar{z-index:5!important}
+.rpg-train-wrap{display:flex;flex-direction:column;gap:10px}
+.rpg-train-hero{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #8a7049;border-radius:14px;background:linear-gradient(135deg,#1b2c40,#111c2c);color:#f8eed9}
+.rpg-train-hero .portrait{width:58px;height:58px;flex:none;border-radius:12px;background:#0a1624;display:grid;place-items:center}
+.rpg-train-hero .portrait .ic{width:46px;height:46px}
+.rpg-train-hero b{display:block;font-size:15px}
+.rpg-train-hero small{display:block;color:#c2d0dc;font-size:11px;margin-top:3px}
+.rpg-train-progress{height:7px;border-radius:8px;background:#081321;overflow:hidden;margin-top:7px}
+.rpg-train-progress i{display:block;height:100%;background:linear-gradient(90deg,#55c9a4,#f2ce7b)}
+.rpg-train-points{margin-left:auto;white-space:nowrap;border:1px solid #b98b45;border-radius:10px;padding:7px 9px;color:#ffdc94;font-weight:800;font-size:12px}
+.rpg-train-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rpg-train-card{min-width:0;border:1px solid #52677b;border-radius:13px;background:linear-gradient(145deg,#1a2b3d,#101a29);padding:10px;color:#f4ead8;display:flex;flex-direction:column;gap:6px}
+.rpg-train-card .head{display:flex;align-items:center;gap:7px}
+.rpg-train-card .head .ic{width:25px;height:25px}
+.rpg-train-card b{font-size:12px}
+.rpg-train-card p{font-size:10.5px;line-height:1.35;color:#b9c8d7;margin:0;min-height:29px}
+.rpg-train-card .rank{font-size:11px;color:#f2cf85;font-weight:800}
+.rpg-train-card .cost{font-size:10px;color:#aebdcb;line-height:1.4}
+.rpg-train-card button{border:1px solid #8c6d3d;border-radius:9px;background:linear-gradient(180deg,#c89b52,#8d612d);color:#fff7e8;padding:7px 8px;font:700 11px system-ui;cursor:pointer}
+.rpg-train-card button:disabled{opacity:.38;filter:grayscale(.65);cursor:not-allowed}
+.rpg-train-locked{border-color:#66516f;background:linear-gradient(145deg,#282039,#17172a)}
+.rpg-ability-locked{opacity:.68!important;filter:saturate(.55)}
+.rpg-ability-locked em{color:#e8d6a7!important}
+.rpg-ability-locked small{background:#4b405b!important;color:#f3e8ff!important}
+.rpg-train-note{font-size:11px;line-height:1.45;color:#bdcbd8;padding:9px 10px;border-left:3px solid #c89b52;background:#152235;border-radius:8px}
+@media(max-width:420px){.rpg-train-grid{grid-template-columns:1fr}.rpg-train-card p{min-height:0}}

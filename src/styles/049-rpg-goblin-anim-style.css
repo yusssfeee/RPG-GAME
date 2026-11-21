@@ -1,0 +1,6 @@
+
+/* Animated goblin-family sprites (fight scene) */
+.gspr{position:relative;width:170px;height:170px;pointer-events:none}
+.gspr:before{content:"";position:absolute;left:50%;bottom:0;width:132px;height:22px;margin-left:-66px;border-radius:50%;background:radial-gradient(closest-side,#000b,#0000)}
+.gsp{position:absolute;left:50%;bottom:10px;width:0;height:0;transform-origin:0 0}
+.gf{position:absolute;bottom:0;background-repeat:no-repeat}

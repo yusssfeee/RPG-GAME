@@ -1,0 +1,1 @@
+setTimeout(function(){var c=document.getElementById("rpg-boot");if(c){c.classList.add("out");setTimeout(function(){c.remove()},500)}},20000)

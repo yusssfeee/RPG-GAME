@@ -1,0 +1,16 @@
+
+/* Gain feed: every item / piece of gear / coin you obtain pops up here with its icon */
+#gainfeed{position:fixed;z-index:9000;left:6px;right:6px;bottom:calc(env(safe-area-inset-bottom,0px) + 205px);display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:5px;pointer-events:none}
+#gainfeed .gn{display:flex;align-items:center;gap:6px;padding:2px 10px 2px 3px;border-radius:12px;background:linear-gradient(180deg,rgba(26,42,66,.96),rgba(12,22,38,.96));
+  border:1.5px solid rgba(214,173,98,.75);box-shadow:0 4px 14px rgba(0,0,0,.45);color:#fff3d6;font:700 12px/1.1 system-ui,-apple-system,"Segoe UI",sans-serif;
+  animation:gnIn .28s cubic-bezier(.2,1.4,.4,1) both;transition:opacity .4s ease,transform .4s ease}
+#gainfeed .gn.gear{border-color:rgba(176,132,255,.9)}
+#gainfeed .gn.coin{border-color:rgba(255,209,90,.95)}
+#gainfeed .gn.out{opacity:0;transform:translateY(8px) scale(.96)}
+#gainfeed .gn.bump{animation:gnBump .25s ease}
+#gainfeed .gi{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:10px;background:rgba(255,255,255,.07);flex:none}
+#gainfeed .gi svg{width:25px;height:25px}
+#gainfeed .gq{color:#8be28b;font-size:13px}
+#gainfeed .gt{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;opacity:.95}
+@keyframes gnIn{from{opacity:0;transform:translateY(10px) scale(.8)}to{opacity:1;transform:none}}
+@keyframes gnBump{50%{transform:scale(1.12)}}

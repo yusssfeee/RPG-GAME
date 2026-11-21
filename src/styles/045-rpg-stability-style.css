@@ -1,0 +1,75 @@
+
+/* ===== Stability layer: pre-game screens, notification dock, fishing layout, scroll safety ===== */
+body.rpg-pregame nav,body.rpg-pregame #rpg-dock{display:none!important}
+#pane{overflow-anchor:none}
+#app{padding-bottom:calc(var(--nav-h,76px) + 64px)!important}
+
+/* --- notification dock: sits just above the bottom menu, never over the play area --- */
+#rpg-dock{position:fixed;z-index:90;left:auto;right:8px;width:min(290px,78vw);bottom:calc(var(--nav-h,76px) + 8px);display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}
+#rpg-dock #v4n{position:static!important;top:auto!important;right:auto!important;width:100%!important;display:flex;flex-direction:column;gap:5px;pointer-events:none;z-index:auto}
+#rpg-dock #v4n .v4c{width:100%;box-shadow:0 3px 10px #0007;opacity:.97}
+#rpg-dock #v4n .v4c:nth-last-child(n+4){display:none}
+#rpg-dock #msg{display:block;max-width:100%;min-height:0;padding:6px 10px;border-radius:10px;background:#0b1a2af2;border:1px solid #c9a96c88;color:#ffe3a4;font-size:12px;line-height:1.3;text-align:left;box-shadow:0 3px 10px #0007}
+#rpg-dock #msg:empty{display:none}
+@media(max-width:899px){#rpg-dock #v4n .v4c:nth-last-child(n+2){display:none}}
+@media(min-width:1500px){
+  #rpg-dock{right:18px;bottom:auto;top:96px;width:270px;align-items:stretch}
+  #rpg-dock #msg{max-width:none}
+  #rpg-dock #v4n .v4c:nth-last-child(n+4){display:flex}
+  #rpg-dock #v4n .v4c:nth-last-child(n+6){display:none}
+}
+
+/* --- preload indicator on the title screen --- */
+#rpg-preload{width:min(360px,88vw);display:flex;flex-direction:column;gap:5px;align-items:center;font:700 11px/1.2 "Trebuchet MS",sans-serif;color:#f7dfb7;transition:opacity .4s}
+#rpg-preload b{display:block;width:100%;height:5px;border-radius:4px;background:#ffffff26;overflow:hidden}
+#rpg-preload i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffe4a0,#dca64e);transition:width .2s}
+#rpg-preload.done{opacity:0;pointer-events:none;height:0;overflow:hidden;margin:0}
+#intro .cta .btn:disabled{opacity:.6;filter:grayscale(.3)}
+
+/* --- fishing: HUD above the water, fish journal beside/below it, water uses the whole stage --- */
+.fish-hud{display:flex;flex-direction:column;gap:6px;padding:7px 9px;border:1px solid #6f97a6;border-radius:12px;background:linear-gradient(110deg,#0d2536,#0a1b2b);color:#eaf8ff;box-shadow:0 4px 12px #0003}
+.fish-hud-row{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+.fish-hud-title{flex:1 1 120px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.fish-hud-title span{font:800 13px/1.1 Georgia,serif;color:#ffe6ad}
+.fish-hud-title small{font-size:9px;line-height:1.2;color:#cce7ee}
+.fish-hud .pond-stage-meta{display:flex!important;flex-wrap:wrap;align-items:center;gap:4px;min-width:0;margin:0!important}
+.fish-hud .pond-stage-meta>span{position:static!important;display:inline-flex;align-items:center;margin:0!important;padding:3px 6px;border:1px solid #b8d7df88;border-radius:6px;background:#15384bdc;color:#e8f8f8;font:800 10px/1.1 "Trebuchet MS",sans-serif;white-space:nowrap}
+.fish-hud #combo{border-color:#e4c47e;background:#4a3a20;color:#ffe7a6}
+.fish-hud .pond-live-meter{position:static!important;left:auto!important;right:auto!important;top:auto!important;pointer-events:none}
+.fish-hud .pond-live-meter .pnd-meter{margin:0;padding:0;border:0;background:none;box-shadow:none}
+.fish-hud .pnd-mlab{display:flex;justify-content:space-between;gap:8px;font-size:11px;margin-bottom:4px}
+.fish-hud .pnd-mlab span:first-child{max-width:none;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fish-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.fish-layout>.rpg-fish-stage.stage{height:clamp(300px,58vh,520px)!important;min-height:300px!important;max-height:none!important;margin:0}
+.fish-layout .rpg-fish-stage #lake,.fish-layout .rpg-fish-stage .pond-surface-motion{left:0!important;right:0!important;top:0!important;bottom:0!important;width:auto!important}
+.fish-layout .pond-fish-catalog{position:static!important;width:auto!important;top:auto!important;right:auto!important;bottom:auto!important;display:flex;flex-direction:row;align-items:center;gap:8px;padding:6px 8px;pointer-events:auto;overflow:hidden}
+.fish-layout .pond-fish-catalog-head{flex:none;border:0;padding:0 8px 0 0;border-right:1px solid #d3e4e455}
+.fish-layout .pond-fish-catalog-list{flex:1;min-width:0;flex-direction:row;overflow-x:auto;overflow-y:hidden;gap:6px;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.fish-layout .pond-fish-entry{flex:0 0 auto;width:98px;min-height:34px}
+.fish-layout .pond-fish-label{font-size:10px}
+@media(min-width:900px){
+  .fish-layout{grid-template-columns:minmax(0,1fr) 184px;align-items:start}
+  .fish-layout>.rpg-fish-stage.stage{height:clamp(380px,62vh,580px)!important}
+  .fish-layout .pond-fish-catalog{flex-direction:column;align-items:stretch;max-height:clamp(380px,62vh,580px)}
+  .fish-layout .pond-fish-catalog-head{border-right:0;border-bottom:1px solid #d3e4e455;padding:0 2px 6px}
+  .fish-layout .pond-fish-catalog-list{flex-direction:column;overflow-x:hidden;overflow-y:auto}
+  .fish-layout .pond-fish-entry{width:auto}
+}
+.rpg-fish-stage~.pnd-info{margin-top:0}
+
+/* --- title artwork (cropped, no baked-in slot panel): framing for portrait phones and landscape screens --- */
+#poster{background-size:cover!important;background-position:50% 30%!important;background-repeat:no-repeat!important}
+@media(max-aspect-ratio:1/1){#poster{background-size:auto 86%!important;background-position:38% 0!important;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 62%,transparent 88%);mask-image:linear-gradient(180deg,#000 0,#000 62%,transparent 88%)}}
+
+/* --- root fix: the page itself scrolls (before, <body> was a hidden scroll container, so scrollTo/scrollIntoView did nothing and phones jumped) --- */
+html{height:auto!important;min-height:100%;overflow-x:hidden!important}
+body{height:auto!important;min-height:100%;overflow-x:clip!important;overflow-y:visible!important}
+
+@media(min-width:701px){nav div{grid-template-columns:repeat(10,minmax(0,1fr))!important}}
+/* --- phones: one swipeable row for the bottom menu instead of a 4-row grid that ate a quarter of the screen --- */
+@media(max-width:700px){
+  nav div{display:flex!important;grid-template-columns:none!important;gap:4px!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x proximity}
+  nav div::-webkit-scrollbar{display:none}
+  nav button{flex:0 0 68px!important;min-height:60px!important;font-size:11px!important;gap:3px!important;padding:5px 2px!important;scroll-snap-align:start}
+  nav button .ic{width:34px!important;height:34px!important}
+}

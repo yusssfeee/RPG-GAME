@@ -1,0 +1,133 @@
+
+/* RPG Game: compact, illustrated, responsive world UI */
+:root{--rpg-night:#071421;--rpg-panel:#12263a;--rpg-panel2:#1d354b;--rpg-gold:#f3c66b;--rpg-cyan:#6ee7f5;--rpg-mine-bg:none}
+#msg:empty{display:none}
+/* Profession grids: small enough to see in one viewport */
+#grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;padding:7px;background:linear-gradient(145deg,#426d39,#213b27);border-color:#d5aa53;box-shadow:inset 0 0 0 2px #18261a,0 7px 18px #0003}
+#grid .plot{aspect-ratio:1.02;min-width:0;border-radius:9px;gap:0;box-shadow:inset 0 -3px 0 var(--soil2),inset 0 0 0 1px #ffffff15;background:linear-gradient(145deg,#c89c63,#99633b);overflow:hidden}
+#grid .plot .ic{width:clamp(22px,6vw,32px);height:clamp(22px,6vw,32px)}
+#grid .plot .l{font-size:clamp(8px,2vw,10px);line-height:1.05;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 1px}
+#grid .plot .bar{left:5px;right:5px;bottom:4px;height:3px}
+#grid .plot.locked{background:linear-gradient(145deg,#48505a,#292f38)}
+#bgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:7px;background:linear-gradient(145deg,#714526,#3b261d);border-color:#d7ac5a}
+#bgrid .plot{aspect-ratio:1.05;min-width:0;border-radius:9px;padding:3px;gap:0;box-shadow:inset 0 -3px 0 #704420}
+#bgrid .plot .ic{width:clamp(25px,7vw,34px);height:clamp(25px,7vw,34px)}
+#bgrid .plot .l{font-size:9px;line-height:1.05;white-space:nowrap}
+#bgrid .plot .bar{left:5px;right:5px;bottom:4px;height:3px}
+#seeds{gap:4px}
+.seed{padding:3px 1px;border-radius:8px;font-size:10px;gap:0;min-width:0;box-shadow:0 2px 0 #0001}
+.seed .ic{width:clamp(22px,6vw,29px);height:clamp(22px,6vw,29px)}
+.seed span{font-size:8px;line-height:1.1;min-height:9px}
+#fchips{gap:4px}
+#aseeds{gap:4px}
+#aseeds .seed{padding:3px 1px}
+/* Nav: every destination is visible; 17 tabs flow into two neat rows */
+nav{background:linear-gradient(180deg,#111f31,#07111d);border-top:1px solid #c29a54;box-shadow:0 -8px 24px #0005;color:#fff;padding:3px 4px calc(3px + env(safe-area-inset-bottom,0px));}
+nav div{width:100%;max-width:440px;margin:0 auto;display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr));gap:1px 3px;overflow:visible!important;align-items:stretch}
+nav button{flex:initial!important;min-width:0;min-height:41px;color:#d6e2f0;font-size:9px;line-height:1.05;padding:3px 0 4px;gap:2px;border-radius:9px;white-space:nowrap;overflow:hidden}
+nav button .ic{width:clamp(19px,2.6vw,25px);height:clamp(19px,2.6vw,25px);padding:3px;opacity:1;border-radius:7px;background:linear-gradient(145deg,#33495d,#101925);border:1px solid #516b80;filter:drop-shadow(0 1px 1px #0008)}
+nav button.on{color:#ffe4a1;background:linear-gradient(145deg,#2d563e,#153629);box-shadow:inset 0 0 0 1px #83c58e,0 2px 5px #0004}
+nav button.on .ic{background:linear-gradient(145deg,#3b8158,#17432e);border-color:#ecc56c}
+/* The SVG icon system is intentionally illustrated, not emoji-based */
+.ic{filter:drop-shadow(0 1px 1px #0003)}
+.rec .ic,.slot .ic,.ch-region .ic,.seed .ic{filter:drop-shadow(0 2px 1px #0003) saturate(1.08)}
+/* Hand-painted AI scene backgrounds */
+.rpg-ai-bg{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+.rpg-art-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
+.rpg-road-stage.stage{height:clamp(280px,43vh,440px);min-height:280px;max-height:440px;padding:0;justify-content:flex-end;border:2px solid #d7b169;box-shadow:0 12px 30px #0005,inset 0 0 0 2px #132238;cursor:default}
+.rpg-road-stage .rpg-road-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,#05132300 15%,#05132308 35%,#06121ed9 100%),linear-gradient(90deg,#06132180,#06132105 58%,#06132155);pointer-events:none}
+.rpg-road-content{position:relative;z-index:2!important;width:100%;padding:18px 16px 15px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:7px;text-shadow:0 2px 5px #000b}
+.rpg-road-kicker{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffe2a3}
+.rpg-road-content h2{font-family:Georgia,serif;font-size:clamp(22px,5vw,32px);line-height:1.05;margin:0;color:#fff7df;text-shadow:0 3px 0 #3d2615,0 0 12px #000}
+.rpg-road-content p{font-size:12px;line-height:1.4;margin:0;max-width:330px;color:#e8f3ff}
+.rpg-road-content .btn{border-color:#ffe1a0;background:linear-gradient(180deg,#35a96b,#14613c);box-shadow:0 3px 0 #392819,0 0 18px #61e7a666;color:#fff;font-size:13px;padding:8px 18px}
+.rpg-road-badge{position:absolute;right:12px;top:12px;z-index:2;background:#071421d9;border:1px solid #d9b36a;border-radius:10px;padding:7px 9px;font-size:10px;font-weight:800;color:#ffeba9}
+.rpg-ambush-note{max-width:440px;margin:2px auto 7px;padding:7px 10px;border:1px solid #d9b36a;border-radius:9px;background:linear-gradient(100deg,#40291d,#17263b);color:#ffe5aa;font-size:10px;font-weight:800;line-height:1.3;text-align:center;box-shadow:0 3px 9px #0003}
+/* Fishing: layered lake scene and lively animated catches */
+.rpg-water-zones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.rpg-water-zone{min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border:1px solid #6d8797;border-radius:10px;background:linear-gradient(145deg,#1c4053,#0d2333);color:#edf8ff;font:inherit;cursor:pointer;box-shadow:inset 0 0 0 1px #ffffff0b,0 3px 0 #050d16}
+.rpg-water-zone .ic{width:23px;height:23px}
+.rpg-water-zone b{font-size:10px;line-height:1.05}
+.rpg-water-zone small{font-size:8px;color:#bcd5e2;line-height:1.1}
+.rpg-water-zone.on{border-color:#f5d17a;background:linear-gradient(145deg,#2f735e,#113d43);box-shadow:inset 0 0 0 1px #ffe5a455,0 0 10px #50dfd344}
+.rpg-fish-stage.stage{position:relative;height:clamp(320px,48vh,470px);min-height:300px;max-height:470px;padding:0;justify-content:initial;overflow:hidden;border:2px solid #d2b36b;box-shadow:0 9px 22px #0004}
+.rpg-fish-stage .bgs{inset:0;z-index:0}.rpg-fish-stage .rpg-water-bg{filter:hue-rotate(var(--rpg-water-hue,0deg)) brightness(var(--rpg-water-bright,1)) saturate(1.08)}
+.rpg-fish-stage .rpg-fish-atmosphere{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,#0a263318 0%,#0b304123 38%,#05213320 70%,#0617259c 100%);pointer-events:none}
+.rpg-fish-stage .rpg-fish-title{position:absolute;left:12px;top:10px;right:12px;z-index:4;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;text-align:left;color:#fff8df;text-shadow:0 2px 4px #000;font-weight:900}
+.rpg-fish-title span{display:inline-block;border:1px solid #ffe2a1;background:#071b2bd9;border-radius:8px;padding:6px 8px;font-size:11px}
+.rpg-fish-stage #combo{top:auto!important;left:auto!important;right:10px!important;bottom:10px!important;width:auto!important;background:#071c2bd9;border:1px solid #c5eaff;border-radius:10px;padding:7px 10px;font-size:12px;font-weight:900;color:#b9fff1;text-shadow:0 1px 3px #000}
+.rpg-fish-stage #lake{inset:0;z-index:3;overflow:hidden}
+.rpg-fish-stage #lake:before{content:"";position:absolute;left:0;right:0;top:48%;bottom:0;background:repeating-linear-gradient(174deg,#e3fdff00 0 22px,#b8f5ff25 23px 25px,transparent 26px 43px);opacity:.5;animation:rpg-lake-shimmer 6s linear infinite;pointer-events:none}
+@keyframes rpg-lake-shimmer{to{background-position:120px 0}}
+.rpg-fish-stage .swim{z-index:2;padding:0;border:0;background:transparent;filter:drop-shadow(0 6px 5px #06121c90);isolation:isolate;touch-action:manipulation}
+.rpg-fish-stage .swim:before{content:"";position:absolute;left:14%;right:14%;bottom:2%;height:13px;border-radius:50%;background:#9ceeff56;filter:blur(3px);animation:rpg-fish-ripple 1.7s ease-in-out infinite;pointer-events:none}
+@keyframes rpg-fish-ripple{0%,100%{transform:scaleX(.68);opacity:.32}50%{transform:scaleX(1.2);opacity:.75}}
+.rpg-fish-stage .fish-art{position:relative;z-index:1;width:100%;height:100%;overflow:visible;transform-origin:50% 50%;animation:rpg-fish-swim .85s ease-in-out infinite;filter:drop-shadow(0 2px 3px #062637)}
+@keyframes rpg-fish-swim{0%,100%{transform:translateY(0) rotate(-2deg) scale(1)}50%{transform:translateY(-3px) rotate(2deg) scale(1.025)}}
+.rpg-fish-stage .rpg-fish-hint{position:absolute;left:10px;bottom:10px;z-index:4;max-width:68%;border-radius:10px;padding:7px 9px;background:#071b2bd9;border:1px solid #b6dce7;color:#effcff;text-align:left;font-size:10px;line-height:1.35;text-shadow:0 1px 3px #000}
+.rpg-fish-stage .rpg-fish-hint b{color:#ffe09a}
+/* Mine caves: six selectable places with cave-dependent ore mixes */
+.rpg-cave-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.rpg-cave-card{position:relative;isolation:isolate;overflow:hidden;min-width:0;min-height:92px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:3px;padding:8px 7px;text-align:left;border:1px solid #6e8fa6;border-radius:11px;color:#f4f8ff;background:#102337;font:inherit;cursor:pointer;box-shadow:0 3px 0 #050e18,inset 0 0 0 1px #ffffff12}
+.rpg-cave-card:before{content:"";position:absolute;inset:0;z-index:-2;background-image:linear-gradient(180deg,#08152310,#07131bdc),var(--rpg-mine-bg);background-position:center;background-size:cover;filter:hue-rotate(var(--cave-hue,0deg)) brightness(.84);transition:filter .2s,transform .3s}
+.rpg-cave-card:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(135deg,var(--cave-tint,#3996bb30),transparent 60%);pointer-events:none}
+.rpg-cave-card b{font-size:10px;line-height:1.15;text-shadow:0 2px 3px #000;overflow-wrap:anywhere}
+.rpg-cave-card small{font-size:8px;color:#d4e4ef;text-shadow:0 2px 3px #000;line-height:1.2}
+.rpg-cave-card .rpg-cave-metals{display:flex;gap:2px;flex-wrap:wrap;align-items:center;margin-top:2px}
+.rpg-cave-card .rpg-cave-metals .ic{width:17px;height:17px;filter:drop-shadow(0 1px 2px #000)}
+.rpg-cave-card.on{border-color:#ffd778;box-shadow:0 3px 0 #5a3515,0 0 0 1px #ffe8a788,0 0 13px #ffc75b66}
+.rpg-cave-card.on:before{filter:hue-rotate(var(--cave-hue,0deg)) brightness(1.04);transform:scale(1.03)}
+.rpg-cave-card:disabled{opacity:.62;cursor:not-allowed;filter:saturate(.5)}
+.rpg-mine-scene{position:relative;isolation:isolate;overflow:hidden;border:2px solid #b79b68;border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:305px;color:#f6f6f1;background:#081525;box-shadow:0 8px 20px #0005}
+.rpg-mine-art{position:absolute;inset:0;z-index:-2;background-image:var(--rpg-mine-bg);background-size:cover;background-position:center;filter:hue-rotate(var(--mine-hue,0deg)) brightness(.7) saturate(1.18);transform:scale(1.03)}
+.rpg-mine-scene:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#0613218c,#07142036 30%,#0817248c 100%),linear-gradient(90deg,var(--mine-tint,#3f86a8),transparent 75%);pointer-events:none}
+.rpg-mine-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;background:#061421c9;border:1px solid #d9b879;border-radius:9px;padding:7px 9px}
+.rpg-mine-heading b{font-size:13px;color:#ffe7ab}
+.rpg-mine-heading small{display:block;font-size:9px;color:#deebf6;line-height:1.3;margin-top:2px}
+.rpg-mine-floor{font-size:10px;font-weight:900;color:#b8f1ff;white-space:nowrap}
+.rpg-mine-grid{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;background:#061522bd;border:1px solid #95bad0;border-radius:11px;padding:6px;box-shadow:inset 0 0 20px #0007}
+.rpg-minetile{position:relative;aspect-ratio:1;min-width:0;border:1px solid #b6c9d4;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;cursor:pointer;overflow:hidden;color:#fff;background:linear-gradient(145deg,#66727a,#2e3946);box-shadow:inset 0 -3px 0 #0004,0 1px 4px #0005;transition:transform .12s,border-color .12s,filter .12s}
+.rpg-minetile:active{transform:scale(.91)}
+.rpg-minetile .ic{width:clamp(22px,6vw,33px);height:clamp(22px,6vw,33px);filter:drop-shadow(0 2px 3px #0008)}
+.rpg-minetile .rpg-tile-hp{position:absolute;left:4px;right:4px;bottom:4px;height:3px;background:#0009;border-radius:3px;overflow:hidden}
+.rpg-minetile .rpg-tile-hp i{display:block;height:100%;background:linear-gradient(90deg,#ffdd84,#ff9f2c);box-shadow:0 0 5px #ffc45d}
+.rpg-minetile[data-kind="ore"]{background:linear-gradient(145deg,#6d7d8b,#27394b);border-color:#b9d8e9}
+.rpg-minetile[data-kind="rare"]{background:linear-gradient(145deg,#6c4a8f,#231c3d);border-color:#e4b2ff;box-shadow:inset 0 -3px 0 #0005,0 0 8px #c77fff55}
+.rpg-minetile[data-kind="special"]{background:linear-gradient(145deg,#6e5635,#28211b);border-color:#f2c96f}
+.rpg-minetile.rpg-mined{opacity:.28;cursor:default;background:#101720;border-color:#445463;box-shadow:none}
+.rpg-mine-tools{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.rpg-mine-tools .btn{padding:7px 8px;font-size:11px;min-height:34px}
+.rpg-mine-readout{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;color:#e8f7ff}
+.rpg-mine-readout b{color:#ffe0a0}
+.rpg-mine-help{font-size:10px;color:#d5e6f0;line-height:1.35;margin:0}
+/* Smooth, custom vector art in every inventory row */
+.rec .ic,.slot .ic,.rpg-minetile .ic{transition:transform .18s,filter .18s}
+.rec:hover .ic,.slot:hover .ic{transform:translateY(-1px) scale(1.04);filter:drop-shadow(0 3px 3px #0005) saturate(1.2)}
+@media(max-width:540px){
+ nav div{grid-template-columns:repeat(9,minmax(0,1fr));gap:0}
+ nav button{font-size:8px;min-height:37px}
+ .rpg-cave-picker{gap:4px}
+ .rpg-cave-card{min-height:82px;padding:6px 5px}
+ .rpg-cave-card b{font-size:9px}
+ .rpg-water-zone{padding:5px 1px}
+}
+@media(max-height:720px){
+ #app{padding:8px 10px 96px;gap:6px}
+ header h1{font-size:19px}
+ #msg{min-height:0}
+ #grid{gap:4px;padding:5px}
+ #grid .plot .ic{width:24px;height:24px}
+ #grid .plot .l{font-size:8px}
+ #seeds{gap:3px}
+ .seed .ic{width:24px;height:24px}
+ .seed{padding:2px 1px}
+ #bgrid{padding:5px;gap:4px}
+ #bgrid .plot .ic{width:27px;height:27px}
+ .sk{gap:5px;font-size:11px;grid-template-columns:95px 1fr 48px}
+ .stage{min-height:270px}
+ .rpg-road-stage.stage{height:280px;min-height:260px}
+ .rpg-fish-stage.stage{height:305px;min-height:290px}
+ .rpg-mine-scene{padding:7px;gap:6px}
+ .rpg-cave-card{min-height:75px}
+}
+@media(prefers-reduced-motion:reduce){.rpg-fish-stage .fish-art,.rpg-fish-stage .swim:before,.rpg-fish-stage #lake:before{animation:none!important}.rpg-cave-card:before,.rec .ic,.slot .ic{transition:none!important}}

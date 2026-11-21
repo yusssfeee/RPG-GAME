@@ -1,0 +1,49 @@
+
+/* No decorative pond swimmers and no per-frame canvas noise generation. Keep real catchable spots. */
+.rpg-fish-stage #lake{position:absolute!important;isolation:isolate!important;overflow:hidden!important;contain:paint!important}
+.rpg-fish-stage #lake .pond-underwater-life,
+.rpg-fish-stage #lake .pond-water-render{display:none!important}
+.rpg-fish-stage #lake:before,
+.rpg-fish-stage #lake:after{content:"";position:absolute;inset:-18%;pointer-events:none!important;}
+.rpg-fish-stage #lake:before{
+  z-index:0;opacity:.9;mix-blend-mode:screen;filter:blur(9px) saturate(1.12);
+  background:
+    radial-gradient(ellipse 48% 10% at 18% 34%,rgba(185,248,235,.17) 0%,rgba(113,220,218,.075) 42%,transparent 76%),
+    radial-gradient(ellipse 42% 12% at 74% 57%,rgba(151,238,239,.14) 0%,rgba(102,197,216,.06) 48%,transparent 78%),
+    radial-gradient(ellipse 52% 8% at 43% 80%,rgba(215,255,244,.12) 0%,rgba(113,218,215,.045) 48%,transparent 78%),
+    linear-gradient(113deg,transparent 13%,rgba(203,255,246,.055) 28%,transparent 43%,rgba(121,222,231,.05) 57%,transparent 73%);
+  background-size:145% 140%,135% 150%,155% 135%,180% 170%;
+  animation:rpg-water-drift 19s ease-in-out infinite alternate;
+  will-change:transform;
+}
+.rpg-fish-stage #lake:after{
+  z-index:1;opacity:.63;mix-blend-mode:screen;filter:blur(4px);
+  background:
+    linear-gradient(166deg,transparent 14%,rgba(202,255,247,.04) 24%,transparent 37%,rgba(143,232,234,.055) 49%,transparent 64%),
+    radial-gradient(ellipse 62% 5% at 27% 39%,rgba(225,255,247,.14),transparent 75%),
+    radial-gradient(ellipse 54% 4% at 79% 68%,rgba(173,244,242,.12),transparent 77%),
+    linear-gradient(102deg,transparent 38%,rgba(223,255,248,.055) 48%,transparent 58%);
+  background-size:190% 180%,145% 150%,150% 160%,220% 100%;
+  animation:rpg-water-glide 12s ease-in-out infinite alternate;
+  will-change:transform,opacity;
+}
+.rpg-fish-stage #lake .pnd-line{z-index:4!important}
+.rpg-fish-stage #lake .pnd-spot{z-index:5!important}
+.rpg-fish-stage #lake .pond-impact{z-index:8!important}
+@keyframes rpg-water-drift{
+  0%{transform:translate3d(-2.5%,-1.5%,0) scale(1.02) rotate(-.45deg)}
+  50%{transform:translate3d(1.2%,1%,0) scale(1.055) rotate(.25deg)}
+  100%{transform:translate3d(3.2%,2%,0) scale(1.075) rotate(.65deg)}
+}
+@keyframes rpg-water-glide{
+  0%{transform:translate3d(2%,-1%,0) scale(1.02);opacity:.42}
+  50%{transform:translate3d(-1%,1%,0) scale(1.055);opacity:.68}
+  100%{transform:translate3d(-3%,2%,0) scale(1.08);opacity:.52}
+}
+@media(max-width:560px){
+  .rpg-fish-stage #lake:before{filter:blur(7px) saturate(1.08);opacity:.78}
+  .rpg-fish-stage #lake:after{filter:blur(3px);opacity:.48}
+}
+@media(prefers-reduced-motion:reduce){
+  .rpg-fish-stage #lake:before,.rpg-fish-stage #lake:after{animation:none!important}
+}

@@ -1,0 +1,9 @@
+
+#intro{background:#10182b!important;background-size:cover;background-position:center}
+#poster{background-size:cover!important;background-position:center 48%!important;filter:saturate(1.08)}
+#intro:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(5,10,22,.48),rgba(5,10,22,.08) 48%,rgba(5,10,22,.38)),linear-gradient(0deg,rgba(4,8,18,.78),transparent 42%,rgba(4,8,18,.2))}
+.intro-brand,.cta,#save-slot-picker{z-index:2;position:relative}
+#save-slot-picker button{backdrop-filter:blur(8px);box-shadow:0 5px 18px #0008;transition:transform .18s,border-color .18s,background .18s}
+#save-slot-picker button:hover{transform:translateY(-3px);border-color:#ffd66c!important}
+#newg{padding:10px 18px;border:1px solid #e6b65b;border-radius:24px;background:linear-gradient(135deg,#8a4a12,#e2a52d);color:#fff;font-weight:800;text-decoration:none;box-shadow:0 4px 0 #51300e,0 0 20px #ffbd4b55}
+@media(max-width:600px){.intro-brand{top:5%!important}.intro-brand p{max-width:90vw}.cta{bottom:calc(14px + env(safe-area-inset-bottom,0px))!important}}

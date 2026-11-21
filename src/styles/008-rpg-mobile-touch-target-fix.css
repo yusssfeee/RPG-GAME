@@ -1,0 +1,18 @@
+
+/* Reliable touch targets and clear stacking on phones */
+button,[role="button"],.seed,.plot,nav button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+button,[role="button"]{position:relative;}
+button:focus-visible,[role="button"]:focus-visible,.seed:focus-visible,.plot:focus-visible{outline:3px solid #ffd36b;outline-offset:2px;z-index:5}
+@media(max-width:600px){
+ #seeds .seed{min-height:68px;position:relative;z-index:1;cursor:pointer;touch-action:manipulation}
+ #grid .plot{position:relative;z-index:1;min-height:58px;cursor:pointer;touch-action:manipulation}
+ #farm button,#farm [role="button"]{min-height:40px;}
+ nav{z-index:100!important;isolation:isolate;}
+ nav button{min-width:0;min-height:44px;padding:5px 1px;position:relative;z-index:1;}
+ #seeds .seed .crop-seed-art,#grid .plot .crop-stage-art,#grid .plot .ic{pointer-events:none}
+ #seeds .seed span,#grid .plot .l{pointer-events:none}
+}
+@media(max-width:360px){
+ nav button{min-height:44px;font-size:8px;padding-inline:0}
+ #seeds .seed{min-height:64px}
+}

@@ -1,0 +1,110 @@
+
+/* Move the pond identity/status from the lower panel into the scene header. */
+.rpg-fish-stage .pond-stage-banner{
+  left:10px!important;right:calc(var(--pond-catalog-w,88px) + 17px)!important;
+  top:8px!important;max-width:none!important;padding:7px 9px!important;
+  display:flex!important;flex-direction:column!important;gap:3px!important;
+  border-color:#c8e4e7!important;background:linear-gradient(110deg,#061b2beF,#0b2b3be8)!important;
+  box-shadow:0 4px 14px #0007,inset 0 0 0 1px #ffffff12!important;
+}
+.rpg-fish-stage .pond-stage-banner>span{font:900 13px/1.05 Georgia,serif!important;color:#ffe7b2!important}
+.rpg-fish-stage .pond-stage-banner>small{font-size:8px!important;line-height:1.15!important;color:#cce7ee!important}
+.rpg-fish-stage .pond-stage-meta{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:4px!important;margin-top:2px!important;min-width:0!important}
+.rpg-fish-stage .pond-stage-meta>span{
+  position:static!important;display:inline-flex!important;align-items:center!important;
+  width:auto!important;min-width:0!important;padding:3px 6px!important;border:1px solid #b8d7df88!important;
+  border-radius:6px!important;background:#15384bdc!important;color:#e8f8f8!important;
+  font:800 8px/1.1 "Trebuchet MS",sans-serif!important;white-space:nowrap!important;
+}
+.rpg-fish-stage .pond-stage-meta #combo{position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;margin:0!important;width:auto!important;height:auto!important;border-color:#e4c47e!important;background:#4a3a20!important;color:#ffe7a6!important;text-shadow:none!important}
+.rpg-fish-stage .pond-live-meter{top:88px!important;left:10px!important;right:calc(var(--pond-catalog-w,88px) + 17px)!important}
+.rpg-fish-stage .pond-live-meter .pnd-meter{background:linear-gradient(105deg,#061b2df5,#0b3040e8)!important}
+/* The moving water is decorative and never intercepts taps on ripple spots. */
+.rpg-fish-stage .pond-surface-motion{
+  position:absolute!important;z-index:2!important;left:5px!important;right:calc(var(--pond-catalog-w,88px) + 8px)!important;
+  top:132px!important;bottom:6px!important;overflow:hidden!important;border-radius:12px!important;
+  pointer-events:none!important;opacity:.88!important;
+  background:radial-gradient(ellipse at 26% 22%,#b9f4ef22,transparent 42%),linear-gradient(180deg,#4bd0df08,#061c2b18);
+}
+.rpg-fish-stage .pond-surface-motion:before{
+  content:"";position:absolute;inset:-28% -38%;
+  background:
+    repeating-radial-gradient(ellipse at 18% 30%,transparent 0 17px,#c8fbff20 18px 19px,transparent 20px 34px),
+    repeating-radial-gradient(ellipse at 78% 66%,transparent 0 23px,#8ceaf018 24px 25px,transparent 26px 45px),
+    repeating-linear-gradient(166deg,transparent 0 17px,#d5ffff16 18px 19px,transparent 20px 39px),
+    repeating-linear-gradient(12deg,transparent 0 29px,#7bdde91a 30px 31px,transparent 32px 58px);
+  background-size:115% 130%,130% 140%,100% 100%,100% 100%;
+  animation:pond-water-current 10s ease-in-out infinite alternate,pond-water-caustics 17s linear infinite;
+  filter:blur(.25px);
+}
+.rpg-fish-stage .pond-surface-motion:after{
+  content:"";position:absolute;inset:-15%;
+  background:
+    radial-gradient(ellipse at 23% 20%,#e3ffff20 0 2%,transparent 20%),
+    radial-gradient(ellipse at 72% 62%,#b9faff18 0 2%,transparent 25%),
+    linear-gradient(112deg,transparent 12%,#bafcff16 29%,transparent 43%,#e4ffff12 58%,transparent 72%);
+  background-size:100% 100%,100% 100%,180% 100%;
+  animation:pond-water-glint 7s ease-in-out infinite alternate,pond-water-shimmer 11s linear infinite;
+}
+.rpg-fish-stage .pond-surface-motion i{
+  position:absolute;left:var(--bx);top:var(--by);width:var(--bs);height:var(--bs);border-radius:50%;
+  border:1px solid #bafaff66;box-shadow:0 0 8px #75e8ee22;opacity:0;
+  animation:pond-water-bubble var(--bd) ease-in infinite;animation-delay:var(--delay);
+}
+@keyframes pond-water-current{from{transform:translate3d(-2%,-1%,0) rotate(-1deg)}to{transform:translate3d(5%,3%,0) rotate(1deg)}}
+@keyframes pond-water-caustics{from{background-position:0 0,0 0,0 0,0 0}to{background-position:38px -24px,-31px 27px,24px 18px,-18px -22px}}
+@keyframes pond-water-shimmer{from{background-position:0 0,0 0,-80% 0}to{background-position:0 0,0 0,80% 0}}
+@keyframes pond-water-glint{from{transform:translateX(-35%);opacity:.45}to{transform:translateX(30%);opacity:.9}}
+@keyframes pond-water-bubble{0%{transform:translateY(18px) scale(.55);opacity:0}18%{opacity:.45}85%{opacity:.2}100%{transform:translateY(-90px) scale(1.2);opacity:0}}
+/* Give the fishing spots a soft, layered water pulse and make the fish glide. */
+
+.rpg-fish-stage .pond-impact{position:absolute;z-index:8;width:10px;height:10px;transform:translate(-50%,-50%);pointer-events:none}
+.rpg-fish-stage .pond-impact i{position:absolute;inset:-5px;border:2px solid #d9ffffd9;border-radius:50%;animation:pond-impact-ring .9s cubic-bezier(.1,.55,.25,1) forwards;box-shadow:0 0 8px #8ffaff88}
+.rpg-fish-stage .pond-impact i:nth-child(2){animation-delay:.12s;border-color:#a8f5ffb8}
+.rpg-fish-stage .pond-impact i:nth-child(3){animation-delay:.24s;border-color:#efffffa0}
+.rpg-fish-stage .pond-impact b{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;background:#eaffff;box-shadow:0 0 12px 5px #7ceeffaa;transform:translate(-50%,-50%);animation:pond-impact-core .45s ease-out forwards}
+.rpg-fish-stage .pond-impact em{position:absolute;left:50%;top:50%;width:4px;height:10px;border-radius:90% 10% 90% 10%;background:linear-gradient(#f4ffff,#75dce9);transform-origin:50% 100%;animation:pond-impact-drop .58s ease-out forwards}
+.rpg-fish-stage .pond-impact em:nth-of-type(1){transform:rotate(-55deg) translateY(-3px)}
+.rpg-fish-stage .pond-impact em:nth-of-type(2){transform:rotate(12deg) translateY(-3px);animation-delay:.04s}
+.rpg-fish-stage .pond-impact em:nth-of-type(3){transform:rotate(65deg) translateY(-3px);animation-delay:.08s}
+@keyframes pond-impact-ring{0%{transform:scale(.25);opacity:.95}100%{transform:scale(7.5);opacity:0}}
+@keyframes pond-impact-core{0%{transform:translate(-50%,-50%) scale(1.3);opacity:1}100%{transform:translate(-50%,-50%) scale(.1);opacity:0}}
+@keyframes pond-impact-drop{0%{opacity:0;translate:0 5px}25%{opacity:1}100%{opacity:0;translate:0 -20px}}
+
+.rpg-fish-stage .pnd-spot{z-index:3!important;transform-origin:50% 50%;filter:drop-shadow(0 5px 8px #001b28cc)!important}
+.rpg-fish-stage .pnd-spot .disc{
+  background:radial-gradient(circle at 42% 38%,#e2ffff72 0 8%,#83e6f65a 28%,#1a6a8a40 68%,transparent 74%),
+             repeating-radial-gradient(circle at 50% 50%,#d6fcff00 0 8px,#d6fcff28 9px 10px,transparent 11px 17px)!important;
+  animation:pond-spot-surface 3.2s ease-in-out infinite!important;
+}
+.rpg-fish-stage .pnd-spot i{border-color:#e3ffffe8!important;box-shadow:0 0 13px #8ff5ff99,inset 0 0 13px #aefaff66!important}
+.rpg-fish-stage .pnd-spot .orb svg{animation:pond-fish-glide 1.8s ease-in-out infinite!important;filter:drop-shadow(0 2px 3px #001b28aa) brightness(0) opacity(.48)!important}
+.rpg-fish-stage .pnd-spot.wait .disc{background:radial-gradient(circle,#fff0b866,#e4b64d44 72%,transparent)!important}
+.rpg-fish-stage .pnd-spot.bite .disc{background:radial-gradient(circle,#ffded0a8,#fa654c55 70%,transparent)!important;animation:pond-bite-pulse .32s ease-in-out infinite alternate!important}
+@keyframes pond-spot-surface{0%,100%{transform:scale(.94);opacity:.82}50%{transform:scale(1.06);opacity:1}}
+@keyframes pond-fish-glide{0%,100%{transform:translate(0,0) rotate(-5deg)}50%{transform:translate(4px,-3px) rotate(5deg)}}
+@keyframes pond-bite-pulse{from{transform:scale(.92);filter:brightness(1)}to{transform:scale(1.1);filter:brightness(1.4)}}
+/* Keep the explanatory instructions below, but make them a neat compact footer. */
+.rpg-fish-stage~.pnd-info .pnd-hint{margin:6px 0 0;padding:8px 10px;border:1px solid #416b7d;border-radius:9px;background:linear-gradient(110deg,#102c3c,#0a1b2a);font-size:10px;line-height:1.4}
+@media(max-width:560px){
+  .rpg-fish-stage .pond-stage-banner{left:7px!important;right:calc(var(--pond-catalog-w,78px) + 13px)!important;top:7px!important;padding:6px 7px!important;gap:2px!important}
+  .rpg-fish-stage .pond-stage-banner>span{font-size:11px!important}
+  .rpg-fish-stage .pond-stage-banner>small{font-size:7px!important}
+  .rpg-fish-stage .pond-stage-meta{gap:3px!important;margin-top:1px!important}
+  .rpg-fish-stage .pond-stage-meta>span{font-size:7px!important;padding:2px 4px!important}
+  .rpg-fish-stage .pond-live-meter{left:7px!important;right:calc(var(--pond-catalog-w,78px) + 13px)!important;top:86px!important}
+  .rpg-fish-stage .pond-live-meter .pnd-meter{padding:5px 6px!important}
+  .rpg-fish-stage .pond-surface-motion{left:5px!important;right:calc(var(--pond-catalog-w,78px) + 7px)!important;top:130px!important;bottom:6px!important}
+  .rpg-fish-stage #lake{left:5px!important;right:calc(var(--pond-catalog-w,78px) + 7px)!important;top:130px!important;bottom:6px!important}
+  .rpg-fish-stage .pnd-spot{width:62px!important;height:62px!important;margin:-31px 0 0 -31px!important}
+}
+@media(max-width:380px){
+  .rpg-fish-stage .pond-stage-banner{right:calc(var(--pond-catalog-w,74px) + 11px)!important}
+  .rpg-fish-stage .pond-live-meter{right:calc(var(--pond-catalog-w,74px) + 11px)!important}
+  .rpg-fish-stage .pond-surface-motion,.rpg-fish-stage #lake{right:calc(var(--pond-catalog-w,74px) + 6px)!important}
+  .rpg-fish-stage .pond-stage-meta>span{font-size:6.5px!important;padding:2px 3px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .rpg-fish-stage .pond-surface-motion:before,.rpg-fish-stage .pond-surface-motion:after,
+  .rpg-fish-stage .pond-surface-motion i,.rpg-fish-stage .pond-impact i,.rpg-fish-stage .pond-impact em,.rpg-fish-stage .pond-impact b{animation:none!important}
+}

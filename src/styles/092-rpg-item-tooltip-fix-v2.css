@@ -1,0 +1,13 @@
+
+#rpg-item-tooltip-v2{position:fixed;z-index:10080;width:min(290px,calc(100vw - 24px));padding:11px 12px;border:1.5px solid var(--tip-rarity,#c6a56a);border-radius:12px;background:linear-gradient(145deg,rgba(13,27,43,.985),rgba(5,12,23,.995));box-shadow:0 12px 34px #000c;color:#f5ecd9;pointer-events:none;opacity:0;visibility:hidden;transform:translateY(5px);transition:opacity .13s ease,transform .13s ease,visibility .13s;font:12px/1.45 system-ui,sans-serif}
+#rpg-item-tooltip-v2.show{opacity:1;visibility:visible;transform:translateY(0)}
+#rpg-item-tooltip-v2 .head{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+#rpg-item-tooltip-v2 .ico{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:9px;background:#ffffff0d}
+#rpg-item-tooltip-v2 .ico svg,#rpg-item-tooltip-v2 .ico .ic{width:35px;height:35px}
+#rpg-item-tooltip-v2 b{font-size:13px}
+#rpg-item-tooltip-v2 small{display:block;color:#c1ceda;font-size:10px}
+#rpg-item-tooltip-v2 .desc{color:#e0e7ed;margin-top:5px}
+#rpg-item-tooltip-v2 .stats{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+#rpg-item-tooltip-v2 .stats span{border:1px solid #ffffff20;border-radius:6px;padding:3px 6px;color:#f4d99e;font-size:10px}
+#rpg-item-tooltip-v2 .foot{border-top:1px solid #ffffff20;margin-top:8px;padding-top:6px;color:#d7bd82;font-size:10.5px}
+#pane .sq[data-a="info"],#pane .rec[data-a="equip"],#pane .slot[data-a="info"],#pane .slot[data-a="info"]{cursor:help}

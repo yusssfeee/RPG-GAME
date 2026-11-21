@@ -1,0 +1,110 @@
+
+/* ---- phone: no written notifications while mining or fighting ---- */
+html[data-device="mobile"] body[data-tab="mine"] #rpg-dock,
+html[data-device="mobile"] body[data-tab="fight"] #rpg-dock{display:none!important}
+
+/* ---- phone: farm icons re-sized for a small screen ---- */
+html[data-device="mobile"] #seeds .crop-tab{min-height:46px;gap:2px;padding:5px 3px 4px;font-size:9.5px}
+html[data-device="mobile"] #seeds .crop-tab img{width:21px;height:21px}
+html[data-device="mobile"] #seeds .crop-tab b{min-width:14px;font-size:9px;top:2px;right:3px}
+html[data-device="mobile"] .seed{padding:4px 1px;font-size:9.5px;gap:0}
+html[data-device="mobile"] .seed .ic{width:23px;height:23px}
+html[data-device="mobile"] .seed span{font-size:7.5px}
+html[data-device="mobile"] #grid .plot .ic{width:33px;height:33px}
+html[data-device="mobile"] #grid .plot .l{font-size:9.5px}
+html[data-device="mobile"] #grid .plot .bar{left:6px;right:6px;bottom:6px;height:4px}
+/* ---- phone: two swipeable rows of tabs instead of one long strip ---- */
+html[data-device="mobile"] nav>div{
+  display:grid!important;
+  grid-auto-flow:row!important;
+  grid-template-columns:repeat(11,calc((100% - 14px)/4.15))!important;
+  grid-template-rows:repeat(2,minmax(0,auto))!important;
+  gap:3px 4px!important;
+  max-width:100%!important;
+  width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+html[data-device="mobile"] nav>div::-webkit-scrollbar{height:0}
+html[data-device="mobile"] nav button{flex:none!important;min-width:0!important;min-height:44px!important;scroll-snap-align:start;padding:4px 1px!important;gap:2px!important;font-size:9px!important;line-height:1.05!important}
+html[data-device="mobile"] nav button .ic{width:25px!important;height:25px!important}
+html[data-device="mobile"] nav button{font-size:9.5px!important}
+
+/* crop info: icons instead of words */
+.ci{width:12.5px;height:12.5px;display:inline-block;vertical-align:-2px;margin-right:3px;color:#cfe3f5}
+.clv{display:inline-block;font:700 9.5px/1.5 'Trebuchet MS',sans-serif;padding:0 6px;border-radius:999px;background:#2f7a5833;border:1px solid #7be3b588;color:#c8f3dd}
+.cinfo{display:inline-flex;align-items:center;gap:2px;margin:0 9px 3px 0;white-space:nowrap}
+.cinfo b{font-size:11px;color:#e7f0fa}
+.cx{font:800 9.5px/1.5 'Trebuchet MS',sans-serif;padding:0 4px;border-radius:4px;background:#6b8cff22;border:1px solid #6b8cff66;color:#c9d9ff;font-style:normal}
+
+/* phone: smaller seed art */
+html[data-device="mobile"] #seeds .seed .crop-seed-art,html[data-device="mobile"] .crop-strip .seed .crop-seed-art{width:30px!important;height:30px!important;max-width:30px!important}
+html[data-device="mobile"] .seed{min-height:58px!important;padding:3px 1px!important}
+html[data-device="mobile"] .seed .ic{width:20px!important;height:20px!important}
+
+/* phone: compact mining map, pins and panels */
+html[data-device="mobile"] .mine-world-map{min-height:236px!important;padding:9px!important;margin:8px 0!important}
+html[data-device="mobile"] .mine-map-title{font-size:10px!important;letter-spacing:.3px!important;padding:2px!important}
+html[data-device="mobile"] .mine-map-pin{min-width:78px!important;padding:5px 4px!important;gap:1px!important}
+html[data-device="mobile"] .mine-map-pin span{font-size:18px!important}
+html[data-device="mobile"] .mine-map-pin b{font-size:9px!important}
+html[data-device="mobile"] .mine-map-pin small{font-size:7.5px!important}
+html[data-device="mobile"] .rpg-mine-scene{min-height:168px!important}
+html[data-device="mobile"] .rpg-mine-resource .big{width:86px!important;height:76px!important}
+html[data-device="mobile"] .card2{padding:8px!important;font-size:11px!important}
+/* ---- in-plot watering (phones) ---- */
+.wf-mob{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;border-radius:inherit}
+.wf-mob i{position:absolute;top:-14%;width:4px;height:14px;border-radius:0 0 3px 3px;background:linear-gradient(180deg,#e8fbff,#5ec8ff);box-shadow:0 0 6px #8fe4ffaa;animation:wfMobFall .8s cubic-bezier(.4,0,.9,.5) forwards}
+.wf-mob i:nth-child(1){left:18%;animation-delay:.02s}
+.wf-mob i:nth-child(2){left:38%;animation-delay:.18s}
+.wf-mob i:nth-child(3){left:56%;animation-delay:.08s}
+.wf-mob i:nth-child(4){left:72%;animation-delay:.24s}
+.wf-mob i:nth-child(5){left:86%;animation-delay:.12s}
+@keyframes wfMobFall{0%{opacity:0;transform:translateY(0)}12%{opacity:1}86%{opacity:.9}100%{opacity:0;transform:translateY(78px)}}
+.wf-mob u{position:absolute;left:50%;bottom:12%;width:40%;height:14%;transform:translateX(-50%);border:2px solid #cdf3ff;border-radius:50%;opacity:0;animation:wfMobRipple .9s ease-out .2s forwards}
+@keyframes wfMobRipple{0%{opacity:.95;transform:translateX(-50%) scale(.2)}100%{opacity:0;transform:translateX(-50%) scale(1.15)}}
+#grid .plot.wf-splash{animation:wfSplashTint .95s ease-out}
+@keyframes wfSplashTint{0%{box-shadow:inset 0 0 0 2px #9fe9ff00}25%{box-shadow:inset 0 0 0 2px #9fe9ffcc,inset 0 -14px 24px #4fc6ff55}100%{box-shadow:inset 0 0 0 2px #9fe9ff00}}
+
+/* ---- requirement chips (icon + amount) ---- */
+.reqs{display:inline-flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.rq{display:inline-flex;align-items:center;gap:2px;padding:1px 4px;border-radius:6px;background:#ffffff10;border:1px solid #ffffff22}
+.rq .ic{width:13px;height:13px}
+.rq b{font-size:10px;color:#e7f0fa}
+.rq.ok{border-color:#8fe3a266}.rq.ok b{color:#8fe3a2}.rq.no{border-color:#ff8a7a77}.rq.no b{color:#ff8a7a}
+.rqt.ok em{color:#8fe3a2}.rqt.no,.rqt.no em{color:#ff8a7a}.rqt em,.v4r em{font-style:normal}
+
+/* ---- phone: compact crafting ui ---- */
+html[data-device="mobile"] .rec{padding:6px 7px!important;gap:6px!important;border-radius:10px!important}
+html[data-device="mobile"] .rec .ic,html[data-device="mobile"] .rec img{width:26px!important;height:26px!important}
+html[data-device="mobile"] .rec b{font-size:11.5px!important}
+html[data-device="mobile"] .rec small{font-size:9px!important;line-height:1.25!important}
+html[data-device="mobile"] .rec .tag{font-size:8.5px!important;padding:1px 5px!important}
+html[data-device="mobile"] .stage{min-height:205px!important}
+html[data-device="mobile"] .stage svg.art,html[data-device="mobile"] .stage .art{width:112px!important;height:112px!important}
+html[data-device="mobile"] .slots{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}
+html[data-device="mobile"] .slot{padding:5px 3px!important;font-size:9.5px!important}
+html[data-device="mobile"] .slot .ic{width:22px!important;height:22px!important}
+html[data-device="mobile"] .inv{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important}
+/* ---- adventurer paper doll (both devices) ---- */
+.doll{display:flex;flex-direction:column;gap:8px;margin:6px 0 10px}
+html[data-device="mobile"] .doll{grid-template-columns:78px 1fr;gap:7px}
+.doll-fig{display:flex;align-items:center;justify-content:center;min-height:92px;border:1px solid #4b6079;border-radius:14px;background:radial-gradient(ellipse at 50% 30%,#22334a,#101a26 70%)}
+.doll-fig svg,.doll-fig .art{width:96px;height:96px}
+html[data-device="mobile"] .doll-fig svg,html[data-device="mobile"] .doll-fig .art{width:68px;height:68px}
+.doll-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+html[data-device="mobile"] .doll-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.doll-slot{display:flex;flex-direction:row;align-items:center;gap:7px;padding:7px 8px;text-align:left;border:1px solid #4b6079;border-radius:10px;background:linear-gradient(160deg,#1b2b40,#121d2b);color:#e9f2fb;font:inherit;cursor:pointer;min-width:0}
+.doll-slot i{flex:0 0 52px;font-style:normal;font-size:7.5px;letter-spacing:.6px;color:#8fa6bd;text-transform:uppercase}
+.doll-slot .ic{width:24px;height:24px}
+html[data-device="mobile"] .doll-slot .ic{width:20px;height:20px}
+.doll-slot span{font-size:9.5px;font-weight:700;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doll-slot small{font-size:7.5px;color:#9fb3c6;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doll-slot.off{opacity:.45;border-style:dashed;cursor:default}
+.doll-slot:not(.off):active{transform:scale(.97)}
+.doll-hint{margin:6px 0 0;font-size:10px;color:#8fa6bd}

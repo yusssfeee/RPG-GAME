@@ -1,0 +1,68 @@
+
+/* ===== v3: bottom navigation - big on PC, proportional on phones ===== */
+nav{padding:7px 10px calc(7px + env(safe-area-inset-bottom,0px))}
+nav div{max-width:980px!important;grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:6px 8px!important}
+nav button{min-height:70px;font-size:12.5px;font-weight:700;gap:5px;padding:7px 3px;border-radius:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15;justify-content:center}
+nav button .ic{width:40px;height:40px;padding:5px;border-radius:11px}
+@media(max-width:900px){
+ nav div{gap:4px 5px!important}
+ nav button{min-height:62px;font-size:11px}
+ nav button .ic{width:34px;height:34px;padding:4px}
+}
+@media(max-width:620px){
+ nav{padding:4px 5px calc(4px + env(safe-area-inset-bottom,0px))}
+ nav div{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:3px!important}
+ nav button{min-height:54px;font-size:9.5px;gap:3px;padding:4px 1px;border-radius:9px}
+ nav button .ic{width:30px;height:30px;padding:4px;border-radius:9px}
+}
+@media(max-width:350px){nav button{font-size:8.5px}nav button .ic{width:27px;height:27px}}
+#app{padding-bottom:calc(var(--nav-h,170px) + 22px)!important}
+
+/* ===== v3: fishing progress meter ===== */
+.pnd-meter{margin:8px 0 2px}
+.pnd-mlab{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:700;margin-bottom:4px;color:#eaf8ff}
+.pnd-mbar{height:12px;background:#0a1c29;border:1px solid #6d8797}
+.pnd-mbar i{background:#ffd84d;transition:width .12s linear}
+.pnd-mbar.bite i{background:#ff5b70}
+.pnd-mbar.idle i{background:#4aa3ff}
+#fskill .sk{margin-bottom:2px}
+
+/* ===== v3: mining - smaller tiles, more shafts ===== */
+.rpg-cave-picker{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(min-width:700px){.rpg-cave-picker{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.rpg-cave-card{min-height:70px;padding:6px 6px}
+.rpg-cave-card .rpg-cave-metals .ic{width:15px;height:15px}
+.rpg-mine-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding:6px;width:100%;max-width:460px;margin:0 auto}
+.rpg-minetile{border-radius:7px;padding:1px}
+.rpg-minetile .ic{width:72%;height:72%}
+.rpg-minetile .rpg-tile-hp{left:3px;right:3px;bottom:3px;height:3px}
+.rpg-mine-readout{flex-wrap:wrap}
+
+/* ===== v3: forge ===== */
+.smelt-row{display:flex;gap:6px;align-items:stretch}.smelt-row .rec{flex:1;min-width:0}.smelt-row .btn{flex:none;padding:6px 10px;font-size:12px}
+
+/* ===== v3: caravan expeditions ===== */
+.cv-map.stage{min-height:330px;padding:0;cursor:default}
+.cv-map .town{font-size:10px;padding:2px 5px;max-width:92px;text-align:center}
+.cv-map .town .ic{width:28px;height:28px}
+.cv-map .town span{line-height:1.1}
+.town.lockd{opacity:.6;filter:grayscale(.7)}
+.town.cv-home{background:#fffdf4;border-color:#6d4a28}
+.cv-map .wagon .ic{width:34px;height:34px}
+.cv-detail{gap:8px}
+.cv-title{display:flex;align-items:center;gap:8px}.cv-title .ic{width:36px;height:36px}.cv-title b{font-size:16px}.cv-title small{margin-left:auto;color:var(--mute)}
+.cv-stats{display:flex;flex-wrap:wrap;gap:6px}.cv-stats span{background:#0004;border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-size:12px}
+.cv-loot{display:flex;flex-wrap:wrap;gap:6px}.cv-loot span{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 7px;border-radius:8px;background:#0004;border:1px solid var(--line)}.cv-loot .ic{width:22px;height:22px}
+.cv-loot span.r{border-color:#b36bff}.cv-loot span.u{border-color:#4aa8ff}
+.cv-run{border-color:#8a7049}.cv-run .bar2{height:10px}
+.cv-run .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cv-row{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:7px 10px;font:inherit;cursor:pointer}
+.cv-row.on{border-color:var(--acc)}.cv-row.dim{opacity:.55}.cv-row .ic{width:34px;height:34px}.cv-row small{display:block;color:var(--mute);font-size:11px}.cv-row .tag{margin-left:auto;font-size:11px;text-align:right}
+.cv-log{font-size:12px;color:var(--mute);line-height:1.5}
+/* ===== v3: bat flaps its wings ===== */
+.bat-wl,.bat-wr{transform-box:view-box}
+.bat-wl{transform-origin:43px 50px;animation:batl .45s ease-in-out infinite alternate}
+.bat-wr{transform-origin:57px 50px;animation:batr .45s ease-in-out infinite alternate}
+@keyframes batl{from{transform:rotate(16deg)}to{transform:rotate(-18deg)}}
+@keyframes batr{from{transform:rotate(-16deg)}to{transform:rotate(18deg)}}
+@media(prefers-reduced-motion:reduce){.bat-wl,.bat-wr{animation:none}}
