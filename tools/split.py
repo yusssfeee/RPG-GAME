@@ -3,6 +3,9 @@
 Lossless: tools/build.py rebuilds a byte-identical single file."""
 import re, sys, json, base64, pathlib
 src_html = pathlib.Path(sys.argv[1]); out = pathlib.Path(sys.argv[2])
+_m = out/'src'/'manifest.json'
+if _m.exists() and '"parts"' in _m.read_text(encoding='utf-8'):
+    sys.exit('REFUSED: src/ is already split into parts (phase 1). Re-running split.py would undo it.')
 h = src_html.read_text(encoding='utf-8')
 for d in ('styles','scripts','assets/embedded'): (out/'src'/d).mkdir(parents=True, exist_ok=True)
 

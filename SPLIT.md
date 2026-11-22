@@ -12,3 +12,6 @@
 `python3 tools/split.py "Project X.html" .` regenerates `src/` from the single file.
 
 Load order matters: later scripts wrap/patch earlier globals (render, strike, startFight, foeDown...). Never reorder NNN.
+
+## Phase 1 (main script split)
+`src/scripts/011/NN-<section>.js` are the 26 sections of the old `011-anon.js` (+ a 1-line header), in load order. `build.py` joins them back into ONE script, so the single file is byte-identical. `python tools/build.py . out.html --separate` loads them as separate scripts, to test the split. Do not reorder NN.
