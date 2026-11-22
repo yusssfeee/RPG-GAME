@@ -1493,7 +1493,7 @@ function enemyAttack(heavy){
   upd();
 }
 function combatTick(dt){
-  const f=fight;if(!f||f.dead||f.hp<=0){if(f&&f.hp<=0)foeDown();return}
+  const f=fight;if(!f||f.dead||f.hp<=0){if(f&&f.hp<=0&&foeDown())render();return}
   en=Math.min(100,en+8*dt);guardT=Math.max(0,guardT-dt);CAB.tick(dt);
   const sl=slowT>0?1.4:1;slowT=Math.max(0,slowT-dt);if(cd>0)cd=Math.max(0,cd-dt/sl);
   if(dot.t>0){dot.t-=dt;dotAcc+=dot.dps*dt;if(dotAcc>=1){const d=Math.floor(dotAcc);dotAcc-=d;S.hp-=d;if(S.hp<=0){playerDown();return}}}
