@@ -15,3 +15,6 @@ Load order matters: later scripts wrap/patch earlier globals (render, strike, st
 
 ## Phase 1 (main script split)
 `src/scripts/011/NN-<section>.js` are the 26 sections of the old `011-anon.js` (+ a 1-line header), in load order. `build.py` joins them back into ONE script, so the single file is byte-identical. `python tools/build.py . out.html --separate` loads them as separate scripts, to test the split. Do not reorder NN.
+
+## Phase 2 (big wrapped scripts)
+`src/scripts/016/` (rpg-v4) and `src/scripts/014/` (rpg-sprite-pack) are FRAGMENTS of one function each, cut at section banners, in order; build.py joins them into one script (not valid JS alone). The goblin atlases are real WebP files `src/assets/embedded/raw-*.webp`, referenced by `{{RAW:file}}` tokens. Never reorder the NN prefixes.

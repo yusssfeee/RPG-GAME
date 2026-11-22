@@ -110,7 +110,11 @@
    "n": 14,
    "tag": "script",
    "attrs": " id=\"rpg-sprite-pack\"",
-   "file": "scripts/014-rpg-sprite-pack.js"
+   "parts": [
+    "scripts/014/00-sprite-pack-part-1.js",
+    "scripts/014/01-sprite-pack-part-2.js"
+   ],
+   "fragments": true
   },
   {
    "n": 15,
@@ -122,7 +126,20 @@
    "n": 16,
    "tag": "script",
    "attrs": " id=\"rpg-v4\"",
-   "file": "scripts/016-rpg-v4.js"
+   "parts": [
+    "scripts/016/00-core-part-a.js",
+    "scripts/016/01-part-b-cooking-carpentry-woodcutting.js",
+    "scripts/016/02-part-c-fishing-mining-blacksmith.js",
+    "scripts/016/03-part-d-icons-trade-timed-crafting.js",
+    "scripts/016/04-part-e-combat-overhaul.js",
+    "scripts/016/05-part-f-woodcutting-market-square.js",
+    "scripts/016/06-part-g-living-farm-barn.js",
+    "scripts/016/07-imported-skill-tree-intro.js",
+    "scripts/016/08-skill-tree.js",
+    "scripts/016/09-woodcutting-forests.js",
+    "scripts/016/10-v8-rebirth.js"
+   ],
+   "fragments": true
   },
   {
    "n": 17,
