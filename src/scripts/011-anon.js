@@ -457,7 +457,7 @@ const L=k=>lvl(S.xp[k]);
 const inv=k=>S.inv[k]||0;
 const cnt=id=>S.items[id]||0;
 const on=k=>(S.buff[k]||0)>Date.now();
-const item=k=>IT.find(i=>i.id===S.eq[k]);
+const item=k=>IT.find(i=>i.id===S.eq[k])||IT.find(i=>i.id==={w:'w_rusty',a:'a_cloth',p:'p_stone'}[k]);
 const CAB={mul:()=>1,add:()=>0,out:d=>d,fdef:()=>1,match:c=>!!(c.k&&(item('w').k||'')===c.k),dodge:()=>false,inc:d=>d,hurt(){},hit(){},tick(){},reset(){},kill(){},use:()=>false,btn:()=>'',lines:()=>[]};
 const maxHp=()=>20+2*L('combat')+item('a').hp+10*S.up.vigor+cm('hp')+CAB.add('hp')+2*(S.story?.skills?.ward||0);
 const maxSh=()=>Math.round(item('a').sh*CAB.mul('sh'));
@@ -905,7 +905,7 @@ function enemyAttack(heavy){
   upd();
 }
 function combatTick(dt){
-  const f=fight;if(!f||f.dead||f.hp<=0){if(f&&f.hp<=0)foeDown();return}
+  const f=fight;if(!f||f.dead||f.hp<=0){if(f&&f.hp<=0&&foeDown())render();return}
   en=Math.min(100,en+8*dt);guardT=Math.max(0,guardT-dt);CAB.tick(dt);
   const sl=slowT>0?1.4:1;slowT=Math.max(0,slowT-dt);if(cd>0)cd=Math.max(0,cd-dt/sl);
   if(dot.t>0){dot.t-=dt;dotAcc+=dot.dps*dt;if(dotAcc>=1){const d=Math.floor(dotAcc);dotAcc-=d;S.hp-=d;if(S.hp<=0){playerDown();return}}}
