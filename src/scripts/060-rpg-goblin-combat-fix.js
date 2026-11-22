@@ -26,7 +26,7 @@
     if(!el){
       el=[...decoded,...hurtDecoded,...deathDecoded].find(frame=>frame&&frame.src===src)||null;
       if(!el){el=new Image();el.alt='';el.draggable=false;el.decoding='sync';el.src=src;}
-      activeMainImg.appendChild(el);stackPool.set(src,el)
+      el.style.opacity='0';activeMainImg.appendChild(el);stackPool.set(src,el)
     }
     return el;
   }
