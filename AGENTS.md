@@ -22,7 +22,7 @@
 - Keep sprite sheets and animation groups separate, with transparent backgrounds and accurate frame bounds.
 
 ## Required workflow
-1. Read this file and inspect the latest commit/branch.
+1. Read this file, then `HANDOFF.md` (current status, completed work, remaining steps, testing know-how), and inspect the latest commit/branch.
 2. Confirm `Project X.html` is the source being edited.
 3. Analyze before changing architecture or data formats.
 4. Make the smallest safe, modular change; do not overwrite unrelated work.
