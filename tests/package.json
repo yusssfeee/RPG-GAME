@@ -1,0 +1,7 @@
+{
+  "name": "rpg-game-tests",
+  "private": true,
+  "description": "Headless regression tests for Project X.html",
+  "scripts": { "test": "node run.js" },
+  "devDependencies": { "playwright": ">=1.40.0" }
+}

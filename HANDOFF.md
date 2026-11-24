@@ -26,7 +26,7 @@
 ## 3. Repository state
 | Branch | Head | What it is |
 |---|---|---|
-| `main` | `2eb31f4` | Single-file game + 3 fixes (below). Baseline before this work: `2252c12`. |
+| `main` | game last changed at `2eb31f4` | Single-file game + 3 fixes (below); later commits on `main` are docs/tests. Baseline before this work: `2252c12`. |
 | `modular-split` | `f94f387` | Same game, byte-identical to `main`, plus a lossless `src/` split and `tools/`. **Not merged into `main`** (decision pending, section 7). |
 
 Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, burn kill redraw) · PR #7 (`e1ffa72`, goblin ghost frame).
@@ -67,7 +67,7 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - Burn kill: `fight.hp=fight.max=500; CAB.use(); fight.hp=1;`.
 - Boot check: 0 page errors; `#poster` has a background image; `[data-k="reb"]` exists; `S.cls`, `S.coins`, `item('a')` as expected.
 - Detect leftovers by counting **visible** `<img>`/sprites in `#stg` after repeated spawn-and-kill rounds (also with a 300 ms gap); some monsters draw with CSS sprites, so element counts cannot see a pixel-level ghost — take screenshots.
-- The test scripts used so far lived only in the AI sandbox and are **not in the repo yet**. Step 3.1 below must commit them under `tests/`.
+- **Regression suite:** `tests/` (read `tests/README.md`). `node tests/run.js` runs 20 headless cases in about 3 minutes (needs Playwright). It was validated on the older builds: it fails on each bug it guards and passes on current `main`.
 
 **Never tested:** a full manual playthrough of farming, mining, fishing, forge, alchemy, trade; Goblin Chief/Shaman/Spear/King/Alchemist were only checked by element counts; the mining screen could not be driven by automation (no buttons found), so whether the older mining-ambush layers in `013` are dead code is **unverified**.
 
@@ -82,7 +82,7 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - [ ] Merge `modular-split` into `main`? It adds `src/`, `tools/`, ~40 MB (images stored twice) and does not change the game. If `src/` becomes the place to edit, `Project X.html` must be rebuilt from it each time; AGENTS.md currently names `Project X.html` as the only canonical source, so keep that rule until the owner decides.
 
 **Next (Phase 3 — changes real code; show each step to the owner before doing it)**
-- [ ] **3.1 Safety net, no game change:** commit headless scenarios under `tests/` with synthetic saves: every goblin kind + Slime control; spawn, hit, kill by click and by burn, fast and slow respawn; record DOM/state traces to compare before/after any refactor; include the boot test.
+- [x] **3.1 Safety net, no game change:** `tests/` (20 cases, synthetic saves): boot with each class's saved gear, burn/click kill redraw, ghost frames for 8 foe kinds at two respawn speeds, reload after a fight. **Still to add before refactoring a system:** attack/hurt animation traces per goblin kind, dungeon progression, mining, and a differential trace (DOM/state at fixed times) to compare before/after.
 - [ ] **3.2** One shared "hold the redraw during the death animation" helper replacing the four copies (`050/060/074/078`); each kind keeps its own drawing.
 - [ ] **3.3** Turn the remaining nested wrappers (`foeDown`, `startFight`, `enemyAttack`, ...) into explicit ordered hook lists.
 - [ ] Verify whether the `013` mining-ambush layers (`tapTile` / `mineAmbushActive`) are superseded by `020`; remove only with evidence.
