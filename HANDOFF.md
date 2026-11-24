@@ -1,6 +1,6 @@
 # HANDOFF — where the project stands and how to continue
 
-*Last updated: 2026-11-22. Written by Claude (Anthropic) at the end of a long working session with the owner.*
+*Last updated: 2026-11-24. Updated after implementing combat death-render guard step 3.2.*
 *`AGENTS.md` stays authoritative. This file is the **status log**: what is done, what is left, and the practical know-how. **Update it at the end of every work session** (commit hashes, test results, decisions).*
 
 ## 0. Read this first
@@ -67,7 +67,8 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - Burn kill: `fight.hp=fight.max=500; CAB.use(); fight.hp=1;`.
 - Boot check: 0 page errors; `#poster` has a background image; `[data-k="reb"]` exists; `S.cls`, `S.coins`, `item('a')` as expected.
 - Detect leftovers by counting **visible** `<img>`/sprites in `#stg` after repeated spawn-and-kill rounds (also with a 300 ms gap); some monsters draw with CSS sprites, so element counts cannot see a pixel-level ghost — take screenshots.
-- **Regression suite:** `tests/` (read `tests/README.md`). `node tests/run.js` runs 20 headless cases in about 3 minutes (needs Playwright). It was validated on the older builds: it fails on each bug it guards and passes on current `main`.
+- **Regression suite:** `tests/` (read `tests/README.md`). `node tests/run.js` runs 21 headless cases in about 3 minutes (needs Playwright). It was validated on the older builds: it fails on each bug it guards and passes on current `main`.
+- **Latest local run:** 21/21 passed on `Project X.html` after step 3.2, including `death-hold.shared-render-guard`.
 
 **Never tested:** a full manual playthrough of farming, mining, fishing, forge, alchemy, trade; Goblin Chief/Shaman/Spear/King/Alchemist were only checked by element counts; the mining screen could not be driven by automation (no buttons found), so whether the older mining-ambush layers in `013` are dead code is **unverified**.
 
@@ -83,7 +84,7 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 
 **Next (Phase 3 — changes real code; show each step to the owner before doing it)**
 - [x] **3.1 Safety net, no game change:** `tests/` (20 cases, synthetic saves): boot with each class's saved gear, burn/click kill redraw, ghost frames for 8 foe kinds at two respawn speeds, reload after a fight. **Still to add before refactoring a system:** attack/hurt animation traces per goblin kind, dungeon progression, mining, and a differential trace (DOM/state at fixed times) to compare before/after.
-- [ ] **3.2** One shared "hold the redraw during the death animation" helper replacing the four copies (`050/060/074/078`); each kind keeps its own drawing.
+- [x] **3.2** `window.__RPG_DEATH_RENDER_GUARD` now shares the render hold across the atlas, standard Goblin, Shaman, and Spear death controllers. Per-controller death cleanup and animation drawing remain local. Added `death-hold.shared-render-guard`; 21/21 regression cases passed locally.
 - [ ] **3.3** Turn the remaining nested wrappers (`foeDown`, `startFight`, `enemyAttack`, ...) into explicit ordered hook lists.
 - [ ] Verify whether the `013` mining-ambush layers (`tapTile` / `mineAmbushActive`) are superseded by `020`; remove only with evidence.
 - [ ] `013-rpg-game-enhancements.js` (52 KB, no banners) is still unsplit.
@@ -91,6 +92,7 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 
 ## 8. Rules for the next AI
 - Smallest safe, reversible change. Analyse before changing structure. Ask before destructive changes to saves, assets or structure. Do not invent: if a file or access is missing, say exactly what and stop.
+- Before step 3.3, add the still-missing attack/hurt animation traces, dungeon progression, mining, and differential DOM/state trace tests noted in step 3.1.
 - Preserve behaviour and save compatibility. Do not rewrite from scratch.
 - Verify everything you claim (rebuild, hash/byte comparison, headless run). Verify on GitHub after the owner pushes.
 - Never ask the owner to run multi-step commands without stating the expected output of each step and where to stop and send a screenshot.
