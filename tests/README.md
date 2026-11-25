@@ -4,7 +4,7 @@ Automated checks that drive the **real game file** in a headless browser. Added 
 
 ```
 npm i playwright && npx playwright install chromium     # once (or set PLAYWRIGHT_PATH to an existing install)
-node tests/run.js                                       # all 20 cases on "Project X.html", ~3 minutes
+node tests/run.js                                       # all 21 cases on "Project X.html", ~3 minutes
 node tests/run.js --game check.html                     # test a rebuilt file (modular-split: python tools/build.py . check.html)
 node tests/run.js --only ghost. --jobs 2                # a subset / fewer parallel browsers
 node tests/run.js --list ; node tests/run.js --full     # list cases / more rounds
@@ -18,6 +18,7 @@ Exit code is 1 if any case fails. Lower `--jobs` if the machine is slow (timings
 | `boot.class-gear.<class>` (6 classes) | PR #5 — saved starter gear registered by a late script crashed the boot; later scripts never ran ("old version", no art, no Rebirth) |
 | `kill.burn-clears-foe` | PR #6 — a foe killed by the mage's burn stayed on screen at 0 HP |
 | `kill.click-clears-foe` | Normal kill: fight ends, kills +1, coins awarded, foe removed from the screen |
+| `death-hold.shared-render-guard` | The atlas, Goblin, Shaman, and Spear death controllers share one render gate; it holds fight redraws and preserves normal render callbacks when leaving combat |
 | `ghost.<kind>.gap<ms>` (Goblin, Goblin Archer at 2500 and 300 ms; Shaman, Spear, Chief, King, Alchemist, Slime) | PR #7 — a ghost of the previous foe's death frame stayed visible on the next goblin |
 | `save.reload-after-fight` | A fight followed by a reload (pagehide autosave, then hydrate) boots cleanly |
 
