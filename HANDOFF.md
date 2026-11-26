@@ -1,12 +1,13 @@
 # HANDOFF — where the project stands and how to continue
 
-*Last updated: 2026-11-24. Updated after implementing combat death-render guard step 3.2.*
+*Last updated: 2026-11-25. Step 3.2 (shared death-render guard, PR #10) was done by a previous agent; the regression tests were extended afterwards and the out-of-date `modular-split` branch is recorded in sections 3 and 7.*
 *`AGENTS.md` stays authoritative. This file is the **status log**: what is done, what is left, and the practical know-how. **Update it at the end of every work session** (commit hashes, test results, decisions).*
 
 ## 0. Read this first
 1. Read `AGENTS.md`. Then read this file. Then check the current branch head before changing anything.
 2. `Project X.html` (repo root, `main`) is the canonical game and the only thing the owner plays. Everything else is support material.
-3. Report only tests you actually ran. If something could not be tested, say so (see section 6 for what was never tested).
+3. **Several AI agents work on this repository** (Claude, Codex, ...). Re-read `main` and this file before every task, and never overwrite a file from an older copy: edit the current version (or do a real 3-way merge).
+4. Report only tests you actually ran. If something could not be tested, say so (see section 6 for what was never tested).
 
 ## 1. The owner and how to work with them
 - GitHub user `yusssfeee`. **Replies must be in Arabic.** Not a programmer: works from screenshots, runs commands you give them. Prefers one clear step at a time, with the expected output stated, and wants you to verify claims instead of guessing.
@@ -15,6 +16,8 @@
 - A separate loose copy `%USERPROFILE%\Downloads\Project X.html` exists outside git. If the owner plays from it, run the same patch script on it too.
 - Git on Windows warns `LF will be replaced by CRLF`: harmless. To compare a built file with `Project X.html`, normalise CRLF (command in section 9).
 - Patch scripts create `*.bak` files. **Never `git add` them**; add files by explicit path. Also never add `check.html`, `apply_*.py` at the repo root, or the owner's save backups.
+- If the owner's main folder holds **uncommitted work** (e.g. a feature in progress: modified `Project X.html`, `docs/`, `*.bak`), do not run git operations there. Use a separate clean clone (`git clone https://github.com/yusssfeee/RPG-GAME.git RPG-GAME-clean`) for your branch.
+- Never `npm install` inside `tests/` without `tests/.gitignore` (it excludes `node_modules/`), and never `git add tests` blindly: read `git status` first. If junk got staged, `git restore --staged <path>` unstages without deleting anything.
 - The owner's game saves (`localStorage`) are personal data. Do not commit them. Test fixtures must be synthetic.
 
 ## 2. How changes get into the repo (important: AI limits)
@@ -26,10 +29,10 @@
 ## 3. Repository state
 | Branch | Head | What it is |
 |---|---|---|
-| `main` | game last changed at `2eb31f4` | Single-file game + 3 fixes (below); later commits on `main` are docs/tests. Baseline before this work: `2252c12`. |
-| `modular-split` | `f94f387` | Same game, byte-identical to `main`, plus a lossless `src/` split and `tools/`. **Not merged into `main`** (decision pending, section 7). |
+| `main` | `e1b2707` (merge of PR #10) | Single-file game + 3 fixes (below) + the shared death render guard of step 3.2 (`Project X.html` changed in 4 places: the `050`/`060`/`074`/`078` death controllers). Baseline before this work: `2252c12`. |
+| `modular-split` | `f94f387` | Lossless `src/` split and `tools/`. **Out of date:** it mirrors `main` only up to PR #7. PR #10 changed `Project X.html` but not this branch's `src/`, so a rebuild no longer equals `main`. It must be synced (section 7) before it is merged. **Not merged into `main`.** |
 
-Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, burn kill redraw) · PR #7 (`e1ffa72`, goblin ghost frame).
+Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, burn kill redraw) · PR #7 (`e1ffa72`, goblin ghost frame) · PR #10 (shared death render guard, step 3.2).
 `modular-split` commits: phase 1 `f618fe3` · phase 2 `0f724e1` · fixes applied to `src/` `5f2c601` and `f94f387`.
 
 **Invariant on `modular-split`:** `python tools/build.py . check.html` must equal `Project X.html` (after CRLF normalisation). Check it after every change.
@@ -66,11 +69,13 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - Kill with a **real click** on `.v4ab[data-a="power"]` after `fight.hp=1; en=100; cd=0`. Calling `strike()` directly does not redraw (the click handler does) and gives misleading screenshots.
 - Burn kill: `fight.hp=fight.max=500; CAB.use(); fight.hp=1;`.
 - Boot check: 0 page errors; `#poster` has a background image; `[data-k="reb"]` exists; `S.cls`, `S.coins`, `item('a')` as expected.
+- Tab content lives in `#pane` (`#stg` exists only in the fight view). Mining uses `data-mine="cave|gather|engage|reset"` rather than `data-a`, and its ore button floats continuously: Playwright rejects it as "not stable", so click it with `force: true`. A forced click lands on the right element.
 - Detect leftovers by counting **visible** `<img>`/sprites in `#stg` after repeated spawn-and-kill rounds (also with a 300 ms gap); some monsters draw with CSS sprites, so element counts cannot see a pixel-level ghost — take screenshots.
-- **Regression suite:** `tests/` (read `tests/README.md`). `node tests/run.js` runs 21 headless cases in about 3 minutes (needs Playwright). It was validated on the older builds: it fails on each bug it guards and passes on current `main`.
+- **Regression suite:** `tests/` (read `tests/README.md`). `node tests/run.js` runs 29 headless cases in about 5 minutes (needs Playwright). Validation: the cases for the three fixed bugs fail on the builds before each fix; the cases added later (tabs, dungeon, mining, animations) fail on deliberately broken copies of `main`; `death-hold.shared-render-guard` (added with PR #10) has not been run against a broken build.
 - **Latest local run:** 21/21 passed on `Project X.html` after step 3.2, including `death-hold.shared-render-guard`.
+- **Latest run of all 29 cases:** all passed on `main` at `e1b2707`, executed as three batches (not a single process) in an AI sandbox.
 
-**Never tested:** a full manual playthrough of farming, mining, fishing, forge, alchemy, trade; Goblin Chief/Shaman/Spear/King/Alchemist were only checked by element counts; the mining screen could not be driven by automation (no buttons found), so whether the older mining-ambush layers in `013` are dead code is **unverified**.
+**Never tested:** a full manual playthrough; the *logic* of farming, fishing, forge, alchemy, trade, cooking and the other skill tabs (they are only rendered by `tabs.render-all`); Goblin King/Alchemist were only checked by element counts. Mining and one dungeon are now driven by `tests/`, but whether the older mining-ambush layers in `013` (`tapTile` / `mineAmbushActive`) are dead code is still **unverified** (the ambush trigger is closure-local and was never observed firing in the mining flow).
 
 ## 7. Status and what remains
 **Done**
@@ -79,11 +84,12 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - [x] Phase 2 — `rpg-v4` and sprite pack fragmented; goblin atlases extracted to WebP; goblin script 1.24 MB → 9 KB (`0f724e1`).
 - [x] Three gameplay fixes on `main`, mirrored in `src/`.
 
-**Pending decision (ask the owner)**
+**Pending (the owner asked for this merge)**
+- [ ] **Sync, then merge `modular-split` into `main`.** `src/` must first be brought in line with `Project X.html` (PR #10 changed 4 places in the goblin death controllers); after that `python tools/build.py . check.html` must again equal `Project X.html`. A sync tool (`tools/sync_src.py`) is prepared for this. Do not merge the branch while that comparison fails.
 - [ ] Merge `modular-split` into `main`? It adds `src/`, `tools/`, ~40 MB (images stored twice) and does not change the game. If `src/` becomes the place to edit, `Project X.html` must be rebuilt from it each time; AGENTS.md currently names `Project X.html` as the only canonical source, so keep that rule until the owner decides.
 
 **Next (Phase 3 — changes real code; show each step to the owner before doing it)**
-- [x] **3.1 Safety net, no game change:** `tests/` (20 cases, synthetic saves): boot with each class's saved gear, burn/click kill redraw, ghost frames for 8 foe kinds at two respawn speeds, reload after a fight. **Still to add before refactoring a system:** attack/hurt animation traces per goblin kind, dungeon progression, mining, and a differential trace (DOM/state at fixed times) to compare before/after.
+- [x] **3.1 Safety net, no game change:** `tests/` (20 cases, synthetic saves): boot with each class's saved gear, burn/click kill redraw, ghost frames for 8 foe kinds at two respawn speeds, reload after a fight. Extended afterwards with `tabs.render-all`, `dungeon.slime-cave-completes`, `mining.gather-yields-ore` and `anim.attack-hurt.<kind>` (29 cases with `death-hold`). **Still to add before refactoring a system:** a differential trace (DOM/state at fixed times) to compare before/after, and cases for the logic of the other skills.
 - [x] **3.2** `window.__RPG_DEATH_RENDER_GUARD` now shares the render hold across the atlas, standard Goblin, Shaman, and Spear death controllers. Per-controller death cleanup and animation drawing remain local. Added `death-hold.shared-render-guard`; 21/21 regression cases passed locally.
 - [ ] **3.3** Turn the remaining nested wrappers (`foeDown`, `startFight`, `enemyAttack`, ...) into explicit ordered hook lists.
 - [ ] Verify whether the `013` mining-ambush layers (`tapTile` / `mineAmbushActive`) are superseded by `020`; remove only with evidence.
@@ -92,7 +98,7 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 
 ## 8. Rules for the next AI
 - Smallest safe, reversible change. Analyse before changing structure. Ask before destructive changes to saves, assets or structure. Do not invent: if a file or access is missing, say exactly what and stop.
-- Before step 3.3, add the still-missing attack/hurt animation traces, dungeon progression, mining, and differential DOM/state trace tests noted in step 3.1.
+- Before step 3.3, add the still-missing differential DOM/state trace test (attack/hurt invariants, dungeon progression and mining are now covered by `tests/`).
 - Preserve behaviour and save compatibility. Do not rewrite from scratch.
 - Verify everything you claim (rebuild, hash/byte comparison, headless run). Verify on GitHub after the owner pushes.
 - Never ask the owner to run multi-step commands without stating the expected output of each step and where to stop and send a screenshot.

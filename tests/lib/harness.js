@@ -101,6 +101,18 @@ async function firstLoadedImgs(page) {
   }
   return 0;
 }
+// Some game buttons float/animate all the time (e.g. the mining ore), so Playwright never sees them as "stable".
+// A forced click still lands on the element (it is the topmost element at its centre).
+const clickForce = (page, selector) => page.locator(selector).first().click({ force: true, timeout: 2500 });
+const paneText = page => page.evaluate(() => (document.getElementById('pane') || document.body).innerText.replace(/\s+/g, ' ').trim());
+// Which animation frames are drawn right now: the lengths of the visible <img> sources (cheap fingerprint).
+const visibleImgSig = page => page.evaluate(() => {
+  const stg = document.getElementById('stg') || document.body;
+  const vis = e => { const r = e.getBoundingClientRect(), cs = getComputedStyle(e);
+    return r.width > 2 && r.height > 2 && cs.visibility !== 'hidden' && cs.display !== 'none' && parseFloat(cs.opacity) > 0.05; };
+  return [...stg.querySelectorAll('img')].filter(vis).map(i => i.src.length).join(',');
+});
+const invTotal = page => page.evaluate(() => Object.values(S.inv || {}).reduce((a, b) => a + (+b || 0), 0));
 const pageText = page => page.evaluate(() => document.body.innerText);
 const bootFacts = page => page.evaluate(() => ({
   poster: !!((document.getElementById('poster') || { style: {} }).style.backgroundImage),
@@ -108,4 +120,4 @@ const bootFacts = page => page.evaluate(() => ({
   scripts: document.scripts.length,
 }));
 
-module.exports = { assert, launch, openGame, enterGame, makeSave, classSave, startFoe, killByClick, killByBurn, visibleImgs, settledImgs, firstLoadedImgs, pageText, bootFacts };
+module.exports = { clickForce, paneText, visibleImgSig, invTotal, assert, launch, openGame, enterGame, makeSave, classSave, startFoe, killByClick, killByBurn, visibleImgs, settledImgs, firstLoadedImgs, pageText, bootFacts };
