@@ -98,10 +98,46 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - [ ] `013-rpg-game-enhancements.js` (52 KB, no banners) is still unsplit.
 - [ ] Keep this file current.
 
+## 7a. Phase 4 — Performance plan (added 2026-11-27)
+**Goal:** the game must open fast and stay smooth, especially on phones, without changing gameplay or save compatibility. Work in the priority order below. **Each item ends with the normal routine** (`sync_src.py`, `--check`, `node run.js`, see section 9). Report only what you measured.
+
+### Measured evidence (owner's Chrome on Windows, DevTools > Performance, Farm tab idle for 10 s, 12 ripe corn plots)
+| Metric (self time) | Baseline | After injecting `*{animation:none!important;transition:none!important}` |
+|---|---|---|
+| Recalculate style | 171 ms | 3.6 ms |
+| Layerize | 132 ms | 5.8 ms |
+| Pre-paint | 71 ms | 4.6 ms |
+| Commit | 66 ms | 18 ms |
+| Total busy time | ~917 ms | ~344 ms |
+
+Both totals include ~100 ms of profiler overhead; without it the work dropped from ~816 ms to ~235 ms (about 3.5x less). Paint was not visible in the second screenshot and was not compared.
+- **Conclusion:** continuous CSS animations are the main measured cost on the Farm screen. The 250 ms `render()` loop is **not** proven to be the main cost. **Do not rewrite `render` for performance reasons.**
+- **Not yet known:** which animation is responsible. Pending experiment: after a reload, inject `#grid,#grid *,#grid::before,#grid::after,#grid *::before,#grid *::after{animation:none!important}` and record again; if the numbers drop, split further (weather overlays / ripe plots / wet soil).
+- This was a desktop run with a single recording per condition. Re-measure with `CPU: 4x slowdown` to approximate a phone, and repeat a recording before trusting a small difference.
+
+### Static findings (read from the code, **not** measured)
+- `Project X.html` is ~50 MB: ~48 MB are base64 images (367 WebP, 153 PNG, 10 JPEG); the code is ~2 MB. Base64 is ~33% larger than the real files.
+- 15 `setInterval` calls, none ever cleared (fast ones: 90, 150, 150, 300, 300, 450 ms). 4 permanent `requestAnimationFrame` loops: `loop`, `fishMotion` (runs even outside the fish tab), and two goblin `tick` functions (run outside fights). Together ~87 ms per 10 s (about 10% of the busy time). 15 `MutationObserver`s, some observing `#pane` or `body` with `subtree`.
+- `save()` runs `JSON.stringify(S)` at ~75 call sites and every 10 s; slot 1 is written twice (`tinyacre-save-slot-1` and legacy `tinyacre-save`); write errors are swallowed by `catch(e){}`, so a full or blocked storage fails silently.
+- `rpg-icon-autofit` only handles hrefs starting with `data:image/` and reads pixels through a canvas (`getImageData`). If images become external files it silently stops fitting icons, and on `file://` the canvas is tainted (fine on GitHub Pages).
+- Candidate animations for the measured cost (**unverified**): weather overlays that animate `background-position` (`wxSheen`, `wxDrizzle`, `wxMist`, `wxWind`; `.v4wx:before`, `#grid.wx-*`), `.plot.ripe` (`v4ripe`, `transform`, one layer per plot), `.farm-wetsoil:after` (`wfSheen`), `.plot.pest` (`v4pst`). In total 133 `@keyframes` and 59 `infinite` animations exist.
+- Line numbers seen during the analysis (`Project X.html`, 2026-11-27): `loop` 1675, `fishMotion` 2260, goblin `tick` 7027 and 7527, cave sound interval 5239. They drift with every edit: search by name.
+
+### Ordered goals (most important first)
+- [ ] **P1 — Fix the Farm CSS animations.** Finish the narrowing experiment above, then fix in CSS only: animate only `transform` and `opacity`; avoid animating `background-position`, `box-shadow` or `filter` on large overlays; pause animations when the pane is hidden. No JS or save changes. *Done when:* the same recording shows clearly lower Recalculate style, Layerize and Paint, and before/after screenshots look the same.
+- [ ] **P2 — Light build for publishing.** Add a `--external-assets` mode to `tools/build.py` that writes a **second** output (never `Project X.html`) referencing the files in `src/assets/embedded/`. The canonical file and the `sync_src.py --check` invariant stay untouched. *Prerequisite:* handle `rpg-icon-autofit` (search `isData` and `measure(`), then test over `http` (GitHub Pages) as well as `file://`. Ask the owner before enabling Pages.
+- [ ] **P3 — Stop needless loops.** Run `fishMotion` only while a school exists, the goblin ticks only during fights, and pause timers while `document.hidden`; slow or make event driven the 90/150 ms intervals (gain feed `check`, farm water `watch`, goblin death `clean`). Expected gain is small (~10%): do it after P1.
+- [ ] **P4 — Save hardening, same format.** Show a visible warning when `localStorage.setItem` fails; add export/import of a save file; coalesce bursts of `save()`. Removing the double write of slot 1 touches saves: **ask the owner first** (`AGENTS.md`). Add a `saveVersion` only with a migration for old saves.
+- [ ] **P5 — Performance regression test in `tests/`.** A Playwright case on the Farm tab with a synthetic save: count `render` calls and long tasks over 10 s and store the baseline in `tests/README.md`. This also covers part of the "differential trace" prerequisite for step 3.3.
+- [ ] **P6 — Step 3.3** (nested wrappers into ordered hook lists): the riskiest and gives no speed gain, so it comes last and only after P5.
+- **Never:** rewrite `render` for speed; change the save format or delete save keys without asking; edit `src/` by hand without the check.
+- The logic of farming and barn is **untested** (section 6, "Never tested") and P1 and P3 touch their screens: run `tabs.render-all` and look at screenshots before and after.
+
 ## 8. Rules for the next AI
 - Smallest safe, reversible change. Analyse before changing structure. Ask before destructive changes to saves, assets or structure. Do not invent: if a file or access is missing, say exactly what and stop.
 - Before step 3.3, add the still-missing differential DOM/state trace test (attack/hurt invariants, dungeon progression and mining are now covered by `tests/`).
 - Preserve behaviour and save compatibility. Do not rewrite from scratch.
+- Performance work follows section 7a in priority order. Measure before and after with the same method (DevTools Performance recording of the same screen) and report the numbers.
 - Verify everything you claim (rebuild, hash/byte comparison, headless run). Verify on GitHub after the owner pushes.
 - Never ask the owner to run multi-step commands without stating the expected output of each step and where to stop and send a screenshot.
 
