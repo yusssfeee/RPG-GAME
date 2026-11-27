@@ -8,7 +8,7 @@
 3. Keep the evidence labels honest: **MEASURED** means a real recording or test produced the number; **READ** means it was read from the code and never measured. Never present a READ item as a measured fact.
 4. When you finish or learn something, update the goal's **Status** line and the *Evidence* section, then say so in your summary.
 
-Status marks: `[ ]` not started, `[~]` in progress, `[x]` done.
+Status marks: `[ ]` not started, `[~]` in progress, `[x]` done, `[-]` dropped by the owner (do not implement or re-propose it; its evidence is kept).
 
 ## Rules that apply to every goal
 - The owner is not a programmer and wants Arabic replies, **one clear step at a time**, with the expected output of every command and a place to stop (see `HANDOFF.md` section 1).
@@ -19,7 +19,9 @@ Status marks: `[ ]` not started, `[~]` in progress, `[x]` done.
 
 ## Goals, most important first
 
-### G1 — Cheaper Farm screen: CSS animations   `[~]`
+### G1 — Cheaper Farm screen: CSS animations   `[-]`
+**DROPPED by the owner on 2026-11-27.** The patch was never applied to `Project X.html`; do not apply `perf_p1_css.py`, do not change the weather shimmer or the ripe-plot hop, and do not propose this again unless the owner asks. The text below is kept only as a record of what was found.
+
 **Why (MEASURED):** on the idle Farm screen, continuous CSS animations cost about 60% of the busy time (see Evidence). Two animations are responsible and they are independent:
 - Weather banner shimmer `.v4wx:before` (`wxSheen`, animates `background-position`, never stops): causes Layerize and Paint (132 ms and 112 ms per 10 s, down to about 7 ms and 2 ms when disabled).
 - Ripe plots `.plot.ripe` (`v4ripe`, infinite hop): causes Recalculate style and Pre-paint (about 150 ms and 70 ms per 10 s, down to about 4 ms and 5 ms when limited to 3 hops).
@@ -33,7 +35,7 @@ Status marks: `[ ]` not started, `[~]` in progress, `[x]` done.
 - [ ] Check the other infinite animations on this screen when their state is active (not measured yet): `.farm-wetsoil:after` (`wfSheen`), `.plot.pest` (`v4pst`), weather overlays inside `#grid` (`wxDrizzle`, `wxMist`, `wxWind`). Only change one if a recording shows it matters.
 
 **Done when:** Recalculate style, Layerize and Pre-paint are each under about 10 ms per 10 s idle on the Farm screen, the suite passes, and the owner has seen the result.
-**Owner decision already taken:** none yet. If the owner dislikes the 3-hop behaviour, change the number in the patch (each hop is 1.3 s) or restore the infinite hop; `Project X.html.bak` holds the previous file.
+**Owner decision:** dropped (2026-11-27). Nothing was changed in the game.
 
 ### G2 — Light build for publishing   `[ ]`
 **Why (READ):** `Project X.html` is about 50 MB; about 48 MB are 530 base64 images (367 WebP, 153 PNG, 10 JPEG) and the code is about 2 MB. Base64 is about a third larger than the real files, and the whole file must download and parse before the game starts. On a phone or a slow connection this is the biggest cost at first load. Not measured yet.
