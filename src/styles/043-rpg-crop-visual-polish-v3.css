@@ -1,0 +1,45 @@
+
+/* Compact crop picker: category tabs + ONE swipeable row (replaces the tall stacked sections). */
+#seeds.crop-picker{display:block!important;max-width:100%;min-width:0}
+#seeds .crop-tabs{display:flex;flex-direction:row;gap:6px;overflow-x:auto;overflow-y:hidden;padding:1px 1px 7px;margin:0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#seeds .crop-tabs::-webkit-scrollbar,#seeds .crop-strip::-webkit-scrollbar{display:none}
+#seeds .crop-tab{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;padding:6px 4px 5px;border:2px solid #3b4d67;border-radius:12px;background:#0f1a2b;color:#c9d9e8;font:inherit;font-size:11.5px;font-weight:700;line-height:1.1;white-space:nowrap;cursor:pointer;touch-action:manipulation}
+#seeds .crop-tab img{display:block;width:28px;height:28px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 1px 1px #0008)}
+#seeds .crop-tab .nm{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+#seeds .crop-tab b{position:absolute;top:3px;right:4px;min-width:16px;padding:1px 4px;border-radius:999px;background:#ffffff22;color:#dbe8f3;font-size:10px;font-weight:700;text-align:center;line-height:1.3}
+#seeds .crop-tab.on{background:linear-gradient(160deg,#2f7a58,#17432e);border-color:#7be3b5;color:#f2fff8;box-shadow:0 0 0 2px #42d39a33}
+#seeds .crop-tab.on b{background:#00000045;color:#eafff5}
+#seeds .crop-caption{margin:0 1px 6px;padding:5px 9px;border-left:3px solid #42d39a;border-radius:4px;background:linear-gradient(90deg,#203b3b99,transparent);font-size:11px;line-height:1.3;color:#b9cbdb}
+#seeds .crop-caption strong{color:#eafff5;font-size:12px;margin-right:4px}
+#seeds .crop-strip{position:relative;display:flex;flex-direction:row;flex-wrap:nowrap;gap:7px;overflow-x:auto;overflow-y:hidden;padding:3px 2px 8px;scroll-snap-type:x proximity;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#seeds .crop-strip .seed{flex:0 0 76px;width:76px!important;min-width:76px!important;max-width:76px!important;min-height:88px!important;height:auto;padding:5px 3px 4px!important;gap:1px!important;border-radius:10px!important;border-width:2px!important;justify-content:flex-start!important;scroll-snap-align:start;overflow:hidden}
+#seeds .crop-strip .seed[data-off="1"]{display:none!important}
+#seeds .crop-strip .seed .crop-seed-art,#seeds .crop-strip .seed>svg,#seeds .crop-strip .seed>.ic{width:44px!important;height:44px!important;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 2px 1px #0008)}
+#seeds .crop-strip .seed>div{max-width:100%;font-size:11px;font-weight:700;line-height:1.15;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#seeds .crop-strip .seed span{display:block;max-width:100%;font-size:9.5px;line-height:1.15;text-align:center;color:#a9bdd0;white-space:normal;overflow-wrap:anywhere}
+#seeds .crop-strip .seed.on{border-color:#42d39a!important;background:#133029!important;box-shadow:0 0 0 2px #42d39a55,0 2px 0 #0004!important}
+#seeds .crop-strip .seed.locked{opacity:.62}
+#seeds .crop-strip .seed.locked span{color:#f0b35a}
+/* Selected-seed explanation card: compact. */
+#v4si{margin:6px 0 8px!important;padding:7px 9px!important;border-radius:9px!important;max-width:100%;font-size:11px;line-height:1.3}
+#v4si .row{gap:7px!important;align-items:center}
+#v4si .row>svg,#v4si .row>img{width:34px!important;height:34px!important;flex:0 0 34px}
+#v4si b{font-size:12px}
+@media(min-width:700px){
+ #seeds.crop-picker{max-width:none!important;margin-inline:0!important}
+ #seeds .crop-tab{min-height:62px;font-size:13px}
+ #seeds .crop-tab img{width:32px;height:32px}
+ #seeds .crop-caption{font-size:12px}
+ #seeds .crop-strip{flex-wrap:wrap;overflow:visible;scroll-snap-type:none}
+ #seeds .crop-strip .seed{flex-basis:92px;width:92px!important;min-width:92px!important;max-width:92px!important;min-height:98px!important}
+ #seeds .crop-strip .seed .crop-seed-art,#seeds .crop-strip .seed>svg,#seeds .crop-strip .seed>.ic{width:50px!important;height:50px!important}
+ #seeds .crop-strip .seed>div{font-size:12px}
+ #seeds .crop-strip .seed span{font-size:10.5px}
+}
+@media(max-width:600px){
+ #v4si{padding:6px 7px!important;font-size:10px}
+ #v4si .row>svg,#v4si .row>img{width:29px!important;height:29px!important;flex-basis:29px}
+}
+@media(max-width:360px){
+ #seeds .crop-strip .seed{flex-basis:70px;width:70px!important;min-width:70px!important;max-width:70px!important}
+}

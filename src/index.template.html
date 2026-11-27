@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RPG Game — Adventure Chronicle</title>
+<!--@@BLOCK:001@@-->
+<!--@@BLOCK:002@@-->
+<!--@@BLOCK:003@@-->
+
+<!--@@BLOCK:004@@-->
+
+<!--@@BLOCK:005@@-->
+<!--@@BLOCK:006@@-->
+
+
+<!--@@BLOCK:007@@-->
+
+<!--@@BLOCK:008@@-->
+</head>
+<body>
+<div id="rpg-boot" role="status" aria-live="polite"><i></i><span>Loading…</span></div>
+<!--@@BLOCK:009@@-->
+<div id="intro"><div id="poster"></div><div class="intro-brand"><div class="intro-kicker">✦ THE LEGEND BEGINS ✦</div><div class="intro-title">RPG <span>GAME</span></div><div class="intro-subtitle">EXPLORE · FIGHT · BECOME LEGENDARY</div><p>Ancient dungeons. Legendary treasures. Your adventure starts here.</p></div><div class="cta"><button class="btn go" id="play">Start</button><button class="lnk" id="newg" hidden>New game</button><p class="intro-footnote">A WORLD OF MYSTERY AWAITS</p></div></div>
+<div id="app">
+  <header><h1>RPG Game</h1><div id="coins"></div><button class="sm" id="mute">Sound on</button><button class="sm" id="title">Title</button></header>
+  <div id="msg"></div>
+  <div id="farm" class="col"><div id="fsk"></div><div id="seeds"></div><p class="h">Fertilizer is used up when you plant. It speeds growth and can double or triple the harvest.</p><div id="fchips"></div><div id="grid"></div><p class="h">Pick a seed, tap soil to plant. Tap a growing crop once to water it. Tap a glowing crop to harvest.</p></div>
+  <div id="barn" class="col" hidden><div id="bsk"></div><div id="aseeds"></div><div id="bgrid"></div><div id="bx"></div></div>
+  <div id="pane" class="col" hidden></div>
+</div>
+<nav><div id="tabs"></div></nav>
+<!--@@BLOCK:010@@-->
+<!--@@BLOCK:011@@-->
+<!--@@BLOCK:012@@-->
+<!--@@BLOCK:013@@-->
+<!--@@BLOCK:014@@-->
+
+<!--@@BLOCK:015@@-->
+
+<!--@@BLOCK:016@@-->
+
+<!--@@BLOCK:017@@-->
+<!--@@BLOCK:018@@-->
+
+
+<!--@@BLOCK:019@@-->
+<!--@@BLOCK:020@@-->
+
+<!--@@BLOCK:021@@-->
+
+<!--@@BLOCK:022@@-->
+
+<!--@@BLOCK:023@@-->
+
+<template id="mm-tpl"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 340" preserveAspectRatio="xMidYMid slice"
+     class="mm-map" role="img" aria-label="Mining frontier world map">
+  <defs>
+    <linearGradient id="mmBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1315"/>
+      <stop offset="0.45" stop-color="#14201f"/>
+      <stop offset="1" stop-color="#0b0f12"/>
+    </linearGradient>
+    <radialGradient id="mmQuarry" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f0c98a" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#c99a5a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mmDeep" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#9db9e8" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#5f7ba8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mmCrystal" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#b79bff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#6f56c9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mmMagma" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ff9a53" stop-opacity="0.44"/>
+      <stop offset="1" stop-color="#c0401c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mmVig" cx="0.5" cy="0.46" r="0.76">
+      <stop offset="0.42" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+    </radialGradient>
+    <linearGradient id="mmMist" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9fd8e0" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#9fd8e0" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#9fd8e0" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="340" fill="url(#mmBase)"/>
+
+  <!-- surveyor grid -->
+  <g stroke="#d9b26a" stroke-opacity="0.08" stroke-width="1">
+    <path d="M40 0v340M80 0v340M120 0v340M160 0v340M200 0v340M240 0v340M280 0v340M320 0v340M360 0v340"/>
+    <path d="M0 40h400M0 80h400M0 120h400M0 160h400M0 200h400M0 240h400M0 280h400"/>
+  </g>
+
+  <!-- contour lines: terrain relief -->
+  <g fill="none" stroke="#c9a06a" stroke-opacity="0.16" stroke-width="1.2">
+    <path d="M-10 60c40 18 66-6 96 6s52 30 44 58-46 30-70 20-58-2-80 14"/>
+    <path d="M-10 96c36 14 60-4 88 8s46 26 40 50-42 26-64 18-52-2-70 12"/>
+    <path d="M410 150c-38 14-62-8-92 4s-48 28-40 54 44 28 68 20 54 0 74 14"/>
+    <path d="M410 186c-34 12-56-6-84 6s-42 24-36 46 40 24 60 18 50 0 68 10"/>
+  </g>
+
+  <!-- region washes -->
+  <ellipse cx="60" cy="85" rx="96" ry="74" fill="url(#mmQuarry)" class="mm-breathe mm-slow"/>
+  <ellipse cx="288" cy="163" rx="100" ry="76" fill="url(#mmDeep)" class="mm-breathe mm-mid"/>
+  <ellipse cx="108" cy="248" rx="102" ry="78" fill="url(#mmCrystal)" class="mm-breathe mm-fast"/>
+  <ellipse cx="312" cy="279" rx="98" ry="74" fill="url(#mmMagma)" class="mm-breathe mm-mid"/>
+
+  <!-- route between the four regions, animated dashes -->
+  <path class="mm-route" d="M60 85C120 58 232 108 288 163C332 206 250 242 108 248C58 250 244 302 312 279"
+        fill="none" stroke="#e8c98a" stroke-opacity="0.55" stroke-width="2.2"
+        stroke-dasharray="9 7" stroke-linecap="round"/>
+  <g fill="none" stroke="#ffe1a8" stroke-opacity="0.35" stroke-width="1.2">
+    <circle cx="60" cy="85" r="9"/><circle cx="288" cy="163" r="9"/>
+    <circle cx="108" cy="248" r="9"/><circle cx="312" cy="279" r="9"/>
+  </g>
+
+  <!-- quarry: stepped terraces -->
+  <g opacity="0.6">
+    <path d="M14 128l20-8 4-14 18-4 6 12 16 2" stroke="#c9a06a" stroke-width="1.6" fill="none" stroke-opacity="0.5"/>
+    <path d="M18 118l16-22 20 4 10 20-14 16-22-2z" fill="#33332d" stroke="#6d6350" stroke-width="1"/>
+    <path d="M54 96l10-12 14 4 4 14-12 8z" fill="#2b2b26" stroke="#5f5646" stroke-width="1"/>
+    <path d="M96 132l10-8 12 4-2 10-14 2z" fill="#2e2e28" stroke="#5a5142" stroke-width="1"/>
+  </g>
+
+  <!-- deep mine: timber headframe -->
+  <g opacity="0.62" stroke="#9db9e8" stroke-width="2.6" fill="none" stroke-linejoin="round">
+    <path d="M246 214v-50a28 28 0 0 1 56 0v50"/>
+    <path d="M232 214h84"/>
+    <path d="M262 214v-40M288 214v-40"/>
+    <path d="M246 176l56 38M302 176l-56 38" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- crystal cavern -->
+  <g>
+    <path d="M70 284l12-44 11 44z" fill="#8f6df0" opacity="0.82"/>
+    <path d="M70 284l12-44v44z" fill="#d9ccff" opacity="0.36"/>
+    <path d="M92 288l9-30 9 30z" fill="#5fd8f0" opacity="0.64" class="mm-breathe mm-fast"/>
+    <path d="M92 288l9-30v30z" fill="#c9f6ff" opacity="0.4"/>
+    <path d="M52 290l8-24 8 24z" fill="#b79bff" opacity="0.56"/>
+    <path d="M116 292l10-34 9 34z" fill="#7de9ff" opacity="0.44"/>
+    <path d="M116 292l10-34v34z" fill="#d6fbff" opacity="0.28"/>
+  </g>
+
+  <!-- magma channels -->
+  <g>
+    <path class="mm-lava" d="M262 326c8-14 18-12 24-22s20-10 26-18 16-8 22-16"
+          stroke="#ff7a3c" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-opacity="0.62"
+          stroke-dasharray="14 8"/>
+    <path class="mm-lava mm-lava-2" d="M248 322c8-8 16-6 22-14s18-6 24-12 14-4 20-10"
+          stroke="#ffb066" stroke-width="2" fill="none" stroke-linecap="round" stroke-opacity="0.5"
+          stroke-dasharray="10 9"/>
+    <circle cx="300" cy="302" r="2.2" fill="#ffb066" class="mm-breathe mm-fast"/>
+    <circle cx="330" cy="288" r="1.5" fill="#ff7a3c" class="mm-breathe mm-mid"/>
+    <circle cx="352" cy="266" r="1.2" fill="#ffd2a0" class="mm-twinkle"/>
+  </g>
+
+  <!-- compass rose -->
+  <g transform="translate(368 96)">
+    <circle r="24" fill="#0c1517" fill-opacity="0.72" stroke="#c99b4d" stroke-opacity="0.75" stroke-width="1.4"/>
+    <circle r="18" fill="none" stroke="#e8c98a" stroke-opacity="0.28" stroke-width="1"/>
+    <g class="mm-needle" style="transform-origin:0 0">
+      <path d="M0 -16l5 16-5 16-5-16z" fill="#e8c98a" fill-opacity="0.85"/>
+      <path d="M0 -16l5 16h-10z" fill="#8fd7ff" fill-opacity="0.55"/>
+    </g>
+    <circle r="2.4" fill="#ffe1a8"/>
+  </g>
+
+  <!-- scale bar -->
+  <g transform="translate(24 318)" stroke="#c9a06a" stroke-opacity="0.55" stroke-width="1.4">
+    <path d="M0 0h44M0 -3v6M22 -2v4M44 -3v6"/>
+  </g>
+
+  <!-- drifting mist -->
+  <g class="mm-mist">
+    <rect x="-40" y="120" width="480" height="26" fill="url(#mmMist)"/>
+  </g>
+  <g class="mm-mist mm-mist-2">
+    <rect x="-40" y="206" width="480" height="20" fill="url(#mmMist)"/>
+  </g>
+
+  <!-- ore specks -->
+  <g fill="#ffe1a8">
+    <circle cx="150" cy="58" r="1.4" class="mm-twinkle"/>
+    <circle cx="344" cy="94" r="1.2" class="mm-twinkle mm-d1"/>
+    <circle cx="196" cy="286" r="1.3" class="mm-twinkle mm-d2"/>
+    <circle cx="236" cy="50" r="1.1" class="mm-twinkle mm-d3"/>
+    <circle cx="24" cy="196" r="1.2" class="mm-twinkle mm-d1"/>
+    <circle cx="372" cy="204" r="1.3" class="mm-twinkle mm-d2"/>
+    <circle cx="168" cy="150" r="1" class="mm-twinkle mm-d3"/>
+    <circle cx="214" cy="232" r="1" class="mm-twinkle"/>
+  </g>
+
+  <rect width="400" height="340" fill="url(#mmVig)"/>
+</svg>
+</template>
+<!--@@BLOCK:024@@-->
+
+
+<!--@@BLOCK:025@@-->
+<!--@@BLOCK:026@@-->
+
+<!--@@BLOCK:027@@-->
+
+<!--@@BLOCK:028@@-->
+<!--@@BLOCK:029@@-->
+
+<!--@@BLOCK:030@@-->
+<!--@@BLOCK:031@@-->
+<!--@@BLOCK:032@@-->
+
+<!--@@BLOCK:033@@-->
+
+
+
+
+<!--@@BLOCK:034@@-->
+<!--@@BLOCK:035@@-->
+
+
+<!--@@BLOCK:036@@-->
+
+
+<!--@@BLOCK:037@@-->
+<!--@@BLOCK:038@@-->
+
+
+<!--@@BLOCK:039@@-->
+
+
+<!--@@BLOCK:040@@-->
+
+
+<!-- Final crop rendering repair: update the actual seed buttons and give plot images a real layout box. -->
+<!--@@BLOCK:041@@-->
+<!--@@BLOCK:042@@-->
+
+
+<!--@@BLOCK:043@@-->
+<!--@@BLOCK:044@@-->
+
+
+<!--@@BLOCK:045@@-->
+
+<!--@@BLOCK:046@@-->
+
+<!--@@BLOCK:047@@-->
+<!--@@BLOCK:048@@-->
+
+<!--@@BLOCK:049@@-->
+<!--@@BLOCK:050@@-->
+<!--@@BLOCK:051@@-->
+<!--@@BLOCK:052@@-->
+<!--@@BLOCK:053@@-->
+
+<!--@@BLOCK:054@@-->
+<!--@@BLOCK:055@@-->
+<!--@@BLOCK:056@@-->
+
+<!--@@BLOCK:057@@-->
+<!--@@BLOCK:058@@-->
+<!--@@BLOCK:059@@-->
+<!--@@BLOCK:060@@-->
+<!--@@BLOCK:061@@-->
+
+<!--@@BLOCK:062@@-->
+<!--@@BLOCK:063@@-->
+
+<!--@@BLOCK:064@@--><!--@@BLOCK:065@@--><!--@@BLOCK:066@@--><!--@@BLOCK:067@@--><!--@@BLOCK:068@@--><!--@@BLOCK:069@@-->
+<!--@@BLOCK:070@@--><!--@@BLOCK:071@@-->
+<!--@@BLOCK:072@@-->
+<!--@@BLOCK:073@@-->
+<!--@@BLOCK:074@@-->
+<!--@@BLOCK:075@@--><!--@@BLOCK:076@@-->
+
+<!--@@BLOCK:077@@-->
+
+<!--@@BLOCK:078@@-->
+
+<!--@@BLOCK:079@@-->
+
+<!--@@BLOCK:080@@-->
+
+
+<!--@@BLOCK:081@@-->
+<!--@@BLOCK:082@@-->
+
+</body>
+</html>
+
+
+<!--@@BLOCK:083@@-->
+<!--@@BLOCK:084@@-->
+
+
+<!--@@BLOCK:085@@-->
+<!--@@BLOCK:086@@-->
+<!--@@BLOCK:087@@-->
+
+
+<!--@@BLOCK:088@@-->
+<!--@@BLOCK:089@@-->
+
+
+<!--@@BLOCK:090@@-->
+<!--@@BLOCK:091@@-->
+
+
+<!--@@BLOCK:092@@-->
+<!--@@BLOCK:093@@-->

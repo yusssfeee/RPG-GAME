@@ -1,0 +1,17 @@
+
+.rpg-mine-scene{isolation:isolate;position:relative}
+.mine-atmosphere{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;border-radius:inherit}
+.mine-atmosphere i{position:absolute;display:block;pointer-events:none}
+.mine-atmosphere.dust i{width:4px;height:4px;border-radius:50%;background:#d9c6a0;box-shadow:0 0 7px #d9c6a077;opacity:0;animation:dustDrift var(--dur) linear infinite;left:var(--x);top:var(--y)}
+.mine-atmosphere.crystal i{width:7px;height:7px;border-radius:2px;background:#a8f5ff;box-shadow:0 0 9px 3px #65dfff,0 0 22px #a68cff;opacity:0;animation:crystalPulse var(--dur) ease-in-out infinite;left:var(--x);top:var(--y)}
+.mine-atmosphere.magma:before{content:"";position:absolute;left:-10%;right:-10%;bottom:-24px;height:70px;background:linear-gradient(0deg,#ff3d16,#ff8a24 35%,#ffca5933 75%,transparent);filter:blur(9px);opacity:.8;animation:lavaFlow 5s ease-in-out infinite alternate}
+.mine-atmosphere.magma i{bottom:var(--y);left:var(--x);width:5px;height:5px;border-radius:50%;background:#ffb13b;box-shadow:0 0 12px 4px #ff5722;animation:emberRise var(--dur) linear infinite}
+.mine-atmosphere.deep{background:radial-gradient(ellipse at 50% 100%,#9bb4d00c,transparent 65%)}
+.mine-atmosphere.deep i{left:var(--x);top:var(--y);width:2px;height:2px;border-radius:50%;background:#b9d5ed;box-shadow:0 0 9px 3px #8eb8e455;animation:deepGlow var(--dur) ease-in-out infinite alternate}
+.rpg-mine-scene>.rpg-mine-resource,.rpg-mine-scene>.rpg-mine-hint{position:relative;z-index:2}
+@keyframes dustDrift{0%{transform:translate(-10px,25px) scale(.6);opacity:0}25%{opacity:.65}100%{transform:translate(45px,-95px) scale(1.3);opacity:0}}
+@keyframes crystalPulse{0%,100%{opacity:.15;transform:scale(.55)}50%{opacity:.95;transform:scale(1.45)}}
+@keyframes lavaFlow{from{transform:translateX(-3%) scaleY(.85);filter:blur(10px)}to{transform:translateX(4%) scaleY(1.15);filter:blur(13px)}}
+@keyframes emberRise{0%{transform:translateY(25px) scale(.5);opacity:0}20%{opacity:1}100%{transform:translate(20px,-230px) scale(0);opacity:0}}
+@keyframes deepGlow{from{opacity:.08;transform:scale(.7)}to{opacity:.7;transform:scale(1.6)}}
+@media(prefers-reduced-motion:reduce){.mine-atmosphere i,.mine-atmosphere:before{animation:none!important}}

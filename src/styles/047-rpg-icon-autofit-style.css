@@ -1,0 +1,3 @@
+
+/* Safety net: an ore illustration drawn without a size class can never stretch over its whole row again. */
+svg.ore-art:not(.ic):not(.art){width:44px;height:44px;flex:none}

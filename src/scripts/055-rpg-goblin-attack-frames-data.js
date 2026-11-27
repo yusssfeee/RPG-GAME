@@ -1,0 +1,2 @@
+
+window.__RPG_GOBLIN_ATTACK_FRAMES={"goblin":{"frames":["{{BLOB:b0385.webp}}","{{BLOB:b0386.webp}}","{{BLOB:b0387.webp}}","{{BLOB:b0388.webp}}","{{BLOB:b0389.webp}}","{{BLOB:b0390.webp}}","{{BLOB:b0391.webp}}","{{BLOB:b0392.webp}}"],"ms":[145,145,145,145,155,155,150,150],"hit":4,"box":{"left":0,"top":0,"w":512,"h":512,"ref":512}},"archer":{"frames":["{{BLOB:b0393.webp}}","{{BLOB:b0394.webp}}","{{BLOB:b0395.webp}}","{{BLOB:b0396.webp}}","{{BLOB:b0397.webp}}","{{BLOB:b0398.webp}}"],"ms":[90,90,100,120,170,220],"hit":4,"box":{"left":42,"top":-47,"w":642,"h":555,"ref":520}}};

@@ -1,0 +1,7 @@
+
+#seeds .seed .crop-seed-art{display:block!important;width:42px!important;height:42px!important;max-width:100%;object-fit:contain;image-rendering:pixelated;flex:0 0 auto}
+#seeds .seed>svg,#seeds .seed>.ic{display:block!important}
+#grid .plot .e{display:block!important;position:relative!important;width:100%!important;height:68%!important;flex:0 0 68%!important;min-height:0!important;isolation:isolate}
+#grid .plot .e .crop-stage-art{display:block!important;position:relative!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;image-rendering:pixelated;filter:drop-shadow(0 3px 2px #0008);margin:0 auto}
+#grid .plot .e>svg{display:block!important}
+@media(max-width:600px){#seeds .seed .crop-seed-art{width:clamp(31px,9vw,38px)!important;height:clamp(31px,9vw,38px)!important}#grid .plot .e{height:68%!important;flex-basis:68%!important}}

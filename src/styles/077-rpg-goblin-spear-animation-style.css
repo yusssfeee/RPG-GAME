@@ -1,0 +1,19 @@
+
+#eo.rpg-spear-host{display:flex!important;align-items:center!important;justify-content:center!important;
+ width:clamp(220px,29vw,270px)!important;height:clamp(220px,29vw,270px)!important;
+ min-width:0!important;min-height:0!important;max-width:100%!important;margin:0 auto!important;
+ flex:0 0 auto!important;overflow:visible!important;transform:none!important;animation:none!important}
+#eo .rpg-spear-wrap{position:relative!important;display:block!important;width:100%!important;height:100%!important;
+ min-width:0!important;min-height:0!important;margin:0!important;flex:0 0 auto!important;
+ overflow:visible!important;pointer-events:none;opacity:0;transition:opacity 120ms linear}
+#eo .rpg-spear-wrap img{position:absolute!important;inset:0!important;display:block!important;
+ width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
+ object-fit:contain!important;object-position:center!important;border:0!important;outline:0!important;
+ box-shadow:none!important;filter:none!important;transform:none!important;animation:none!important}
+/* Idle source frames have a taller canvas than the attack frames; normalize their visible scale. */
+#eo .rpg-spear-wrap img[data-mode="idle"]{transform:scale(.68)!important}
+#eo.rpg-spear-host{filter:none!important;transform:none!important;opacity:1!important}
+#eo.rpg-spear-host .rpg-spear-wrap,#eo.rpg-spear-host .rpg-spear-wrap img{filter:none!important;mix-blend-mode:normal!important;opacity:1!important}
+#eo .rpg-spear-wrap img[data-mode="death"]{transform:scale(.58)!important;filter:none!important;opacity:1!important;mix-blend-mode:normal!important}
+#eo .rpg-spear-legacy.spear-hidden{display:none!important}
+@media(max-width:620px){#eo.rpg-spear-host{width:min(70vw,250px)!important;height:min(70vw,250px)!important}}

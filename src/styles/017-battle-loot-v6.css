@@ -1,0 +1,17 @@
+
+#battle-loot-feed{margin-top:10px;padding:12px;border:1px solid #b98b4e;border-radius:14px;background:linear-gradient(145deg,#14263a,#0b1726);box-shadow:0 6px 18px #0005;color:#f7ecd5}
+#battle-loot-feed .bl-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+#battle-loot-feed .bl-head b{color:#ffdc91;font-size:14px;letter-spacing:.4px}
+#battle-loot-feed .bl-head small{font-size:10px;color:#a9bfd0}
+#battle-loot-feed .bl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px}
+#battle-loot-feed .bl-item{display:flex;align-items:center;gap:8px;min-width:0;padding:7px;border:1px solid #40566b;border-radius:10px;background:#071522a8;font-size:11px}
+#battle-loot-feed .bl-item .ic{width:32px;height:32px;flex:none}
+#battle-loot-feed .bl-item span{min-width:0;display:flex;flex-direction:column;gap:2px}
+#battle-loot-feed .bl-item strong{font-size:11px;color:#fff1cf;overflow-wrap:anywhere}
+#battle-loot-feed .bl-item small{font-size:9px;color:#a9bfd0}
+#battle-loot-feed .bl-empty{font-size:11px;color:#a9bfd0;padding:6px 0}
+#battle-loot-feed .bl-item.gear{border-color:#b98b4e;background:linear-gradient(120deg,#3b2d1c,#14263a)}
+#battle-loot-feed .bl-item.gear strong{color:#ffdc91}
+#battle-loot-feed .bl-item.rare{border-color:#a875d5}
+@keyframes bl-drop-in{from{opacity:0;transform:translateY(-8px) scale(.97)}to{opacity:1;transform:none}}
+#battle-loot-feed .bl-item{animation:bl-drop-in .25s ease-out}

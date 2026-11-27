@@ -1,0 +1,19 @@
+
+#battle-loot-feed .bl-item{animation:none}
+.rpg-caves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.rpg-cave{border:1px solid #52677b;border-radius:13px;padding:10px;background:linear-gradient(145deg,#172b3d,#101b2b);color:#f5e9d2;text-align:left;cursor:pointer;min-height:76px}
+.rpg-cave.on{border:2px solid #e8b65c;box-shadow:0 0 16px #e8b65c35}
+.rpg-cave:disabled{opacity:.45;cursor:not-allowed}
+.rpg-cave b,.rpg-cave small{display:block}.rpg-cave small{font-size:10px;color:#b7c7d6;margin-top:4px}
+.rpg-mine-scene{position:relative;overflow:hidden;min-height:245px;border:2px solid #493b50;border-radius:18px;background:radial-gradient(ellipse at 50% 110%,#a65d38 0,#392b3b 43%,#121c2b 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:18px;margin:10px 0;color:#fff4d9}
+.rpg-mine-scene:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 18%,#fff8 0 2px,transparent 3px),radial-gradient(circle at 80% 25%,#fff6 0 2px,transparent 3px);opacity:.4;pointer-events:none}
+.rpg-mine-resource{position:relative;z-index:1;border:0;background:transparent;color:inherit;cursor:pointer;display:flex;align-items:center;flex-direction:column;gap:8px;animation:mineFloat 2.1s ease-in-out infinite;filter:drop-shadow(0 12px 14px #0009)}
+.rpg-mine-resource .big{font-size:76px;line-height:1.1;transition:transform .18s}.rpg-mine-resource:active .big{transform:scale(.78) rotate(-12deg)}
+.rpg-mine-resource b{font-size:17px}.rpg-mine-resource small{color:#ffe0a0}
+.rpg-mine-progress{width:min(100%,280px);height:7px;border-radius:9px;background:#0008;overflow:hidden;margin-top:8px}.rpg-mine-progress i{display:block;height:100%;background:#e6b45b;transition:width .25s}
+.rpg-mine-hint{font-size:11px;color:#d2c7d6;text-align:center;margin-top:8px}
+@keyframes mineFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes mineReveal{from{opacity:0;transform:translateY(24px) scale(.7)}to{opacity:1;transform:none}}
+.rpg-mine-resource{animation:mineReveal .35s ease-out,mineFloat 2.1s .35s ease-in-out infinite}
+.rpg-mine-event{padding:12px;border:1px solid #a75c49;background:linear-gradient(120deg,#47252d,#1a1d2c);border-radius:12px;color:#ffe5d1;text-align:center;margin:8px 0}
+@media(max-width:390px){.rpg-caves{grid-template-columns:1fr}}

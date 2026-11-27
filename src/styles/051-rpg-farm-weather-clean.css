@@ -1,0 +1,3 @@
+
+/* Rain / breeze / mist used to paint stripes and a tinted rectangle over all the plots. The weather banner still tells the weather. */
+#grid.wx-drizzle:after,#grid.wx-breeze:before,#grid.wx-mist:before{content:none!important;display:none!important;animation:none!important}

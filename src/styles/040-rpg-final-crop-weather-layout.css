@@ -1,0 +1,7 @@
+
+/* Crop art is now emitted by the game's original render functions. */
+#seeds .seed .crop-seed-art{display:block!important;width:clamp(30px,4.2vw,42px);height:clamp(30px,4.2vw,42px);max-width:100%;object-fit:contain;image-rendering:pixelated;flex:0 0 auto}
+#grid .plot .e .crop-stage-art{display:block!important;position:relative!important;inset:auto!important;margin:0 auto;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 3px 2px #0008);pointer-events:none}
+#grid .plot .e{display:block!important;position:relative;isolation:isolate;width:100%;height:68%;flex:0 0 68%;min-height:0}
+@media(max-width:600px){#seeds .seed .crop-seed-art{width:clamp(29px,9vw,36px);height:clamp(29px,9vw,36px)}#grid .plot .e .crop-stage-art{max-width:100%;max-height:100%}}
+@media(prefers-reduced-motion:reduce){.v4wx:before,#grid.wx-drizzle:after,#grid.wx-mist:before,#grid.wx-breeze:before{animation:none!important}}

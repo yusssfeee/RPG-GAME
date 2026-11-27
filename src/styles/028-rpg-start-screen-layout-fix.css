@@ -1,0 +1,23 @@
+
+/* Keep the title, its supporting line and the Start action in separate visual zones. */
+#intro{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;overflow:hidden!important;isolation:isolate}
+#poster{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;background-size:cover!important;background-position:center 48%!important;transform:none!important}
+#intro:after{z-index:1!important;background:linear-gradient(180deg,rgba(4,9,20,.12) 0%,rgba(4,9,20,.05) 35%,rgba(4,9,20,.38) 62%,rgba(4,9,20,.86) 100%)!important}
+#intro .intro-brand{position:absolute!important;top:clamp(28px,6.5vh,76px)!important;left:18px!important;right:18px!important;z-index:3!important;text-align:center!important}
+#intro .intro-kicker{margin-bottom:12px!important}
+#intro .intro-title{font-size:clamp(48px,8vw,88px)!important;line-height:1.04!important;letter-spacing:1.5px!important}
+#intro .intro-subtitle{margin-top:13px!important;font-size:clamp(10px,1.3vw,13px)!important;letter-spacing:2.2px!important}
+#intro .intro-brand p{display:block!important;max-width:min(620px,88vw)!important;margin:clamp(18px,3vh,30px) auto 0!important;font-size:clamp(13px,1.5vw,16px)!important;line-height:1.65!important;color:#fff1d4!important;text-shadow:0 2px 8px #000!important}
+#intro .cta{position:absolute!important;left:0!important;right:0!important;bottom:clamp(18px,4vh,42px)!important;z-index:4!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:12px!important;padding:0 20px!important;background:none!important}
+#intro .cta .btn{width:min(360px,88vw)!important;min-height:58px!important;border-radius:14px!important;font-size:18px!important}
+#intro .intro-footnote{margin-top:4px!important;font-size:10px!important;letter-spacing:3px!important;color:#f7dfb7!important}
+#rpg-slot-screen{z-index:5000!important}
+#rpg-slot-panel{max-height:calc(100dvh - 24px)!important}
+#v4cls{z-index:6000!important;display:block!important;box-sizing:border-box!important;padding:clamp(16px,3vh,30px) 14px 34px!important}
+#v4cls h2{font-size:clamp(25px,4vw,34px)!important;margin:8px 0 8px!important}
+#v4cls p.sub{max-width:700px!important;margin:0 auto 18px!important;line-height:1.55!important}
+#v4cls .v4cg{padding-bottom:8px!important}
+#v4cls .go{position:sticky!important;bottom:8px!important;z-index:2!important;min-height:50px!important;background:linear-gradient(180deg,#ffe4a0,#dca64e)!important;color:#271a0a!important;border:1px solid #fff0bd!important;box-shadow:0 4px 0 #76502a,0 8px 22px #0008!important}
+#v4cls .go:disabled{opacity:.58!important;filter:grayscale(.35)!important}
+@media(max-height:650px){#intro .intro-brand{top:18px!important}#intro .intro-title{font-size:clamp(42px,7vw,62px)!important}#intro .intro-brand p{margin-top:12px!important}#intro .cta{bottom:12px!important}#intro .cta .btn{min-height:48px!important}}
+@media(max-width:620px){#intro .intro-brand{top:clamp(28px,7vh,58px)!important}#intro .intro-title{font-size:clamp(46px,13vw,66px)!important}#intro .intro-brand p{max-width:90vw!important;margin-top:18px!important}#intro .cta{bottom:calc(16px + env(safe-area-inset-bottom,0px))!important}}
