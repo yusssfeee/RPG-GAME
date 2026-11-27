@@ -230,10 +230,7 @@
     return previousCombatTick.apply(this,arguments);
   };
   const previousRender=render;
-  render=function(){
-    if(deathState){if(S&&S.tab==='fight')return;finishDeath(false);}
-    const result=previousRender.apply(this,arguments);requestAnimationFrame(attach);return result;
-  };
+  render=window.__RPG_DEATH_RENDER_GUARD(previousRender,()=>!!deathState,()=>finishDeath(false),()=>requestAnimationFrame(attach));
   const previousStartFight=startFight;
   startFight=function(){if(deathState)finishDeath(false);detach();return previousStartFight.apply(this,arguments)};
   document.addEventListener('click',e=>{if(deathState&&e.target&&e.target.closest&&e.target.closest('#stg'))finishDeath(true)},true);

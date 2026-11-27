@@ -110,7 +110,7 @@
    state.endTimer=setTimeout(()=>finishDeath(true),DEATH_END_AT);
  }
  const previousRender=render;
- render=function(){if(deathState){if(S&&S.tab==='fight')return;finishDeath(false)}const result=previousRender.apply(this,arguments);requestAnimationFrame(attach);return result};
+ render=window.__RPG_DEATH_RENDER_GUARD(previousRender,()=>!!deathState,()=>finishDeath(false),()=>requestAnimationFrame(attach));
  const previousStartFight=startFight;
  startFight=function(){if(deathState)finishDeath(false);detach();const result=previousStartFight.apply(this,arguments);requestAnimationFrame(attach);return result};
  const previousStrike=strike;

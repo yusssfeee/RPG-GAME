@@ -86,7 +86,7 @@
   deathState.endTimer=setTimeout(()=>{const state=deathState;if(!state)return;clearTimeout(state.endTimer);deathState=null;detach();try{render()}catch(e){}},DEATH_END_AT);
  }
  const previousRender=render;
- render=function(){if(deathState){if(S&&S.tab==='fight')return;clearTimeout(deathState.endTimer);deathState=null;detach()}const result=previousRender.apply(this,arguments);requestAnimationFrame(attach);return result};
+ render=window.__RPG_DEATH_RENDER_GUARD(previousRender,()=>!!deathState,()=>{clearTimeout(deathState.endTimer);deathState=null;detach()},()=>requestAnimationFrame(attach));
  const previousStartFight=startFight;
  startFight=function(){if(deathState){clearTimeout(deathState.endTimer);deathState=null}detach();const result=previousStartFight.apply(this,arguments);requestAnimationFrame(attach);return result};
  const previousEnemyAttack=enemyAttack;

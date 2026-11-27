@@ -60,12 +60,22 @@
  }
  requestAnimationFrame(tick);
 
- /* The scene must not change until the enemy is really dead: while the death animation runs, redraws of the fight tab are held back. */
- function endDeath(){if(!DY)return;DY=null;try{render()}catch(e){console.warn(e)}}
- const _rn=render;
- render=function(){
-   if(DY){if(S.tab==='fight')return;DY=null}   // leaving the fight tab cancels the wait
-   return _rn.apply(this,arguments)};
+  /* Shared render gate used by the four enemy death-animation controllers below. */
+  window.__RPG_DEATH_RENDER_GUARD=window.__RPG_DEATH_RENDER_GUARD||function(previousRender,isActive,onLeave,afterRender){
+    return function(){
+      if(isActive()){
+        if(S&&S.tab==='fight')return;
+        onLeave();
+      }
+      const result=previousRender.apply(this,arguments);
+      if(afterRender)afterRender();
+      return result;
+    };
+  };
+  /* The scene must not change until the enemy is really dead: while the death animation runs, redraws of the fight tab are held back. */
+  function endDeath(){if(!DY)return;DY=null;try{render()}catch(e){console.warn(e)}}
+  const _rn=render;
+  render=window.__RPG_DEATH_RENDER_GUARD(_rn,()=>!!DY,()=>{DY=null});
  document.addEventListener('click',e=>{if(DY&&e.target.closest&&e.target.closest('#stg'))endDeath()},true);   // tap the scene to skip
 
  /* ----- put the sprite into the fight scene ----- */
