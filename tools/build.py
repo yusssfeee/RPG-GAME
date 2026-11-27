@@ -10,7 +10,7 @@ args = [a for a in sys.argv[1:] if not a.startswith('--')]; separate = '--separa
 external = '--external-assets' in sys.argv
 prefix = next((a.split('=', 1)[1] for a in sys.argv if a.startswith('--assets-prefix=')), 'src/assets/embedded/')
 if not prefix.endswith('/'): prefix += '/'
-if any(c in prefix for c in '\'"\\'): sys.exit('bad --assets-prefix')
+if not re.fullmatch(r'[A-Za-z0-9_./-]+', prefix): sys.exit('bad --assets-prefix (allowed: letters, digits, _ . / -)')
 root = pathlib.Path(args[0]); outp = pathlib.Path(args[1])
 src = root/'src'; man = json.loads((src/'manifest.json').read_text(encoding='utf-8'))
 blocks = {b['n']: b for b in man['blocks']}; mimes = {b['name']: b['mime'] for b in man['blobs']}
