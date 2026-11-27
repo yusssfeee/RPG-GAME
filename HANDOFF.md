@@ -1,6 +1,6 @@
 # HANDOFF — where the project stands and how to continue
 
-*Last updated: 2026-11-25. Step 3.2 (shared death-render guard, PR #10) was done by a previous agent; the regression tests were extended afterwards and the out-of-date `modular-split` branch is recorded in sections 3 and 7.*
+*Last updated: 2026-11-27. Step 3.2 (shared death-render guard, PR #10) was done earlier. On 2026-11-27 `modular-split` was synced with `Project X.html` (`tools/sync_src.py`), merged into `main` by PR #12, and all 29 regression cases passed. See sections 3 and 7.*
 *`AGENTS.md` stays authoritative. This file is the **status log**: what is done, what is left, and the practical know-how. **Update it at the end of every work session** (commit hashes, test results, decisions).*
 
 ## 0. Read this first
@@ -11,9 +11,10 @@
 
 ## 1. The owner and how to work with them
 - GitHub user `yusssfeee`. **Replies must be in Arabic.** Not a programmer: works from screenshots, runs commands you give them. Prefers one clear step at a time, with the expected output stated, and wants you to verify claims instead of guessing.
-- Windows PC, PowerShell, Chrome. Local clone: `%USERPROFILE%\Downloads\rpg-split\RPG-GAME`.
+- Windows PC, PowerShell, Chrome. Local clone: `%USERPROFILE%\Downloads\rpg-split\RPG-GAME` (the clone currently used for work and tests is `%USERPROFILE%\Downloads\rpg-split\RPG-GAME-tests`; `RPG-GAME` and `RPG-GAME-clean` are older copies).
   **Start every command block with `cd $HOME\Downloads\rpg-split\RPG-GAME`** — the terminal often opens in the user's home folder, which caused repeated "not a git repository" errors.
 - A separate loose copy `%USERPROFILE%\Downloads\Project X.html` exists outside git. If the owner plays from it, run the same patch script on it too.
+- PowerShell blocks `.ps1` scripts (`running scripts is disabled on this system`), so `npm`/`npx` fail: give the owner `npm.cmd` / `npx.cmd` instead. Clicking inside the PowerShell window pauses a running command (selection mode); tell the owner to press `Esc` and not to click while tests run.
 - Git on Windows warns `LF will be replaced by CRLF`: harmless. To compare a built file with `Project X.html`, normalise CRLF (command in section 9).
 - Patch scripts create `*.bak` files. **Never `git add` them**; add files by explicit path. Also never add `check.html`, `apply_*.py` at the repo root, or the owner's save backups.
 - If the owner's main folder holds **uncommitted work** (e.g. a feature in progress: modified `Project X.html`, `docs/`, `*.bak`), do not run git operations there. Use a separate clean clone (`git clone https://github.com/yusssfeee/RPG-GAME.git RPG-GAME-clean`) for your branch.
@@ -29,15 +30,15 @@
 ## 3. Repository state
 | Branch | Head | What it is |
 |---|---|---|
-| `main` | `e1b2707` (merge of PR #10) | Single-file game + 3 fixes (below) + the shared death render guard of step 3.2 (`Project X.html` changed in 4 places: the `050`/`060`/`074`/`078` death controllers). Baseline before this work: `2252c12`. |
-| `modular-split` | `f94f387` | Lossless `src/` split and `tools/`. **Out of date:** it mirrors `main` only up to PR #7. PR #10 changed `Project X.html` but not this branch's `src/`, so a rebuild no longer equals `main`. It must be synced (section 7) before it is merged. **Not merged into `main`.** |
+| `main` | merge commit `d4d459e` (PR #12) | Single-file game with 3 fixes and the shared death render guard (PR #10), **plus the modular split**: `src/`, `tools/` (`build.py`, `split.py`, `split_main.py`, `phase2.py`, `sync_src.py`, `patches/`), `tests/`, `HANDOFF.md`. |
+| `modular-split` | `b9077b8` | Fully merged into `main` by PR #12 (11 commits). Can be deleted. |
 
-Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, burn kill redraw) · PR #7 (`e1ffa72`, goblin ghost frame) · PR #10 (shared death render guard, step 3.2).
-`modular-split` commits: phase 1 `f618fe3` · phase 2 `0f724e1` · fixes applied to `src/` `5f2c601` and `f94f387`.
+Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, burn kill redraw) · PR #7 (`e1ffa72`, goblin ghost frame) · PR #10 (shared death render guard, step 3.2) · PR #12 (modular split + sync + tests dependency).
+`modular-split` commits: phase 1 `f618fe3` · phase 2 `0f724e1` · fixes applied to `src/` `5f2c601` and `f94f387` · sync with Codex goblin changes `d974144` (adds `tools/sync_src.py`) · playwright dependency `b9077b8`.
 
-**Invariant on `modular-split`:** `python tools/build.py . check.html` must equal `Project X.html` (after CRLF normalisation). Check it after every change.
+**Invariant (now on `main`):** `src/` must rebuild to exactly `Project X.html`. Check with `python tools/sync_src.py "Project X.html" --check` (expected: `OK: src/ rebuilds to the canonical file.`) after every change to `Project X.html`. `Project X.html` remains the canonical file; `src/` is derived from it.
 
-## 4. `src/` layout (branch `modular-split` only)
+## 4. `src/` layout (on `main` since PR #12)
 - `src/manifest.json` — ordered list of 93 blocks (52 scripts, 41 styles) and 527 embedded images. `src/index.template.html` — page markup with markers `<!--@@BLOCK:NNN@@-->`.
 - Tokens inside sources: `{{BLOB:bNNNN.ext}}` = `data:` URI image; `{{RAW:file}}` = raw base64 (goblin atlases). `build.py` expands both.
 - `src/scripts/NNN-*.js` — the 52 original inline scripts **in load order. Never reorder.**
@@ -72,8 +73,8 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - Tab content lives in `#pane` (`#stg` exists only in the fight view). Mining uses `data-mine="cave|gather|engage|reset"` rather than `data-a`, and its ore button floats continuously: Playwright rejects it as "not stable", so click it with `force: true`. A forced click lands on the right element.
 - Detect leftovers by counting **visible** `<img>`/sprites in `#stg` after repeated spawn-and-kill rounds (also with a 300 ms gap); some monsters draw with CSS sprites, so element counts cannot see a pixel-level ghost — take screenshots.
 - **Regression suite:** `tests/` (read `tests/README.md`). `node tests/run.js` runs 29 headless cases in about 5 minutes (needs Playwright). Validation: the cases for the three fixed bugs fail on the builds before each fix; the cases added later (tabs, dungeon, mining, animations) fail on deliberately broken copies of `main`; `death-hold.shared-render-guard` (added with PR #10) has not been run against a broken build.
-- **Latest local run:** 21/21 passed on `Project X.html` after step 3.2, including `death-hold.shared-render-guard`.
-- **Latest run of all 29 cases:** all passed on `main` at `e1b2707`, executed as three batches (not a single process) in an AI sandbox.
+- **Latest run of all 29 cases:** 29 passed, 0 failed in about 128 s, run locally on Windows with `node run.js` (single process) on `main` after PR #12 (2026-11-27), with `python tools/sync_src.py "Project X.html" --check` reporting `OK`. Before that it was also 29/29 on `modular-split` after syncing `src/`.
+- Setup on a fresh machine: from `tests/` run `npm.cmd i playwright` and `npx.cmd playwright install chromium`, then `node run.js`.
 
 **Never tested:** a full manual playthrough; the *logic* of farming, fishing, forge, alchemy, trade, cooking and the other skill tabs (they are only rendered by `tabs.render-all`); Goblin King/Alchemist were only checked by element counts. Mining and one dungeon are now driven by `tests/`, but whether the older mining-ambush layers in `013` (`tapTile` / `mineAmbushActive`) are dead code is still **unverified** (the ambush trigger is closure-local and was never observed firing in the mining flow).
 
@@ -84,9 +85,10 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - [x] Phase 2 — `rpg-v4` and sprite pack fragmented; goblin atlases extracted to WebP; goblin script 1.24 MB → 9 KB (`0f724e1`).
 - [x] Three gameplay fixes on `main`, mirrored in `src/`.
 
-**Pending (the owner asked for this merge)**
-- [ ] **Sync, then merge `modular-split` into `main`.** `src/` must first be brought in line with `Project X.html` (PR #10 changed 4 places in the goblin death controllers); after that `python tools/build.py . check.html` must again equal `Project X.html`. A sync tool (`tools/sync_src.py`) is prepared for this. Do not merge the branch while that comparison fails.
-- [ ] Merge `modular-split` into `main`? It adds `src/`, `tools/`, ~40 MB (images stored twice) and does not change the game. If `src/` becomes the place to edit, `Project X.html` must be rebuilt from it each time; AGENTS.md currently names `Project X.html` as the only canonical source, so keep that rule until the owner decides.
+- [x] **Sync and merge `modular-split` into `main`** (2026-11-27): `tools/sync_src.py` updated 4 files in `src/scripts/` (`050`, `060`, `074`, `078`), `--check` reported OK, 29/29 tests passed, PR #12 merged into `main`.
+
+**Open decision**
+- `src/` adds ~40 MB (images stored twice) and does not change the game. `Project X.html` is still the canonical file that is edited; `src/` is kept in sync with `tools/sync_src.py` (see `AGENTS.md`). Only change this rule if the owner decides to edit `src/` instead and rebuild `Project X.html` from it.
 
 **Next (Phase 3 — changes real code; show each step to the owner before doing it)**
 - [x] **3.1 Safety net, no game change:** `tests/` (20 cases, synthetic saves): boot with each class's saved gear, burn/click kill redraw, ghost frames for 8 foe kinds at two respawn speeds, reload after a fight. Extended afterwards with `tabs.render-all`, `dungeon.slime-cave-completes`, `mining.gather-yields-ore` and `anim.attack-hurt.<kind>` (29 cases with `death-hold`). **Still to add before refactoring a system:** a differential trace (DOM/state at fixed times) to compare before/after, and cases for the logic of the other skills.
@@ -104,6 +106,14 @@ Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, bu
 - Never ask the owner to run multi-step commands without stating the expected output of each step and where to stop and send a screenshot.
 
 ## 9. Command cheat sheet (PowerShell, from the repo folder)
+After any edit to `Project X.html` (this is the normal routine now):
+```powershell
+cd $HOME\Downloads\rpg-split\RPG-GAME-tests
+python tools/sync_src.py "Project X.html"           # expect: OK: updated N file(s) ...
+python tools/sync_src.py "Project X.html" --check   # expect: OK: src/ rebuilds to the canonical file.
+cd tests ; node run.js                              # expect: 29 passed, 0 failed
+```
+Older manual check (still valid):
 ```powershell
 cd $HOME\Downloads\rpg-split\RPG-GAME
 git checkout modular-split ; git fetch origin ; git merge origin/main -m "Merge origin/main into modular-split"
