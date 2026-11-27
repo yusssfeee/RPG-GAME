@@ -37,15 +37,26 @@ Status marks: `[ ]` not started, `[~]` in progress, `[x]` done, `[-]` dropped by
 **Done when:** Recalculate style, Layerize and Pre-paint are each under about 10 ms per 10 s idle on the Farm screen, the suite passes, and the owner has seen the result.
 **Owner decision:** dropped (2026-11-27). Nothing was changed in the game.
 
-### G2 — Light build for publishing   `[ ]`
+### G2 — Light build for publishing   `[~]`
 **Why (READ):** `Project X.html` is about 50 MB; about 48 MB are 530 base64 images (367 WebP, 153 PNG, 10 JPEG) and the code is about 2 MB. Base64 is about a third larger than the real files, and the whole file must download and parse before the game starts. On a phone or a slow connection this is the biggest cost at first load. Not measured yet.
 **Change:** add an `--external-assets` mode to `tools/build.py` that writes a **second** output (never `Project X.html`) referencing the files already in `src/assets/embedded/`. The canonical file and the `sync_src.py --check` invariant stay untouched.
 **Prerequisite:** the `rpg-icon-autofit` script (search `isData` and `measure(`) only handles hrefs that start with `data:image/` and reads pixels through a canvas (`getImageData`). With external files it would silently stop fitting icons, and on `file://` the canvas is tainted (it works on GitHub Pages). Handle and test this first.
 **Tasks:**
-- [ ] Make `rpg-icon-autofit` work with external images, or prove it is not needed.
-- [ ] Add the build mode and test the light build over `http` as well as `file://`.
+- [x] Make `rpg-icon-autofit` work with external images, or prove it is not needed.
+- [~] Add the build mode and test the light build over `http` as well as `file://`. (`file://` tested; `http` not yet)
 - [ ] Measure first load (DevTools Network + Performance, with throttling) for both builds.
 - [ ] Ask the owner before enabling GitHub Pages.
+
+﻿**Status (2026-11-28): in progress, NOT done.** Merged: PR #16 (`--external-assets` + `src/icon-fit.json`), PR #17 (`--assets-prefix`), PR #18 (whitelist `[A-Za-z0-9_./-]` for the prefix).
+**How to use:** `node tools/measure_icons.js` regenerates `src/icon-fit.json` (run it again whenever icons change, otherwise the table goes stale). `python tools/build.py . out.html --external-assets [--assets-prefix=img]` writes the light file; the images folder (a copy of `src/assets/embedded/`) must sit where the prefix points. `Project X.html` and the `sync_src.py --check` invariant are untouched.
+**MEASURED** (Chromium via Playwright, mage save, one run unless noted):
+- Light HTML 2.00 MB vs 50062526 chars for the canonical file (HTML only; images load separately).
+- Canvas read of an external image on `file://` fails with `SecurityError`, so live measuring cannot work there; hence the pre-measured table.
+- Icon cache has 224 entries after boot, unchanged across all 19 tabs, identical in 2 runs. 223 map to image files; 1 is a hand-written `data:` image (`00-sprite-pack-part-1.js` line 7) that keeps live measuring.
+- `data-fit` counts equal canonical vs light in all 19 tabs (`file://`), and on the start screen with `--assets-prefix=img` built outside the repo (30 fitted / 46 not, 0 broken images, 0 errors).
+- Default build byte-identical to canonical; 29/29 tests pass (they run on `Project X.html`, not on the light build).
+**NOT MEASURED:** load time; `http` / GitHub Pages; desktop Chrome (only Chromium); classes other than mage; icons that appear during fights; why the light build's icon cache holds 28 entries instead of 224 (fit counts are equal, so it may be harmless, unverified); browser load with `--assets-prefix=./assets`; bot 'possible issues' never expanded.
+**Corrections:** the `isData` length threshold is 40 (not 400); there are 19 tabs (not 20).
 
 **Done when:** the light build plays the same as the canonical file (screenshots of the tabs match) and first-load size drops from about 50 MB to a few MB for the HTML.
 
