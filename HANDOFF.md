@@ -30,10 +30,10 @@
 ## 3. Repository state
 | Branch | Head | What it is |
 |---|---|---|
-| `main` | merge commit `d4d459e` (PR #12) | Single-file game with 3 fixes and the shared death render guard (PR #10), **plus the modular split**: `src/`, `tools/` (`build.py`, `split.py`, `split_main.py`, `phase2.py`, `sync_src.py`, `patches/`), `tests/`, `HANDOFF.md`. |
+| `main` | merge commit `69b6919` (PR #19) | Single-file game with 3 fixes and the shared death render guard (PR #10), **plus the modular split**: `src/`, `tools/` (`build.py`, `split.py`, `split_main.py`, `phase2.py`, `sync_src.py`, `patches/`), `tests/`, `HANDOFF.md`. |
 | `modular-split` | `b9077b8` | Fully merged into `main` by PR #12 (11 commits). Can be deleted. |
 
-Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, burn kill redraw) · PR #7 (`e1ffa72`, goblin ghost frame) · PR #10 (shared death render guard, step 3.2) · PR #12 (modular split + sync + tests dependency).
+Merged fixes on `main`: PR #5 (`5338430`, item fallback) · PR #6 (`986574f`, burn kill redraw) · PR #7 (`e1ffa72`, goblin ghost frame) · PR #10 (shared death render guard, step 3.2) · PR #12 (modular split + sync + tests dependency) · PR #16 (`--external-assets`, `src/icon-fit.json`, `tools/measure_icons.js`) · PR #17 (`--assets-prefix`) · PR #18 (whitelist for the prefix) · PR #19 (G2 status in `GOALS.md`).
 `modular-split` commits: phase 1 `f618fe3` · phase 2 `0f724e1` · fixes applied to `src/` `5f2c601` and `f94f387` · sync with Codex goblin changes `d974144` (adds `tools/sync_src.py`) · playwright dependency `b9077b8`.
 
 **Invariant (now on `main`):** `src/` must rebuild to exactly `Project X.html`. Check with `python tools/sync_src.py "Project X.html" --check` (expected: `OK: src/ rebuilds to the canonical file.`) after every change to `Project X.html`. `Project X.html` remains the canonical file; `src/` is derived from it.
